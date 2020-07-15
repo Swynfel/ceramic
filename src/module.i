@@ -17,8 +17,30 @@ typedef unsigned short ushort;
 
 %include "tiles.hpp"
 
+%extend Tile {
+  int __int__() {
+    return (int)(*($self));
+  }
+
+  string __str__() {
+    return (*($self)).str();
+  }
+}
+
 %extend Tiles {
   ushort __getitem__(Tile t) {
     return (*($self))[t];
+  }
+
+  void __setitem__(Tile t, ushort value) {
+    (*($self))[t] = value;
+  }
+
+  bool __eq__(const Tiles& other) {
+    return (*($self)) == other;
+  }
+
+  string __str__() {
+    return (*($self)).str();
   }
 }

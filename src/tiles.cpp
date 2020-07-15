@@ -5,8 +5,10 @@
 #include <numeric>
 #include <sstream>
 #include <iostream>
+#include <assert.h>
 
-// Tile
+
+/*** Tile ***/
 
 Tile::Tile(ushort _value): value(_value) {
 
@@ -16,7 +18,23 @@ Tile::operator int() const {
   return value;
 }
 
-// Tiles
+
+// Reading
+
+ostream& operator<<(ostream& os, const Tile& tile) {
+  return os << '<' << (int)tile << '>';
+}
+
+string Tile::str() const {
+  ostringstream os;
+  os << *this;
+  return os.str();
+}
+
+
+/*** Tiles ***/
+
+// Constructors
 
 Tiles::Tiles() : quantities() {}
 
@@ -38,6 +56,12 @@ Tiles::Tiles(const vector<ushort>& tiles) : quantities() {
 Tiles::Tiles(const Tiles& tiles) : quantities(tiles.quantities) {
 }
 
+// Utils
+
+ushort& Tiles::operator[](Tile tile) {
+  return quantities[tile];
+}
+
 ushort Tiles::total() const {
   return accumulate(
     this->quantities.begin(),
@@ -46,9 +70,104 @@ ushort Tiles::total() const {
   );
 }
 
-ushort& Tiles::operator[](Tile tile) {
-  return quantities[tile];
+Tiles& Tiles::operator+=(const Tiles& other) {
+  for(int i = 0; i<TILE_TYPES; i++){
+    this->quantities[i] += other.quantities[i];
+  }
+  return *this;
 }
+
+Tiles& Tiles::operator-=(const Tiles& other) {
+  assert(*this >= other);
+  for(int i = 0; i<TILE_TYPES; i++){
+    this->quantities[i] -= other.quantities[i];
+  }
+  return *this;
+}
+
+Tiles Tiles::operator+(const Tiles& other) const {
+  Tiles t(*this);
+  t += other;
+  return t;
+}
+
+Tiles Tiles::operator-(const Tiles& other) const {
+  Tiles t(*this);
+  t -= other;
+  return t;
+}
+
+bool operator==(const Tiles& left, const Tiles& right) {
+  return left.quantities == right.quantities;
+}
+
+bool operator!=(const Tiles& left, const Tiles& right) {
+  return !(left == right);
+}
+
+bool operator<=(const Tiles& left, const Tiles& right) {
+  for(int i = 0; i<TILE_TYPES; i++){
+    if(left.quantities[i] > right.quantities[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>=(const Tiles& left, const Tiles& right) {
+  for(int i = 0; i<TILE_TYPES; i++){
+    if(left.quantities[i] < right.quantities[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+Tiles& Tiles::operator+=(const Tile& tile) {
+  this->quantities[tile]++;
+  return *this;
+}
+
+Tiles& Tiles::operator-=(const Tile& tile) {
+  assert(this->quantities[tile] > 0);
+  this->quantities[tile]--;
+  return *this;
+}
+
+Tiles Tiles::operator+(const Tile& tile) const {
+  Tiles t(*this);
+  t += tile;
+  return t;
+}
+
+Tiles Tiles::operator-(const Tile& tile) const {
+  Tiles t(*this);
+  t -= tile;
+  return t;
+}
+
+
+bool operator<=(const Tiles& left, const ushort& right) {
+  for(int i = 0; i<TILE_TYPES; i++){
+    if(left.quantities[i] > right) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>=(const Tiles& left, const ushort& right) {
+  for(int i = 0; i<TILE_TYPES; i++){
+    if(left.quantities[i] < right) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+// Reading
 
 ostream& operator<<(ostream& os, const Tiles& tiles) {
   bool first = true;
