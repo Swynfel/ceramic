@@ -1,0 +1,10 @@
+# Target
+target
+
+# Generated
+src/module_wrap.cxx
+
+# Build
+build
+__pycache__
+.ccls-cache
