@@ -4,7 +4,7 @@ module = Extension(
     '_azul',
     sources=[
         'src/module_wrap.cxx',
-        'src/example.cpp'
+        'src/tiles.cpp'
     ],
     language='c++',
 )

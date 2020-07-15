@@ -1,6 +1,10 @@
 #include <iostream>
 
+#include "tiles.hpp"
+
 int main() {
-    std::cout << "Hello world!";
-    return 0;
+  Tile tile{3};
+  Tiles tiles(tile);
+  std::cout << tiles;
+  return 0;
 }
