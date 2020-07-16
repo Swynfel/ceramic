@@ -1,7 +1,13 @@
-%module azul
+#if defined(SWIGPYTHON_BUILTIN) /* defined when using -builtin */
+%module(moduleimport="from $module import *") azul
+#else
+%module(moduleimport="import $module") azul
+#endif
+
 %include <std_string.i>
 %include <std_vector.i>
 %include <std_array.i>
+%include "utils.swg"
 
 using namespace std;
 typedef unsigned short ushort;
@@ -18,29 +24,23 @@ typedef unsigned short ushort;
 %include "tiles.hpp"
 
 %extend Tile {
-  int __int__() {
-    return (int)(*($self));
-  }
-
-  string __str__() {
-    return (*($self)).str();
-  }
+  %INT_AUTO
+  %STR_AUTO
+  %EQ_AUTO(Tile)
 }
 
 %extend Tiles {
+  %GETITEM
   ushort __getitem__(Tile t) {
     return (*($self))[t];
   }
 
+  %SETITEM
   void __setitem__(Tile t, ushort value) {
     (*($self))[t] = value;
   }
 
-  bool __eq__(const Tiles& other) {
-    return (*($self)) == other;
-  }
-
-  string __str__() {
-    return (*($self)).str();
-  }
+  %EQ_AUTO(Tiles)
+  %STR_AUTO
+  %LEN_AUTO
 }

@@ -1,7 +1,7 @@
 from distutils.core import setup, Extension
 
 module = Extension(
-    '_azul',
+    'azul',
     sources=[
         'src/module_wrap.cxx',
         'src/tiles.cpp'

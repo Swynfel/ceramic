@@ -10,19 +10,25 @@
 
 /*** Tile ***/
 
-Tile::Tile(ushort _value): value(_value) {
+Tile::Tile(ushort _value): value(_value) {}
 
-}
+Tile::Tile(const Tile& tile): value(tile.value) {}
 
 Tile::operator int() const {
   return value;
 }
 
 
-// Reading
-
 ostream& operator<<(ostream& os, const Tile& tile) {
   return os << '<' << (int)tile << '>';
+}
+
+bool operator==(const Tile& left, const Tile& right) {
+  return left.value == right.value;
+}
+
+bool operator!=(const Tile& left, const Tile& right) {
+  return !(left == right);
 }
 
 string Tile::str() const {
@@ -53,8 +59,7 @@ Tiles::Tiles(const vector<ushort>& tiles) : quantities() {
   }
 }
 
-Tiles::Tiles(const Tiles& tiles) : quantities(tiles.quantities) {
-}
+Tiles::Tiles(const Tiles& tiles) : quantities(tiles.quantities) {}
 
 // Utils
 

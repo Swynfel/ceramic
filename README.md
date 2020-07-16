@@ -10,4 +10,4 @@ Execute the script `build.sh`
 source build.sh
 ```
 
-The python module is created in the directory `target`.
+The python module (e.g. `azul.so` for linux) is created in the directory `target`.
