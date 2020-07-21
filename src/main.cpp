@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "tiles.hpp"
+#include "state/tiles.hpp"
 
 int main() {
   Tile tile{3};

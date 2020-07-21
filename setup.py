@@ -1,11 +1,13 @@
+from pathlib import Path
 from distutils.core import setup, Extension
+
+sources = [p.as_posix() for p in Path("src/").rglob("*.cpp")]
 
 module = Extension(
     'azul',
     sources=[
         'src/module_wrap.cxx',
-        'src/tiles.cpp'
-    ],
+    ] + sources,
     language='c++',
 )
 

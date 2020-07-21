@@ -15,32 +15,14 @@ typedef unsigned short ushort;
 %{
 #define SWIG_FILE_WITH_INIT
 #include "global.hpp"
-#include "tiles.hpp"
+#include "state/tiles.hpp"
+#include "state/factory.hpp"
+#include "state/parameters.hpp"
 %}
 
 %template(UshortVector) vector<ushort>;
 %template(UshortArray) array<ushort, TILE_TYPES>;
 
-%include "tiles.hpp"
-
-%extend Tile {
-  %INT_AUTO
-  %STR_AUTO
-  %EQ_AUTO(Tile)
-}
-
-%extend Tiles {
-  %GETITEM
-  ushort __getitem__(Tile t) {
-    return (*($self))[t];
-  }
-
-  %SETITEM
-  void __setitem__(Tile t, ushort value) {
-    (*($self))[t] = value;
-  }
-
-  %EQ_AUTO(Tiles)
-  %STR_AUTO
-  %LEN_AUTO
-}
+%include "state/tiles.swg"
+%include "state/factory.swg"
+%include "state/parameters.swg"

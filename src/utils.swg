@@ -63,3 +63,9 @@ bool __eq__(const TYPE& other) {
   return (*($self)) == other;
 }
 %enddef
+
+%define %COPY_AUTO(TYPE)
+TYPE copy() const {
+  return TYPE(*($self));
+}
+%enddef

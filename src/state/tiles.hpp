@@ -1,12 +1,12 @@
-#ifndef TILES_H
-#define TILES_H
+#ifndef TILES_HPP
+#define TILES_HPP
 
 #include <array>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "global.hpp"
+#include "../global.hpp"
 
 using namespace std;
 
@@ -76,4 +76,4 @@ public:
   array<ushort, TILE_TYPES> to_tuple() const;
 };
 
-#endif //TILES_H
+#endif //TILES_HPP
