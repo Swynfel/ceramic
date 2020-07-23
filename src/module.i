@@ -15,14 +15,22 @@ typedef unsigned short ushort;
 %{
 #define SWIG_FILE_WITH_INIT
 #include "global.hpp"
-#include "state/tiles.hpp"
 #include "state/factory.hpp"
-#include "state/parameters.hpp"
+#include "state/panel.hpp"
+#include "state/pyramid.hpp"
+#include "state/rules.hpp"
+#include "state/state.hpp"
+#include "state/tiles.hpp"
+#include "state/wall.hpp"
 %}
 
 %template(UshortVector) vector<ushort>;
 %template(UshortArray) array<ushort, TILE_TYPES>;
 
-%include "state/tiles.swg"
 %include "state/factory.swg"
-%include "state/parameters.swg"
+%include "state/panel.swg"
+%include "state/pyramid.swg"
+%include "state/rules.swg"
+%include "state/state.swg"
+%include "state/tiles.swg"
+%include "state/wall.swg"

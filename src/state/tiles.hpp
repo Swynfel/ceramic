@@ -16,8 +16,11 @@ struct Tile {
 private:
   ushort value;
 public:
-  Tile(ushort _value);
+  Tile();
+  Tile(ushort value);
   Tile(const Tile& tile);
+
+  static const Tile NONE;
 
 #ifndef SWIG
   operator int() const;
@@ -25,6 +28,7 @@ public:
   friend bool operator==(const Tile& left, const Tile& right);
   friend bool operator!=(const Tile& left, const Tile& right);
 #endif
+  bool is_none() const;
   string str() const;
 };
 

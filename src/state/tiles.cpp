@@ -7,12 +7,23 @@
 #include <iostream>
 #include <assert.h>
 
+#include <stdexcept>
+
 
 /*** Tile ***/
 
-Tile::Tile(ushort _value): value(_value) {}
+Tile::Tile(): value(TILE_TYPES) {}
+
+Tile::Tile(ushort value): value(value) {
+  if(value >= TILE_TYPES) {
+    throw std::invalid_argument("Tile color was too big");
+  }
+}
 
 Tile::Tile(const Tile& tile): value(tile.value) {}
+
+const Tile Tile::NONE = Tile();
+
 
 Tile::operator int() const {
   return value;
@@ -20,6 +31,9 @@ Tile::operator int() const {
 
 
 ostream& operator<<(ostream& os, const Tile& tile) {
+  if (tile.is_none()) {
+    return os << "< >";
+  }
   return os << '<' << (int)tile << '>';
 }
 
@@ -29,6 +43,10 @@ bool operator==(const Tile& left, const Tile& right) {
 
 bool operator!=(const Tile& left, const Tile& right) {
   return !(left == right);
+}
+
+bool Tile::is_none() const {
+  return (this->value == TILE_TYPES);
 }
 
 string Tile::str() const {
