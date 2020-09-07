@@ -3,6 +3,10 @@ build
 __pycache__
 ceramic.*
 
+# Test
+.tox
+.pytest_cache
+
 # Editor
 .ccls-cache
 .vscode

@@ -1,10 +1,12 @@
 from pathlib import Path
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 import pybind11
 
 __version__ = '0.0.2'
 
-sources = sorted(p.as_posix() for p in Path("src/").rglob("*.cpp"))
+sources = sorted(p.as_posix() for p in Path("src/").rglob("*pp"))
+
+print(sources)
 
 module = Extension(
     'ceramic',
@@ -21,5 +23,5 @@ setup(
     author="Swynfel",
     description="""Azul-like Game Environment""",
     ext_modules=[module],
-    py_modules=["ceramic"],
+    test_suite='tests',
 )
