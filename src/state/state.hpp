@@ -1,19 +1,26 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include <boost/random/mersenne_twister.hpp>
+#include <memory>
+#include <vector>
 
 #include "tiles.hpp"
 #include "factory.hpp"
-
-typedef boost::random::mt11213b rng;
+#include "panel.hpp"
+#include "rules.hpp"
 
 class State {
 private:
-  rng randomness;
-public:
-  State();
+  const std::shared_ptr<Rules> rules;
+  std::vector<Factory> factories;
+  std::vector<Panel> panels;
 
+public:
+  State(const std::shared_ptr<Rules>& rules);
+  //State(const State& state);
+
+  void start();
+  void start_round();
 };
 
 #endif //STATE_HPP
