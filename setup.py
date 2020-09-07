@@ -4,7 +4,7 @@ from distutils.core import setup, Extension
 sources = [p.as_posix() for p in Path("src/").rglob("*.cpp")]
 
 module = Extension(
-    'azul',
+    'ceramic',
     sources=[
         'src/module_wrap.cxx',
     ] + sources,
@@ -12,10 +12,10 @@ module = Extension(
 )
 
 setup(
-    name='azul',
-    version='0.0.0',
+    name='ceramic',
+    version='0.0.1',
     author="Swynfel",
-    description="""Azul Environment""",
+    description="""Azul-like Game Environment""",
     ext_modules=[module],
-    py_modules=["azul"],
+    py_modules=["ceramic"],
 )

@@ -1,5 +1,5 @@
-# Azul
-A python module for playing the board game Azul implemented in C++.
+# Ceramic
+A python module for playing variations of the board game Azul, implemented in C++.
 
 ## Dependencies
 
@@ -19,4 +19,4 @@ Execute the script `build.sh`
 source build.sh
 ```
 
-The python module `azul.so` is created in the directory `target`.
+The python module `ceramic.so` is created in the directory `target`.

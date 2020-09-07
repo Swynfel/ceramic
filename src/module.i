@@ -1,7 +1,7 @@
 #if defined(SWIGPYTHON_BUILTIN) /* defined when using -builtin */
-%module(moduleimport="from $module import *") azul
+%module(moduleimport="from $module import *") ceramic
 #else
-%module(moduleimport="import $module") azul
+%module(moduleimport="import $module") ceramic
 #endif
 
 %include <std_string.i>
