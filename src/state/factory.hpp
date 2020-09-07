@@ -6,13 +6,13 @@
 
 class Factory {
 public:
-  ushort id;
-  Tiles tiles;
-  // Constructor
-  Factory(ushort);
+    ushort id;
+    Tiles tiles;
+    // Constructor
+    Factory(ushort);
 
-  // Utils
-  Tiles get_tiles() const;
+    // Utils
+    Tiles get_tiles() const;
 };
 
 #endif //FACTORY_HPP

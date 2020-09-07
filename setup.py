@@ -1,19 +1,23 @@
 from pathlib import Path
 from distutils.core import setup, Extension
+import pybind11
 
-sources = [p.as_posix() for p in Path("src/").rglob("*.cpp")]
+__version__ = '0.0.2'
+
+sources = sorted(p.as_posix() for p in Path("src/").rglob("*.cpp"))
 
 module = Extension(
     'ceramic',
-    sources=[
-        'src/module_wrap.cxx',
-    ] + sources,
+    sources=sources,
+    include_dirs=[
+        pybind11.get_include()
+    ],
     language='c++',
 )
 
 setup(
     name='ceramic',
-    version='0.0.1',
+    version=__version__,
     author="Swynfel",
     description="""Azul-like Game Environment""",
     ext_modules=[module],

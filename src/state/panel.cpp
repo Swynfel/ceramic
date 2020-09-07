@@ -1,53 +1,59 @@
 #include "panel.hpp"
 
-Panel::Panel(std::shared_ptr<Rules> rules):
-  rules(rules),
-  score(0),
-  pyramid(rules->tile_types),
-  wall(rules->tile_types),
-  first_token(false),
-  floor(0) {}
+Panel::Panel(std::shared_ptr<Rules> rules)
+  : rules(rules)
+  , score(0)
+  , pyramid(rules->tile_types)
+  , wall(rules->tile_types)
+  , first_token(false)
+  , floor(0) {}
 
-Panel::Panel(ushort size):
-  rules(),
-  score(0),
-  pyramid(size),
-  wall(size),
-  first_token(false),
-  floor(0) {}
+Panel::Panel(ushort size)
+  : rules()
+  , score(0)
+  , pyramid(size)
+  , wall(size)
+  , first_token(false)
+  , floor(0) {}
 
-Panel::Panel(const Panel& panel):
-  rules(panel.rules),
-  score(panel.score),
-  pyramid(panel.pyramid),
-  wall(panel.wall),
-  first_token(panel.first_token),
-  floor(panel.floor) {}
+Panel::Panel(const Panel& panel)
+  : rules(panel.rules)
+  , score(panel.score)
+  , pyramid(panel.pyramid)
+  , wall(panel.wall)
+  , first_token(panel.first_token)
+  , floor(panel.floor) {}
 
-const ushort Panel::get_score() const {
-  return score;
+const ushort
+Panel::get_score() const {
+    return score;
 }
 
-const Pyramid Panel::get_pyramid() const {
-  return pyramid;
+const Pyramid
+Panel::get_pyramid() const {
+    return pyramid;
 }
 
-const Wall Panel::get_wall() const {
-  return wall;
+const Wall
+Panel::get_wall() const {
+    return wall;
 }
 
-const bool Panel::get_first_token() const {
-  return first_token;
+const bool
+Panel::get_first_token() const {
+    return first_token;
 }
 
-const ushort Panel::get_floor() const {
-  return floor;
+const ushort
+Panel::get_floor() const {
+    return floor;
 }
 
-const ushort Panel::get_penalty() const {
-  if (auto strong_rules = rules.lock()) {
-    return strong_rules->penalty_for_floor(get_floor());
-  }
-  // TODO: Exception
-  return 0;
+const ushort
+Panel::get_penalty() const {
+    if (auto strong_rules = rules.lock()) {
+        return strong_rules->penalty_for_floor(get_floor());
+    }
+    // TODO: Exception
+    return 0;
 }

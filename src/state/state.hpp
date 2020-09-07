@@ -4,23 +4,23 @@
 #include <memory>
 #include <vector>
 
-#include "tiles.hpp"
 #include "factory.hpp"
 #include "panel.hpp"
 #include "rules.hpp"
+#include "tiles.hpp"
 
 class State {
 private:
-  const std::shared_ptr<Rules> rules;
-  std::vector<Factory> factories;
-  std::vector<Panel> panels;
+    const std::shared_ptr<Rules> rules;
+    std::vector<Factory> factories;
+    std::vector<Panel> panels;
 
 public:
-  State(const std::shared_ptr<Rules>& rules);
-  //State(const State& state);
+    State(const std::shared_ptr<Rules>& rules);
+    //State(const State& state);
 
-  void start();
-  void start_round();
+    void start();
+    void start_round();
 };
 
 #endif //STATE_HPP

@@ -1,0 +1,7 @@
+Standard: Cpp14
+BasedOnStyle: Mozilla
+IndentWidth: 4
+ColumnLimit: 0
+AccessModifierOffset: -4
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+BreakBeforeBraces: Attach

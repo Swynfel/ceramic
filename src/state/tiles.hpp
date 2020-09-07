@@ -14,70 +14,70 @@ using namespace std;
 
 struct Tile {
 private:
-  ushort value;
+    ushort value;
+
 public:
-  Tile();
-  Tile(ushort value);
-  Tile(const Tile& tile);
+    Tile();
+    Tile(ushort value);
+    Tile(const Tile& tile);
 
-  static const Tile NONE;
+    static const Tile NONE;
 
-#ifndef SWIG
-  operator int() const;
-  friend ostream& operator <<(ostream& os, const Tile& tiles);
-  friend bool operator==(const Tile& left, const Tile& right);
-  friend bool operator!=(const Tile& left, const Tile& right);
-#endif
-  bool is_none() const;
-  string str() const;
+    operator int() const;
+    friend ostream& operator<<(ostream& os, const Tile& tiles);
+    friend bool operator==(const Tile& left, const Tile& right);
+    friend bool operator!=(const Tile& left, const Tile& right);
+    bool is_none() const;
+    string str() const;
 };
 
 /*** Tiles ***/
 
 class Tiles {
-  array<ushort, TILE_TYPES> quantities;
+    array<ushort, TILE_TYPES> quantities;
+
 public:
-  // Constructors
-  Tiles();
-  Tiles(const Tile& tile);
-  Tiles(const vector<ushort>& tiles);
-  Tiles(const Tiles& tiles);
+    // Constructors
+    Tiles();
+    Tiles(const Tile& tile);
+    Tiles(const vector<ushort>& tiles);
+    Tiles(const Tiles& tiles);
 
-  // Utils
+    // Utils
 #ifndef SWIG
-  ushort& operator[](Tile tile);
+    ushort& operator[](Tile tile);
 #endif
-  ushort total() const;
-  constexpr ushort size() const { return TILE_TYPES; }
+    ushort total() const;
+    constexpr ushort size() const { return TILE_TYPES; }
 
-  Tiles& operator+=(const Tiles& other);
-  Tiles& operator-=(const Tiles& other);
-  Tiles operator+(const Tiles& other) const;
-  Tiles operator-(const Tiles& other) const;
-
-#ifndef SWIG
-  friend bool operator==(const Tiles& left, const Tiles& right);
-  friend bool operator!=(const Tiles& left, const Tiles& right);
-  friend bool operator<=(const Tiles& left, const Tiles& right);
-  friend bool operator>=(const Tiles& left, const Tiles& right);
-#endif
-
-  Tiles& operator+=(const Tile& tile);
-  Tiles& operator-=(const Tile& tile);
-  Tiles operator+(const Tile& tile) const;
-  Tiles operator-(const Tile& tile) const;
+    Tiles& operator+=(const Tiles& other);
+    Tiles& operator-=(const Tiles& other);
+    Tiles operator+(const Tiles& other) const;
+    Tiles operator-(const Tiles& other) const;
 
 #ifndef SWIG
-  friend bool operator<=(const Tiles& left, const ushort& right);
-  friend bool operator>=(const Tiles& left, const ushort& right);
+    friend bool operator==(const Tiles& left, const Tiles& right);
+    friend bool operator!=(const Tiles& left, const Tiles& right);
+    friend bool operator<=(const Tiles& left, const Tiles& right);
+    friend bool operator>=(const Tiles& left, const Tiles& right);
 #endif
 
-  // Reading
+    Tiles& operator+=(const Tile& tile);
+    Tiles& operator-=(const Tile& tile);
+    Tiles operator+(const Tile& tile) const;
+    Tiles operator-(const Tile& tile) const;
+
 #ifndef SWIG
-  friend ostream& operator <<(ostream& os, const Tiles& tiles);
+    friend bool operator<=(const Tiles& left, const ushort& right);
+    friend bool operator>=(const Tiles& left, const ushort& right);
 #endif
-  string str() const;
-  array<ushort, TILE_TYPES> to_tuple() const;
+
+    // Reading
+#ifndef SWIG
+    friend ostream& operator<<(ostream& os, const Tiles& tiles);
+#endif
+    string str() const;
+    array<ushort, TILE_TYPES> to_tuple() const;
 };
 
 #endif //TILES_HPP

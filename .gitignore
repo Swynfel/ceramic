@@ -1,10 +1,8 @@
-# Target
-target
-
-# Generated
-src/module_wrap.cxx
-
 # Build
 build
 __pycache__
+ceramic.*
+
+# Editor
 .ccls-cache
+.vscode
