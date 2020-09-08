@@ -1,7 +1,6 @@
+import ceramic
 import pytest
 
-import ceramic
 
-
-def test_factory_init():
+def test_factory_fields():
     ceramic.Factory(4)

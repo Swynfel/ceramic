@@ -1,12 +1,10 @@
 from pathlib import Path
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 import pybind11
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
-sources = sorted(p.as_posix() for p in Path("src/").rglob("*pp"))
-
-print(sources)
+sources = sorted(p.as_posix() for p in Path("src/").rglob("*.cpp"))
 
 module = Extension(
     'ceramic',
@@ -23,5 +21,7 @@ setup(
     author="Swynfel",
     description="""Azul-like Game Environment""",
     ext_modules=[module],
+    packages=find_packages(),
     test_suite='tests',
+    zip_safe=False,
 )
