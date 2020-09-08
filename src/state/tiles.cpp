@@ -239,6 +239,6 @@ Tiles::str() const {
 }
 
 array<ushort, TILE_TYPES>
-Tiles::to_tuple() const {
+Tiles::get_quantities() const {
     return quantities;
 }

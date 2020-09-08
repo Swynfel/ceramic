@@ -10,9 +10,6 @@ public:
     Tiles tiles;
     // Constructor
     Factory(ushort);
-
-    // Utils
-    Tiles get_tiles() const;
 };
 
 #endif //FACTORY_HPP

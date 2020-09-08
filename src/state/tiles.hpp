@@ -44,40 +44,33 @@ public:
     Tiles(const Tiles& tiles);
 
     // Utils
-#ifndef SWIG
     ushort& operator[](Tile tile);
-#endif
     ushort total() const;
     constexpr ushort size() const { return TILE_TYPES; }
 
-    Tiles& operator+=(const Tiles& other);
-    Tiles& operator-=(const Tiles& other);
-    Tiles operator+(const Tiles& other) const;
-    Tiles operator-(const Tiles& other) const;
-
-#ifndef SWIG
     friend bool operator==(const Tiles& left, const Tiles& right);
     friend bool operator!=(const Tiles& left, const Tiles& right);
     friend bool operator<=(const Tiles& left, const Tiles& right);
     friend bool operator>=(const Tiles& left, const Tiles& right);
-#endif
 
-    Tiles& operator+=(const Tile& tile);
-    Tiles& operator-=(const Tile& tile);
+    Tiles operator+(const Tiles& other) const;
+    Tiles operator-(const Tiles& other) const;
+    Tiles& operator+=(const Tiles& other);
+    Tiles& operator-=(const Tiles& other);
+
     Tiles operator+(const Tile& tile) const;
     Tiles operator-(const Tile& tile) const;
+    Tiles& operator+=(const Tile& tile);
+    Tiles& operator-=(const Tile& tile);
 
-#ifndef SWIG
     friend bool operator<=(const Tiles& left, const ushort& right);
     friend bool operator>=(const Tiles& left, const ushort& right);
-#endif
 
     // Reading
-#ifndef SWIG
     friend ostream& operator<<(ostream& os, const Tiles& tiles);
-#endif
+
     string str() const;
-    array<ushort, TILE_TYPES> to_tuple() const;
+    array<ushort, TILE_TYPES> get_quantities() const;
 };
 
 #endif //TILES_HPP
