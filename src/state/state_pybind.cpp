@@ -1,12 +1,14 @@
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
 #include "factory.hpp"
 #include "panel.hpp"
 #include "pyramid.hpp"
 #include "rules.hpp"
 #include "state.hpp"
+#include "tile.hpp"
 #include "tiles.hpp"
 #include "wall.hpp"
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
@@ -14,7 +16,10 @@ void
 state_pybind(py::module& m) {
     py::class_<Factory>(m, "Factory")
         .def(py::init<const ushort>())
-        .def_readwrite("tiles", &Factory::tiles);
+        .def_readwrite("tiles", &Factory::tiles)
+
+        .def("__str__", &Factory::str)
+        .def("__repr__", &Factory::repr);
 
     py::class_<Panel>(m, "Panel")
         .def(py::init<const ushort>())
@@ -26,7 +31,10 @@ state_pybind(py::module& m) {
         .def_property_readonly("wall", &Panel::get_wall)
         .def_property_readonly("first_token", &Panel::get_first_token)
         .def_property_readonly("floor", &Panel::get_floor)
-        .def_property_readonly("penalty", &Panel::get_penalty);
+        .def_property_readonly("penalty", &Panel::get_penalty)
+
+        .def("__str__", &Panel::str)
+        .def("__repr__", &Panel::repr);
 
     py::class_<Pyramid>(m, "Pyramid")
         .def(py::init<const ushort>())
@@ -42,7 +50,10 @@ state_pybind(py::module& m) {
         .def("amount", &Pyramid::amount)
         .def("amount_remaining", &Pyramid::amount_remaining)
         .def("color", &Pyramid::color)
-        .def("filled", &Pyramid::filled);
+        .def("filled", &Pyramid::filled)
+
+        .def("__str__", &Pyramid::str)
+        .def("__repr__", &Pyramid::repr);
 
     py::class_<Rules>(m, "Rules")
         .def(py::init<>())
@@ -61,7 +72,20 @@ state_pybind(py::module& m) {
         .def("penalty_for_floor", &Rules::penalty_for_floor)
         .def("factories", &Rules::factories)
 
-        .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; });
+        .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; })
+
+        .def("__str__", &Rules::str)
+        .def("__repr__", &Rules::repr);
+
+    py::class_<State>(m, "State")
+        .def(py::init<const Rules&>())
+
+        .def_property_readonly("rules", &State::get_rules)
+        .def("get_factory", &State::get_factory_mut)
+        .def("get_panel", &State::get_panel_mut)
+
+        .def("__str__", &State::str)
+        .def("__repr__", &State::repr);
 
     py::class_<Tile>(m, "Tile")
         .def(py::init<>())
@@ -73,7 +97,10 @@ state_pybind(py::module& m) {
         .def("__ne__", [](const Tile& self, const Tile& other) { return self != other; })
         .def("is_none", &Tile::is_none)
         .def("__str__", &Tile::str)
-        .def_property_readonly_static("NONE", [](py::object) { return Tile::NONE; });
+        .def_property_readonly_static("NONE", [](py::object) { return Tile::NONE; })
+
+        .def("__str__", &Tile::str)
+        .def("__repr__", &Tile::repr);
 
     py::class_<Tiles>(m, "Tiles")
         .def(py::init<>())
@@ -111,9 +138,11 @@ state_pybind(py::module& m) {
         .def("__radd__", [](Tiles& self, const Tile& other) { self += other; })
         .def("__rsub__", [](Tiles& self, const Tile& other) { self -= other; })
 
-        .def("__str__", &Tiles::str)
         .def_property_readonly("quantities", &Tiles::get_quantities)
-        .def_property_readonly_static("ZERO", [](py::object) { return Tiles::ZERO; });
+        .def_property_readonly_static("ZERO", [](py::object) { return Tiles::ZERO; })
+
+        .def("__str__", &Tiles::str)
+        .def("__repr__", &Tiles::repr);
 
     py::class_<Wall>(m, "Wall")
         .def(py::init<const ushort>())
@@ -122,5 +151,8 @@ state_pybind(py::module& m) {
 
         .def("clear", &Wall::clear)
         .def("is_placed_at", &Wall::is_placed_at)
-        .def("get_placed", &Wall::get_placed);
+        .def("get_placed", &Wall::get_placed)
+
+        .def("__str__", &Wall::str)
+        .def("__repr__", &Wall::repr);
 }

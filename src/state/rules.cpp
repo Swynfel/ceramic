@@ -1,5 +1,7 @@
 #include "rules.hpp"
 
+#include <sstream>
+
 Rules::Rules()
   : player_count(4)
   , tile_count(20)
@@ -43,3 +45,30 @@ Rules::factories() const {
 }
 
 const Rules Rules::DEFAULT = Rules();
+
+ostream&
+operator<<(ostream& os, const Rules& rules) {
+    os << "player_count:     " << rules.player_count << endl;
+    os << "tile_count:       " << rules.tile_count << endl;
+    os << "tile_types:       " << rules.tile_types << endl;
+    os << "line_bonus:       " << rules.line_bonus << endl;
+    os << "column_bonus:     " << rules.column_bonus << endl;
+    os << "type_bonus:       " << rules.type_bonus << endl;
+    os << "overflow_count:   " << rules.overflow_count << endl;
+    os << "overflow_penalty: " << rules.overflow_penalty << endl;
+    return os;
+}
+
+string
+Rules::str() const {
+    ostringstream os;
+    os << *this;
+    return os.str();
+}
+
+string
+Rules::repr() const {
+    ostringstream os;
+    os << "<Ceramic Rules (" << player_count << "p)" << this << ">" << endl;
+    return os.str();
+}

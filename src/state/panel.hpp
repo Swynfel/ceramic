@@ -30,6 +30,11 @@ public:
     const bool get_first_token() const;
     const ushort get_floor() const;
     const ushort get_penalty() const;
+
+    // Reading
+    friend ostream& operator<<(ostream& os, const Panel& panel);
+    string str() const;
+    string repr() const;
 };
 
 #endif //PANEL_HPP

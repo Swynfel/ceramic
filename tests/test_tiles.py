@@ -1,30 +1,6 @@
 import pytest
 from ceramic import Tiles, Tile, TILE_TYPES
 
-# Tile
-
-TILE_VALUES = [0, 1, 2, 3, 4]
-
-
-@pytest.mark.parametrize("value", TILE_VALUES)
-def test_tile(value):
-    tile = Tile(value)
-    assert value == int(tile)
-    assert tile == Tile(value)
-
-
-def test_tile_init_others():
-    assert Tile() == Tile.NONE
-    assert Tile(Tile.NONE) == Tile.NONE
-    with pytest.raises(ValueError):
-        Tile(TILE_TYPES + 1)
-
-
-@pytest.mark.parametrize("value", TILE_VALUES)
-def test_tile_str(value):
-    assert str(Tile(value)) == f"<{value}>"
-
-
 # Tiles
 
 TILES_VALUES = [
@@ -70,13 +46,6 @@ def test_tiles_comparasions(left, right, is_le, is_eq, is_ge):
     assert (left_tiles >= right_tiles) == is_ge
 
 
-@pytest.mark.parametrize("values", TILES_VALUES)
-def test_tiles_str(values):
-    assert str(Tiles(values)) == \
-        str([0 if k >= len(values) else values[k]
-             for k in range(0, 5)]).replace(' ', '')
-
-
 # Operations
 
 @pytest.mark.parametrize("left, right", [
@@ -94,9 +63,10 @@ def test_tiles_operation(left, right):
 @pytest.mark.parametrize("tiles", [
     [1, 2, 3],
     [0, 0, 0, 0, 0],
-    [3, 3, 5, 5, 7]
+    [0, 3, 5, 5, 7]
 ])
 @pytest.mark.parametrize("tile", [
+    0,
     1,
     2
 ])
@@ -107,6 +77,9 @@ def test_tile_tiles_operation(tiles, tile):
     assert _tiles == Tiles(tiles) + _tile
     _tiles -= _tile
     assert _tiles == Tiles(tiles)
+    if _tiles[tile] == 0:
+        with pytest.raises(ValueError):
+            _tiles -= _tile
 
 
 # Constants

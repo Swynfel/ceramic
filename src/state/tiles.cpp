@@ -1,66 +1,10 @@
 #include "tiles.hpp"
 
-#include <assert.h>
-
 #include <algorithm>
-#include <iostream>
 #include <iterator>
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
-
-/*** Tile ***/
-
-Tile::Tile()
-  : value(TILE_TYPES) {}
-
-Tile::Tile(const ushort value)
-  : value(value) {
-    if (value >= TILE_TYPES) {
-        throw std::invalid_argument("Tile color was too big (" + std::to_string(value) + ")");
-    }
-}
-
-Tile::Tile(const Tile& tile)
-  : value(tile.value) {}
-
-const Tile Tile::NONE = Tile();
-
-Tile::operator int() const {
-    return value;
-}
-
-ostream&
-operator<<(ostream& os, const Tile& tile) {
-    if (tile.is_none()) {
-        return os << "< >";
-    }
-    return os << '<' << (int)tile << '>';
-}
-
-bool
-operator==(const Tile& left, const Tile& right) {
-    return left.value == right.value;
-}
-
-bool
-operator!=(const Tile& left, const Tile& right) {
-    return !(left == right);
-}
-
-bool
-Tile::is_none() const {
-    return (this->value == TILE_TYPES);
-}
-
-string
-Tile::str() const {
-    ostringstream os;
-    os << *this;
-    return os.str();
-}
-
-/*** Tiles ***/
 
 // Constructors
 
@@ -102,6 +46,16 @@ Tiles::total() const {
         0);
 }
 
+bool
+Tiles::is_empty() const {
+    return total() == 0;
+}
+
+bool
+Tiles::has_color(Tile color) const {
+    return quantities[color] > 0;
+}
+
 Tiles&
 Tiles::operator+=(const Tiles& other) {
     for (int i = 0; i < TILE_TYPES; i++) {
@@ -112,7 +66,9 @@ Tiles::operator+=(const Tiles& other) {
 
 Tiles&
 Tiles::operator-=(const Tiles& other) {
-    assert(*this >= other);
+    if (*this >= other) {
+        throw std::invalid_argument("Not enough Tiles to substract");
+    }
     for (int i = 0; i < TILE_TYPES; i++) {
         this->quantities[i] -= other.quantities[i];
     }
@@ -171,7 +127,9 @@ Tiles::operator+=(const Tile& tile) {
 
 Tiles&
 Tiles::operator-=(const Tile& tile) {
-    assert(this->quantities[tile] > 0);
+    if (this->quantities[tile] == 0) {
+        throw std::invalid_argument("Not enough Tiles to substract");
+    }
     this->quantities[tile]--;
     return *this;
 }
@@ -235,6 +193,13 @@ string
 Tiles::str() const {
     ostringstream os;
     os << *this;
+    return os.str();
+}
+
+string
+Tiles::repr() const {
+    ostringstream os;
+    os << "Tiles:" << *this;
     return os.str();
 }
 

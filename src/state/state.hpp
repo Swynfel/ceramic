@@ -2,6 +2,7 @@
 #define STATE_HPP
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "factory.hpp"
@@ -18,6 +19,8 @@ private:
     Tiles bin;
     ushort player;
 
+    void assert_player_id(const ushort id) const;
+
 public:
     State(const Rules& rules);
     //State(const State& state);
@@ -27,8 +30,17 @@ public:
 
     const Rules& get_rules() const;
     const ushort get_current_player() const;
+    Factory& get_factory_mut(const ushort id);
+    Panel& get_panel_mut(const ushort id);
+    const Factory& get_factory(const ushort id) const;
+    const Panel& get_panel(const ushort id) const;
     void set_current_player(const ushort id);
-    void next_player() const;
+    void next_player();
+
+    // Reading
+    friend ostream& operator<<(ostream& os, const State& state);
+    string str() const;
+    string repr() const;
 };
 
 #endif //STATE_HPP

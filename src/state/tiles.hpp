@@ -2,36 +2,13 @@
 #define TILES_HPP
 
 #include <array>
-#include <memory>
 #include <string>
 #include <vector>
 
 #include "../global.hpp"
+#include "tile.hpp"
 
 using namespace std;
-
-/*** Tile ***/
-
-struct Tile {
-private:
-    ushort value;
-
-public:
-    Tile();
-    Tile(ushort value);
-    Tile(const Tile& tile);
-
-    static const Tile NONE;
-
-    operator int() const;
-    friend ostream& operator<<(ostream& os, const Tile& tiles);
-    friend bool operator==(const Tile& left, const Tile& right);
-    friend bool operator!=(const Tile& left, const Tile& right);
-    bool is_none() const;
-    string str() const;
-};
-
-/*** Tiles ***/
 
 class Tiles {
     array<ushort, TILE_TYPES> quantities;
@@ -47,6 +24,8 @@ public:
     ushort& operator[](Tile tile);
     ushort total() const;
     constexpr ushort size() const { return TILE_TYPES; }
+    bool is_empty() const;
+    bool has_color(Tile color) const;
 
     friend bool operator==(const Tiles& left, const Tiles& right);
     friend bool operator!=(const Tiles& left, const Tiles& right);
@@ -68,8 +47,9 @@ public:
 
     // Reading
     friend ostream& operator<<(ostream& os, const Tiles& tiles);
-
     string str() const;
+    string repr() const;
+
     array<ushort, TILE_TYPES> get_quantities() const;
 
     static const Tiles ZERO;

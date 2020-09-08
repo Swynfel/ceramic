@@ -1,5 +1,7 @@
 #include "pyramid.hpp"
 
+#include <sstream>
+
 Pyramid::Pyramid(ushort size)
   : size(size)
   , tile_types()
@@ -70,4 +72,49 @@ Pyramid::filled() const {
         result.push_back(is_filled(i));
     }
     return result;
+}
+
+// Reading
+
+void
+Pyramid::stream_line(ostream& os, const ushort line, bool brackets) const {
+    int a = amount(line);
+    string c = to_string(int(color(line)));
+    if (brackets) {
+        os << "[";
+    }
+    for (int i = 0; i < line; i++) {
+        os << (i < a ? c : " ");
+    }
+    if (brackets) {
+        os << "]";
+    }
+}
+
+ostream&
+operator<<(ostream& os, const Pyramid& pyramid) {
+    for (int line = 0; line < pyramid.size; line++) {
+        os << (line == 0 ? '[' : ' ');
+        pyramid.stream_line(os, line, true);
+        os << (line == pyramid.size - 1 ? ']' : '\n');
+    }
+    return os;
+}
+
+string
+Pyramid::str() const {
+    ostringstream os;
+    os << *this;
+    return os.str();
+}
+
+string
+Pyramid::repr() const {
+    ostringstream os;
+    os << "[Pyramid:";
+    for (int line = 0; line < size; line++) {
+        stream_line(os, line, false);
+        os << (line == size - 1 ? ']' : '|');
+    }
+    return os.str();
 }

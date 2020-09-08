@@ -1,5 +1,7 @@
 #include "panel.hpp"
 
+#include <sstream>
+
 Panel::Panel(const Rules& rules)
   : rules(rules)
   , score(0)
@@ -61,4 +63,37 @@ Panel::get_floor() const {
 const ushort
 Panel::get_penalty() const {
     return rules.penalty_for_floor(get_floor());
+}
+
+// Reading
+
+ostream&
+operator<<(ostream& os, const Panel& panel) {
+    os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << endl;
+    for (int line = 0; line < panel.rules.tile_types; line++) {
+        os << (line == 0 ? '[' : ' ');
+        panel.wall.stream_line(os, line, true);
+        os << ' ';
+        panel.pyramid.stream_line(os, line, true);
+        os << (line == panel.rules.tile_types - 1 ? ']' : '\n');
+    }
+    os << "Floor: " << panel.floor << " (-" << panel.get_penalty() << ")" << endl;
+    return os;
+}
+
+string
+Panel::str() const {
+    ostringstream os;
+    os << *this;
+    return os.str();
+}
+
+string
+Panel::repr() const {
+    ostringstream os;
+    os << "<Panel:" << score << (first_token ? "+" : "")
+       << wall.repr() << pyramid.repr()
+       << "[f:" << floor << "(-" << get_penalty() << ")]"
+       << ">";
+    return os.str();
 }

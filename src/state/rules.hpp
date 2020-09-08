@@ -2,8 +2,11 @@
 #define RULES_HPP
 
 #include <memory>
+#include <string>
 
 #include "../global.hpp"
+
+using namespace std;
 
 class Rules {
 
@@ -25,6 +28,11 @@ public:
     const ushort factories() const;
 
     static const Rules DEFAULT;
+
+    // Reading
+    friend ostream& operator<<(ostream& os, const Rules& rules);
+    string str() const;
+    string repr() const;
 };
 
 #endif //RULE_HPP

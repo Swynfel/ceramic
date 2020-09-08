@@ -1,6 +1,6 @@
 #include "wall.hpp"
 
-#include <assert.h>
+#include <sstream>
 
 Wall::Wall(const ushort size)
   : size(size)
@@ -22,7 +22,9 @@ Wall::clear() {
 
 bool
 Wall::is_placed_at(ushort x, ushort y) const {
-    assert(x < size && y < size);
+    if (x >= size || y >= size) {
+        throw std::range_error("x or y out of range");
+    }
     return placed[x + y * size];
 }
 
@@ -43,4 +45,48 @@ Wall::get_placed_array() const {
         slice_start = slice_end;
     }
     return result;
+}
+
+// Reading
+
+void
+Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
+    if (brackets) {
+        os << "[";
+    }
+    for (int i = 0; i < size; i++) {
+        os << is_placed_at(i, line) ? 'x' : ' ';
+    }
+    if (brackets) {
+        os << "]";
+    }
+}
+
+ostream&
+operator<<(ostream& os, const Wall& wall) {
+    int x = 0;
+    for (int line = 0; line < wall.size; line++) {
+        os << (line == 0 ? '[' : ' ');
+        wall.stream_line(os, line, true);
+        os << (line == wall.size - 1 ? ']' : '\n');
+    }
+    return os;
+}
+
+string
+Wall::str() const {
+    ostringstream os;
+    os << *this;
+    return os.str();
+}
+
+string
+Wall::repr() const {
+    ostringstream os;
+    os << "[Wall:";
+    for (int line = 0; line < size; line++) {
+        stream_line(os, line, false);
+        os << (line == size - 1 ? ']' : '|');
+    }
+    return os.str();
 }
