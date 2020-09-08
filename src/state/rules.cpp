@@ -42,13 +42,4 @@ Rules::factories() const {
     return 1 + 2 * player_count;
 }
 
-// Lazy shared_default_rules initialization
-std::shared_ptr<Rules> Rules::shared_default_rules = nullptr;
-
-std::shared_ptr<Rules>
-Rules::get_default() {
-    if (shared_default_rules == nullptr) {
-        shared_default_rules = std::make_shared<Rules>();
-    }
-    return shared_default_rules;
-}
+const Rules Rules::DEFAULT = Rules();

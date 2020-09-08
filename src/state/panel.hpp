@@ -10,7 +10,7 @@
 
 class Panel {
 private:
-    const std::weak_ptr<Rules> rules;
+    const Rules rules;
     ushort score;
     Pyramid pyramid;
     Wall wall;
@@ -18,12 +18,12 @@ private:
     ushort floor;
 
 public:
-    Panel(std::shared_ptr<Rules> rules);
+    Panel(const Rules& rules);
     Panel(const ushort size);
     Panel(const Panel& panel);
 
     void clear();
-    
+
     const ushort get_score() const;
     const Pyramid get_pyramid() const;
     const Wall get_wall() const;

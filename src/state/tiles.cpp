@@ -97,9 +97,9 @@ Tiles::operator[](Tile tile) {
 ushort
 Tiles::total() const {
     return accumulate(
-      this->quantities.begin(),
-      this->quantities.end(),
-      0);
+        this->quantities.begin(),
+        this->quantities.end(),
+        0);
 }
 
 Tiles&

@@ -15,11 +15,10 @@ Wall::Wall(const Wall& wall)
   : size(wall.size)
   , placed(wall.placed) {}
 
-
-void Wall::clear() {
+void
+Wall::clear() {
     placed.assign(size * size, false);
 }
-
 
 bool
 Wall::is_placed_at(ushort x, ushort y) const {
@@ -40,7 +39,7 @@ Wall::get_placed_array() const {
     for (int i = 0; i < size; i++) {
         slice_end = slice_start + size;
         result.push_back(
-          vector<bool>(slice_start, slice_end));
+            vector<bool>(slice_start, slice_end));
         slice_start = slice_end;
     }
     return result;

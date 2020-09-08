@@ -6,8 +6,6 @@
 #include "../global.hpp"
 
 class Rules {
-private:
-    static std::shared_ptr<Rules> shared_default_rules;
 
 public:
     ushort player_count;
@@ -26,7 +24,7 @@ public:
     const ushort penalty_for_floor(ushort floor) const;
     const ushort factories() const;
 
-    static std::shared_ptr<Rules> get_default();
+    static const Rules DEFAULT;
 };
 
 #endif //RULE_HPP

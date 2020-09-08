@@ -1,5 +1,3 @@
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 #include "factory.hpp"
 #include "panel.hpp"
 #include "pyramid.hpp"
@@ -7,21 +5,20 @@
 #include "state.hpp"
 #include "tiles.hpp"
 #include "wall.hpp"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
-void state_pybind(py::module& m) {
+void
+state_pybind(py::module& m) {
     py::class_<Factory>(m, "Factory")
         .def(py::init<const ushort>())
         .def_readwrite("tiles", &Factory::tiles);
 
-
-
     py::class_<Panel>(m, "Panel")
-        .def(py::init([](Rules rules){
-            return std::make_shared<Rules>(rules);
-        }))
         .def(py::init<const ushort>())
+        .def(py::init<const Rules&>())
         .def(py::init<const Panel&>())
 
         .def_property_readonly("score", &Panel::get_score)
@@ -30,8 +27,6 @@ void state_pybind(py::module& m) {
         .def_property_readonly("first_token", &Panel::get_first_token)
         .def_property_readonly("floor", &Panel::get_floor)
         .def_property_readonly("penalty", &Panel::get_penalty);
-
-
 
     py::class_<Pyramid>(m, "Pyramid")
         .def(py::init<const ushort>())
@@ -49,8 +44,6 @@ void state_pybind(py::module& m) {
         .def("color", &Pyramid::color)
         .def("filled", &Pyramid::filled);
 
-
-
     py::class_<Rules>(m, "Rules")
         .def(py::init<>())
         .def(py::init<const Rules&>())
@@ -67,12 +60,10 @@ void state_pybind(py::module& m) {
         .def("penalty_at", &Rules::penalty_at)
         .def("penalty_for_floor", &Rules::penalty_for_floor)
         .def("factories", &Rules::factories)
-        
-        .def_property_readonly_static("DEFAULT", &Rules::get_default);
 
+        .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; });
 
-
-    py::module tile_module = py::class_<Tile>(m, "Tile")
+    py::class_<Tile>(m, "Tile")
         .def(py::init<>())
         .def(py::init<const ushort>())
         .def(py::init<const Tile&>())
@@ -81,11 +72,10 @@ void state_pybind(py::module& m) {
         .def("__eq__", [](const Tile& self, const Tile& other) { return self == other; })
         .def("__ne__", [](const Tile& self, const Tile& other) { return self != other; })
         .def("is_none", &Tile::is_none)
-        .def("__str__", &Tile::str);
-    tile_module.attr("NONE") = Tile::NONE;
+        .def("__str__", &Tile::str)
+        .def_property_readonly_static("NONE", [](py::object) { return Tile::NONE; });
 
-
-    py::module tiles_module = py::class_<Tiles>(m, "Tiles")
+    py::class_<Tiles>(m, "Tiles")
         .def(py::init<>())
         .def(py::init<const Tile&>())
         .def(py::init<const vector<ushort>&>())
@@ -110,22 +100,20 @@ void state_pybind(py::module& m) {
         .def("__ne__", [](const Tiles& self, const Tiles& other) { return self != other; })
         .def("__le__", [](const Tiles& self, const Tiles& other) { return self <= other; })
         .def("__ge__", [](const Tiles& self, const Tiles& other) { return self >= other; })
-        
+
         .def("__add__", [](const Tiles& self, const Tiles& other) { return self + other; })
         .def("__sub__", [](const Tiles& self, const Tiles& other) { return self - other; })
         .def("__radd__", [](Tiles& self, const Tiles& other) { self += other; })
         .def("__rsub__", [](Tiles& self, const Tiles& other) { self -= other; })
-        
+
         .def("__add__", [](const Tiles& self, const Tile& other) { return self + other; })
         .def("__sub__", [](const Tiles& self, const Tile& other) { return self - other; })
         .def("__radd__", [](Tiles& self, const Tile& other) { self += other; })
         .def("__rsub__", [](Tiles& self, const Tile& other) { self -= other; })
-        
+
         .def("__str__", &Tiles::str)
-        .def_property_readonly("quantities", &Tiles::get_quantities);
-    tiles_module.attr("ZERO") = Tiles::ZERO;
-
-
+        .def_property_readonly("quantities", &Tiles::get_quantities)
+        .def_property_readonly_static("ZERO", [](py::object) { return Tiles::ZERO; });
 
     py::class_<Wall>(m, "Wall")
         .def(py::init<const ushort>())

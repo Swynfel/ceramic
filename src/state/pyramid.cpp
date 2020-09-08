@@ -15,7 +15,6 @@ Pyramid::Pyramid(const Pyramid& pyramid)
   , tile_types(pyramid.tile_types)
   , tile_filled(pyramid.tile_filled) {}
 
-
 void
 Pyramid::clear() {
     tile_types.assign(size, Tile::NONE);
@@ -33,13 +32,11 @@ Pyramid::set_line(ushort line, ushort amount, Tile color) {
     Tile previous_color = tile_types[line];
     if (previous_color != Tile::NONE && color != previous_color) {
         throw std::invalid_argument(
-            "Placing wrong tile color '" + color.str() + "' on pyramid line already holding tiles of color '" + previous_color.str() + "'"
-        );
+            "Placing wrong tile color '" + color.str() + "' on pyramid line already holding tiles of color '" + previous_color.str() + "'");
     }
     tile_types[line] = color;
     tile_filled[line] = amount;
 }
-
 
 bool
 Pyramid::is_filled(ushort line) const {
@@ -65,7 +62,6 @@ Tile
 Pyramid::color(ushort line) const {
     return tile_types[line];
 }
-
 
 vector<bool>
 Pyramid::filled() const {
