@@ -71,6 +71,8 @@ public:
 
     string str() const;
     array<ushort, TILE_TYPES> get_quantities() const;
+
+    static const Tiles ZERO;
 };
 
 #endif //TILES_HPP

@@ -14,10 +14,10 @@
 Tile::Tile()
   : value(TILE_TYPES) {}
 
-Tile::Tile(ushort value)
+Tile::Tile(const ushort value)
   : value(value) {
     if (value >= TILE_TYPES) {
-        throw std::invalid_argument("Tile color was too big");
+        throw std::invalid_argument("Tile color was too big (" + std::to_string(value) + ")");
     }
 }
 
@@ -242,3 +242,5 @@ array<ushort, TILE_TYPES>
 Tiles::get_quantities() const {
     return quantities;
 }
+
+const Tiles Tiles::ZERO = Tiles();

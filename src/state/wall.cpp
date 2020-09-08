@@ -2,10 +2,10 @@
 
 #include <assert.h>
 
-Wall::Wall(ushort size)
+Wall::Wall(const ushort size)
   : size(size)
   , placed() {
-    placed.assign(size * size, false);
+    clear();
 }
 
 Wall::Wall(const Rules& rule)
@@ -14,6 +14,12 @@ Wall::Wall(const Rules& rule)
 Wall::Wall(const Wall& wall)
   : size(wall.size)
   , placed(wall.placed) {}
+
+
+void Wall::clear() {
+    placed.assign(size * size, false);
+}
+
 
 bool
 Wall::is_placed_at(ushort x, ushort y) const {

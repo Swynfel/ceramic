@@ -14,11 +14,19 @@ private:
     vector<ushort> tile_filled;
 
 public:
-    Pyramid(ushort size);
+    Pyramid(const ushort size);
     Pyramid(const Rules& rule);
     Pyramid(const Pyramid& pyramid);
 
+    void clear();
+    void clear_line(ushort line);
+    void set_line(ushort line, ushort amount, Tile color);
+
     bool is_filled(ushort line) const;
+    bool is_empty(ushort line) const;
+    ushort amount(ushort line) const;
+    ushort amount_remaining(ushort line) const;
+    Tile color(ushort line) const;
     vector<bool> filled() const;
 };
 

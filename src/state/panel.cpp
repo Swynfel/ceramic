@@ -8,7 +8,7 @@ Panel::Panel(std::shared_ptr<Rules> rules)
   , first_token(false)
   , floor(0) {}
 
-Panel::Panel(ushort size)
+Panel::Panel(const ushort size)
   : rules()
   , score(0)
   , pyramid(size)
@@ -23,6 +23,16 @@ Panel::Panel(const Panel& panel)
   , wall(panel.wall)
   , first_token(panel.first_token)
   , floor(panel.floor) {}
+
+
+void Panel::clear() {
+    score = 0;
+    pyramid.clear();
+    wall.clear();
+    first_token = false;
+    floor = 0;
+}
+
 
 const ushort
 Panel::get_score() const {
@@ -54,6 +64,5 @@ Panel::get_penalty() const {
     if (auto strong_rules = rules.lock()) {
         return strong_rules->penalty_for_floor(get_floor());
     }
-    // TODO: Exception
-    return 0;
+    throw runtime_error("Unable compute penalty with expired rules");
 }

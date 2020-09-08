@@ -13,9 +13,11 @@ private:
     vector<bool> placed;
 
 public:
-    Wall(ushort size);
+    Wall(const ushort size);
     Wall(const Rules& rule);
     Wall(const Wall& wall);
+
+    void clear();
 
     bool is_placed_at(ushort x, ushort y) const;
     const vector<bool> get_placed() const;

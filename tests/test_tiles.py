@@ -1,5 +1,5 @@
 import pytest
-from ceramic import Tiles, Tile
+from ceramic import Tiles, Tile, TILE_TYPES
 
 # Tile
 
@@ -14,8 +14,10 @@ def test_tile(value):
 
 
 def test_tile_init_others():
-    tile = Tile()
-    Tile(tile)
+    assert Tile() == Tile.NONE
+    assert Tile(Tile.NONE) == Tile.NONE
+    with pytest.raises(ValueError):
+        Tile(TILE_TYPES + 1)
 
 
 @pytest.mark.parametrize("value", TILE_VALUES)
@@ -74,10 +76,10 @@ def test_tiles_str(values):
         str([0 if k >= len(values) else values[k]
              for k in range(0, 5)]).replace(' ', '')
 
+
 # Operations
 
-
-@ pytest.mark.parametrize("left, right", [
+@pytest.mark.parametrize("left, right", [
     ([1, 2, 3], [0, 0, 2])
 ])
 def test_tiles_operation(left, right):
@@ -89,12 +91,12 @@ def test_tiles_operation(left, right):
     assert total_tiles.total() == sum(total)
 
 
-@ pytest.mark.parametrize("tiles", [
+@pytest.mark.parametrize("tiles", [
     [1, 2, 3],
     [0, 0, 0, 0, 0],
     [3, 3, 5, 5, 7]
 ])
-@ pytest.mark.parametrize("tile", [
+@pytest.mark.parametrize("tile", [
     1,
     2
 ])
@@ -105,3 +107,13 @@ def test_tile_tiles_operation(tiles, tile):
     assert _tiles == Tiles(tiles) + _tile
     _tiles -= _tile
     assert _tiles == Tiles(tiles)
+
+
+# Constants
+
+def test_tiles_zero():
+    assert Tiles() == Tiles.ZERO
+
+
+def test_tiles_len():
+    assert len(Tiles()) == TILE_TYPES

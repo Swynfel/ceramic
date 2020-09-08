@@ -14,6 +14,8 @@ private:
     const std::shared_ptr<Rules> rules;
     std::vector<Factory> factories;
     std::vector<Panel> panels;
+    Tiles bag;
+    Tiles bin;
 
 public:
     State(const std::shared_ptr<Rules>& rules);

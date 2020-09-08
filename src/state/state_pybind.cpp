@@ -13,12 +13,14 @@ namespace py = pybind11;
 void state_pybind(py::module& m) {
     py::class_<Factory>(m, "Factory")
         .def(py::init<const ushort>())
-        .def_readonly("tiles", &Factory::tiles);
+        .def_readwrite("tiles", &Factory::tiles);
 
 
 
     py::class_<Panel>(m, "Panel")
-        .def(py::init<std::shared_ptr<Rules>>())
+        .def(py::init([](Rules rules){
+            return std::make_shared<Rules>(rules);
+        }))
         .def(py::init<const ushort>())
         .def(py::init<const Panel&>())
 
@@ -31,7 +33,46 @@ void state_pybind(py::module& m) {
 
 
 
-    py::class_<Tile>(m, "Tile")
+    py::class_<Pyramid>(m, "Pyramid")
+        .def(py::init<const ushort>())
+        .def(py::init<const Rules&>())
+        .def(py::init<const Pyramid&>())
+
+        .def("clear", &Pyramid::clear)
+        .def("clear_line", &Pyramid::clear_line)
+        .def("set_line", &Pyramid::set_line)
+
+        .def("is_filled", &Pyramid::is_filled)
+        .def("is_empty", &Pyramid::is_empty)
+        .def("amount", &Pyramid::amount)
+        .def("amount_remaining", &Pyramid::amount_remaining)
+        .def("color", &Pyramid::color)
+        .def("filled", &Pyramid::filled);
+
+
+
+    py::class_<Rules>(m, "Rules")
+        .def(py::init<>())
+        .def(py::init<const Rules&>())
+
+        .def_readwrite("player_count", &Rules::player_count)
+        .def_readwrite("tile_count", &Rules::tile_count)
+        .def_readwrite("tile_types", &Rules::tile_types)
+        .def_readwrite("line_bonus", &Rules::line_bonus)
+        .def_readwrite("column_bonus", &Rules::column_bonus)
+        .def_readwrite("type_bonus", &Rules::type_bonus)
+        .def_readwrite("overflow_count", &Rules::overflow_count)
+        .def_readwrite("overflow_penalty", &Rules::overflow_penalty)
+
+        .def("penalty_at", &Rules::penalty_at)
+        .def("penalty_for_floor", &Rules::penalty_for_floor)
+        .def("factories", &Rules::factories)
+        
+        .def_property_readonly_static("DEFAULT", &Rules::get_default);
+
+
+
+    py::module tile_module = py::class_<Tile>(m, "Tile")
         .def(py::init<>())
         .def(py::init<const ushort>())
         .def(py::init<const Tile&>())
@@ -41,9 +82,10 @@ void state_pybind(py::module& m) {
         .def("__ne__", [](const Tile& self, const Tile& other) { return self != other; })
         .def("is_none", &Tile::is_none)
         .def("__str__", &Tile::str);
+    tile_module.attr("NONE") = Tile::NONE;
 
 
-    py::class_<Tiles>(m, "Tiles")
+    py::module tiles_module = py::class_<Tiles>(m, "Tiles")
         .def(py::init<>())
         .def(py::init<const Tile&>())
         .def(py::init<const vector<ushort>&>())
@@ -81,4 +123,16 @@ void state_pybind(py::module& m) {
         
         .def("__str__", &Tiles::str)
         .def_property_readonly("quantities", &Tiles::get_quantities);
+    tiles_module.attr("ZERO") = Tiles::ZERO;
+
+
+
+    py::class_<Wall>(m, "Wall")
+        .def(py::init<const ushort>())
+        .def(py::init<const Rules&>())
+        .def(py::init<const Wall&>())
+
+        .def("clear", &Wall::clear)
+        .def("is_placed_at", &Wall::is_placed_at)
+        .def("get_placed", &Wall::get_placed);
 }
