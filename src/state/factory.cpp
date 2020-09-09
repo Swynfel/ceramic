@@ -5,26 +5,19 @@
 // Constructor
 
 Factory::Factory(ushort _id)
-  : id(_id)
-  , tiles() {}
+  : Tiles()
+  , id(_id) {}
 
-// Utils
-
-bool
-Factory::is_empty() const {
-    return tiles.is_empty();
-}
-
-bool
-Factory::has_color(Tile color) const {
-    return tiles.has_color(color);
+void
+Factory::set_tiles(const Tiles& tiles) {
+    quantities = tiles.get_quantities();
 }
 
 // Reading
 
 ostream&
 operator<<(ostream& os, const Factory& factory) {
-    os << "<#" << factory.id << ":" << factory.tiles << ">";
+    os << "<#" << factory.id << ":" << (Tiles)(factory) << ">";
     return os;
 }
 
@@ -38,6 +31,6 @@ Factory::str() const {
 string
 Factory::repr() const {
     ostringstream os;
-    os << "<Factory#" << id << ":" << tiles << ">";
+    os << "<Factory#" << id << ":" << (Tiles)(*this) << ">";
     return os.str();
 }

@@ -17,6 +17,19 @@ Pyramid::Pyramid(const Pyramid& pyramid)
   , tile_types(pyramid.tile_types)
   , tile_filled(pyramid.tile_filled) {}
 
+// Place before every direct acces to arrays tile_types and tile_filled
+void
+Pyramid::assert_line(const ushort line) const {
+    if (line == 0) {
+        throw std::range_error("No line '0', as it designates the floor.");
+    }
+    if (line > size) {
+        throw std::range_error("No line '" + to_string(line) + "', as there is only '" + to_string(size) + "' lines.");
+    }
+}
+
+// Methods
+
 void
 Pyramid::clear() {
     tile_types.assign(size, Tile::NONE);
@@ -25,24 +38,26 @@ Pyramid::clear() {
 
 void
 Pyramid::clear_line(ushort line) {
-    tile_types[line] = Tile::NONE;
-    tile_filled[line] = 0;
+    assert_line(line);
+    tile_types[line - 1] = Tile::NONE;
+    tile_filled[line - 1] = 0;
 }
 
 void
 Pyramid::set_line(ushort line, ushort amount, Tile color) {
-    Tile previous_color = tile_types[line];
+    assert_line(line);
+    Tile previous_color = tile_types[line - 1];
     if (previous_color != Tile::NONE && color != previous_color) {
         throw std::invalid_argument(
             "Placing wrong tile color '" + color.str() + "' on pyramid line already holding tiles of color '" + previous_color.str() + "'");
     }
-    tile_types[line] = color;
-    tile_filled[line] = amount;
+    tile_types[line - 1] = color;
+    tile_filled[line - 1] = amount;
 }
 
 bool
 Pyramid::is_filled(ushort line) const {
-    return amount(line) == line + 1;
+    return amount(line) == line;
 }
 
 bool
@@ -52,23 +67,25 @@ Pyramid::is_empty(ushort line) const {
 
 ushort
 Pyramid::amount(ushort line) const {
-    return tile_filled[line];
+    assert_line(line);
+    return tile_filled[line - 1];
 }
 
 ushort
 Pyramid::amount_remaining(ushort line) const {
-    return line + 1 - tile_filled[line];
+    return line - amount(line);
 }
 
 Tile
 Pyramid::color(ushort line) const {
-    return tile_types[line];
+    assert_line(line);
+    return tile_types[line - 1];
 }
 
 vector<bool>
 Pyramid::filled() const {
     vector<bool> result;
-    for (ushort i = 0; i < size; i++) {
+    for (ushort i = 1; i <= size; i++) {
         result.push_back(is_filled(i));
     }
     return result;
@@ -83,8 +100,8 @@ Pyramid::stream_line(ostream& os, const ushort line, bool brackets) const {
     if (brackets) {
         os << "[";
     }
-    for (int i = 0; i < line; i++) {
-        os << (i < a ? c : " ");
+    for (int i = 1; i <= line; i++) {
+        os << (i <= a ? c : " ");
     }
     if (brackets) {
         os << "]";
@@ -93,10 +110,10 @@ Pyramid::stream_line(ostream& os, const ushort line, bool brackets) const {
 
 ostream&
 operator<<(ostream& os, const Pyramid& pyramid) {
-    for (int line = 0; line < pyramid.size; line++) {
-        os << (line == 0 ? '[' : ' ');
+    for (int line = 1; line <= pyramid.size; line++) {
+        os << (line == 1 ? '[' : ' ');
         pyramid.stream_line(os, line, true);
-        os << (line == pyramid.size - 1 ? ']' : '\n');
+        os << (line == pyramid.size ? ']' : '\n');
     }
     return os;
 }
@@ -112,9 +129,9 @@ string
 Pyramid::repr() const {
     ostringstream os;
     os << "[Pyramid:";
-    for (int line = 0; line < size; line++) {
+    for (int line = 1; line <= size; line++) {
         stream_line(os, line, false);
-        os << (line == size - 1 ? ']' : '|');
+        os << (line == size ? ']' : '|');
     }
     return os.str();
 }

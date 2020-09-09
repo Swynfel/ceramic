@@ -11,6 +11,7 @@
 using namespace std;
 
 class Tiles {
+protected:
     array<ushort, TILE_TYPES> quantities;
 
 public:
@@ -47,10 +48,11 @@ public:
 
     // Reading
     friend ostream& operator<<(ostream& os, const Tiles& tiles);
-    string str() const;
-    string repr() const;
+    string virtual str() const;
+    string virtual repr() const;
 
     array<ushort, TILE_TYPES> get_quantities() const;
+    void set_quantities(array<ushort, TILE_TYPES> quantities);
 
     static const Tiles ZERO;
 };

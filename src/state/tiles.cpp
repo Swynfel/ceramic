@@ -208,4 +208,9 @@ Tiles::get_quantities() const {
     return quantities;
 }
 
+void
+Tiles::set_quantities(array<ushort, TILE_TYPES> _quantities) {
+    quantities = _quantities;
+}
+
 const Tiles Tiles::ZERO = Tiles();

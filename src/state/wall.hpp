@@ -12,6 +12,9 @@ private:
     const ushort size;
     vector<bool> placed;
 
+    void assert_line(const ushort line) const;
+    void assert_column(const ushort column) const;
+
 public:
     Wall(const ushort size);
     Wall(const Rules& rule);

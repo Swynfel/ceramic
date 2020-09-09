@@ -45,8 +45,18 @@ Panel::get_pyramid() const {
     return pyramid;
 }
 
+Pyramid
+Panel::get_pyramid_mut() {
+    return pyramid;
+}
+
 const Wall
 Panel::get_wall() const {
+    return wall;
+}
+
+Wall
+Panel::get_wall_mut() {
     return wall;
 }
 
@@ -55,9 +65,25 @@ Panel::get_first_token() const {
     return first_token;
 }
 
+void
+Panel::set_first_token(bool value) {
+    first_token = value;
+}
+
 const ushort
 Panel::get_floor() const {
     return floor;
+}
+
+void
+Panel::add_floor(const ushort value) {
+    floor += value;
+    floor = max(floor, rules.overflow_count);
+}
+
+void
+Panel::clear_floor() {
+    floor = 0;
 }
 
 const ushort
@@ -70,12 +96,12 @@ Panel::get_penalty() const {
 ostream&
 operator<<(ostream& os, const Panel& panel) {
     os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << endl;
-    for (int line = 0; line < panel.rules.tile_types; line++) {
-        os << (line == 0 ? '[' : ' ');
+    for (int line = 1; line <= panel.rules.tile_types; line++) {
+        os << (line == 1 ? '[' : ' ');
         panel.wall.stream_line(os, line, true);
         os << ' ';
         panel.pyramid.stream_line(os, line, true);
-        os << (line == panel.rules.tile_types - 1 ? ']' : '\n');
+        os << (line == panel.rules.tile_types ? ']' : '\n');
     }
     os << "Floor: " << panel.floor << " (-" << panel.get_penalty() << ")" << endl;
     return os;

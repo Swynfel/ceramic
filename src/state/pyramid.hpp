@@ -13,6 +13,8 @@ private:
     vector<Tile> tile_types;
     vector<ushort> tile_filled;
 
+    void assert_line(const ushort line) const;
+
 public:
     Pyramid(const ushort size);
     Pyramid(const Rules& rule);

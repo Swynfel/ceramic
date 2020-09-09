@@ -4,16 +4,22 @@
 
 State::State(const Rules& rules)
   : rules(rules)
-  , factories(rules.factories(), Factory(rules.player_count))
+  , center()
+  , factories()
   , panels(rules.player_count, Panel(rules))
   , bag()
-  , bin() {}
+  , bin() {
+    int factory_count = rules.factories();
+    for (int i = 1; i < factory_count; i++) {
+        factories.push_back(Factory(i));
+    }
+}
 
 void
 State::start() {
     bag = Tiles(vector<ushort>(rules.tile_types, rules.tile_count));
     for (Factory& factory : factories) {
-        factory.tiles = Tiles::ZERO;
+        factory.set_tiles(Tiles::ZERO);
     }
     for (Panel& panel : panels) {
         panel.clear();
@@ -24,6 +30,16 @@ void
 State::assert_player_id(const ushort id) const {
     if (id >= rules.player_count) {
         throw std::invalid_argument("No player with id '" + to_string(id) + "', as there is only '" + to_string(rules.player_count) + "' players.");
+    }
+}
+
+void
+State::assert_factory_id(const ushort id) const {
+    if (id == 0) {
+        throw std::invalid_argument("No factory with id '0', as it designates the Center.");
+    }
+    if (id > factories.size()) {
+        throw std::invalid_argument("No factory with id '" + to_string(id) + "', as there is only '" + to_string(factories.size()) + "' factories.");
     }
 }
 
@@ -41,14 +57,26 @@ State::get_current_player() const {
     return player;
 }
 
+const Center&
+State::get_center() const {
+    return center;
+}
+
+Center&
+State::get_center_mut() {
+    return center;
+}
+
 const Factory&
 State::get_factory(const ushort id) const {
-    return factories[id];
+    assert_factory_id(id);
+    return factories[id - 1];
 }
 
 Factory&
 State::get_factory_mut(const ushort id) {
-    return factories[id];
+    assert_factory_id(id);
+    return factories[id - 1];
 }
 
 const Panel&

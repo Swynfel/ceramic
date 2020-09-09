@@ -22,7 +22,7 @@ def test_pyramid_methods():
 
     with pytest.raises(ValueError):
         pyramid.set_line(2, 2, Tile(1))
-    pyramid.set_line(2, 3, Tile(2))
+    pyramid.set_line(2, 2, Tile(2))
     assert not pyramid.is_empty(2)
     assert pyramid.is_filled(2)
     assert pyramid.color(2) == Tile(2)

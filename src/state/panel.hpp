@@ -26,9 +26,14 @@ public:
 
     const ushort get_score() const;
     const Pyramid get_pyramid() const;
+    Pyramid get_pyramid_mut();
     const Wall get_wall() const;
+    Wall get_wall_mut();
     const bool get_first_token() const;
+    void set_first_token(const bool value);
     const ushort get_floor() const;
+    void add_floor(const ushort value);
+    void clear_floor();
     const ushort get_penalty() const;
 
     // Reading
