@@ -2,14 +2,16 @@
 namespace py = pybind11;
 #include "global.hpp"
 
-void state_pybind(py::module& m);
-void action_pybind(py::module& m);
+void py_bind_state(py::module& root);
+void py_bind_game(py::module& root);
+void py_bind_rules(py::module& root);
 
 PYBIND11_MODULE(ceramic, m) {
     m.doc() = "Azul-like Game Environment";
 
     m.attr("TILE_TYPES") = TILE_TYPES;
 
-    state_pybind(m);
-    action_pybind(m);
+    py_bind_rules(m);
+    py_bind_state(m);
+    py_bind_game(m);
 }

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../global.hpp"
-#include "rules.hpp"
+#include "../rules/rules.hpp"
 #include "tiles.hpp"
 
 class Pyramid {
@@ -17,7 +17,7 @@ private:
 
 public:
     Pyramid(const ushort size);
-    Pyramid(const Rules& rule);
+    Pyramid(const std::shared_ptr<Rules>& rule);
     Pyramid(const Pyramid& pyramid);
 
     void clear();

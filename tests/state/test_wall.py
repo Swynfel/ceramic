@@ -1,5 +1,6 @@
 import pytest
-from ceramic import Wall, TILE_TYPES
+from ceramic.state import Wall
+from ceramic import TILE_TYPES
 
 SIZES = [3, 5]
 

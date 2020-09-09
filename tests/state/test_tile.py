@@ -1,5 +1,6 @@
 import pytest
-from ceramic import Tile, TILE_TYPES
+from ceramic.state import Tile
+from ceramic import TILE_TYPES
 
 
 TILE_VALUES = [0, 1, 2, 3, 4]

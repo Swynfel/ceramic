@@ -4,13 +4,13 @@
 #include <memory>
 
 #include "../global.hpp"
+#include "../rules/rules.hpp"
 #include "pyramid.hpp"
-#include "rules.hpp"
 #include "wall.hpp"
 
 class Panel {
 private:
-    const Rules rules;
+    const std::shared_ptr<Rules> rules;
     ushort score;
     Pyramid pyramid;
     Wall wall;
@@ -18,8 +18,7 @@ private:
     ushort floor;
 
 public:
-    Panel(const Rules& rules);
-    Panel(const ushort size);
+    Panel(const std::shared_ptr<Rules>& rules);
     Panel(const Panel& panel);
 
     void clear();

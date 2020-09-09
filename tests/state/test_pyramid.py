@@ -1,12 +1,15 @@
 import pytest
-from ceramic import Pyramid, Tile, TILE_TYPES
+from ceramic.rules import Rules
+from ceramic.state import Pyramid, Tile
+from ceramic import TILE_TYPES
 
+RULES = [Rules.MINI, Rules.DEFAULT]
 SIZES = [3, 5]
 
 
-@pytest.mark.parametrize("size", SIZES)
-def test_pyramid_init(size):
-    Pyramid(size)
+@pytest.mark.parametrize("arg", SIZES + RULES)
+def test_pyramid_init(arg):
+    Pyramid(arg)
 
 
 def test_pyramid_methods():

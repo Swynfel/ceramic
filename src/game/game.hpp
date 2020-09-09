@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-#include "../state/rules.hpp"
+#include "../rules/rules.hpp"
 #include "../state/state.hpp"
 #include "action.hpp"
 
@@ -28,7 +28,7 @@ private:
 
 public:
     Game();
-    Game(const Rules& rules);
+    Game(const std::shared_ptr<Rules>& rules);
 
     void start();
     void start_round();

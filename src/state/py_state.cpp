@@ -5,7 +5,6 @@
 #include "factory.hpp"
 #include "panel.hpp"
 #include "pyramid.hpp"
-#include "rules.hpp"
 #include "state.hpp"
 #include "tile.hpp"
 #include "tiles.hpp"
@@ -14,7 +13,9 @@
 namespace py = pybind11;
 
 void
-state_pybind(py::module& m) {
+py_bind_state(py::module& root) {
+    py::module m = root.def_submodule("state", "Classes defining the state of a Ceramic game");
+
     py::class_<Tile>(m, "Tile")
         .def(py::init<>())
         .def(py::init<const ushort>())
@@ -29,6 +30,7 @@ state_pybind(py::module& m) {
 
         .def("__str__", &Tile::str)
         .def("__repr__", &Tile::repr);
+
 
     py::class_<Tiles>(m, "Tiles")
         .def(py::init<>())
@@ -72,6 +74,16 @@ state_pybind(py::module& m) {
         .def("__str__", &Tiles::str)
         .def("__repr__", &Tiles::repr);
 
+
+    py::class_<Center, Tiles>(m, "Center")
+        .def(py::init<>())
+        .def_readonly("first_token", &Center::first_token)
+        .def_property_readonly("tiles", [](Center& center) { return (Tiles)center; })
+
+        .def("__str__", &Center::str)
+        .def("__repr__", &Center::repr);
+
+
     py::class_<Factory, Tiles>(m, "Factory")
         .def(py::init<const ushort>())
         .def_readonly("id", &Factory::id)
@@ -80,16 +92,9 @@ state_pybind(py::module& m) {
         .def("__str__", &Factory::str)
         .def("__repr__", &Factory::repr);
 
-    py::class_<Center, Tiles>(m, "Center")
-        .def(py::init<>())
-        .def_readonly("first_token", &Center::first_token)
-
-        .def("__str__", &Center::str)
-        .def("__repr__", &Center::repr);
 
     py::class_<Panel>(m, "Panel")
-        .def(py::init<const ushort>())
-        .def(py::init<const Rules&>())
+        .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const Panel&>())
 
         .def_property_readonly("score", &Panel::get_score)
@@ -102,9 +107,10 @@ state_pybind(py::module& m) {
         .def("__str__", &Panel::str)
         .def("__repr__", &Panel::repr);
 
+
     py::class_<Pyramid>(m, "Pyramid")
         .def(py::init<const ushort>())
-        .def(py::init<const Rules&>())
+        .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const Pyramid&>())
 
         .def("clear", &Pyramid::clear)
@@ -121,30 +127,9 @@ state_pybind(py::module& m) {
         .def("__str__", &Pyramid::str)
         .def("__repr__", &Pyramid::repr);
 
-    py::class_<Rules>(m, "Rules")
-        .def(py::init<>())
-        .def(py::init<const Rules&>())
-
-        .def_readwrite("player_count", &Rules::player_count)
-        .def_readwrite("tile_count", &Rules::tile_count)
-        .def_readwrite("tile_types", &Rules::tile_types)
-        .def_readwrite("line_bonus", &Rules::line_bonus)
-        .def_readwrite("column_bonus", &Rules::column_bonus)
-        .def_readwrite("type_bonus", &Rules::type_bonus)
-        .def_readwrite("overflow_count", &Rules::overflow_count)
-        .def_readwrite("overflow_penalty", &Rules::overflow_penalty)
-
-        .def("penalty_at", &Rules::penalty_at)
-        .def("penalty_for_floor", &Rules::penalty_for_floor)
-        .def("factories", &Rules::factories)
-
-        .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; })
-
-        .def("__str__", &Rules::str)
-        .def("__repr__", &Rules::repr);
 
     py::class_<State>(m, "State")
-        .def(py::init<const Rules&>())
+        .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const State&>())
 
         .def_property_readonly("rules", &State::get_rules)
@@ -155,9 +140,10 @@ state_pybind(py::module& m) {
         .def("__str__", &State::str)
         .def("__repr__", &State::repr);
 
+
     py::class_<Wall>(m, "Wall")
         .def(py::init<const ushort>())
-        .def(py::init<const Rules&>())
+        .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const Wall&>())
 
         .def("clear", &Wall::clear)

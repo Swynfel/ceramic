@@ -8,8 +8,8 @@ Wall::Wall(const ushort size)
     clear();
 }
 
-Wall::Wall(const Rules& rule)
-  : Wall(rule.tile_types) {}
+Wall::Wall(const std::shared_ptr<Rules>& rule)
+  : Wall(rule->tile_types) {}
 
 Wall::Wall(const Wall& wall)
   : size(wall.size)
@@ -82,7 +82,6 @@ Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
 
 ostream&
 operator<<(ostream& os, const Wall& wall) {
-    int x = 0;
     for (int line = 1; line <= wall.size; line++) {
         os << (line == 1 ? '[' : ' ');
         wall.stream_line(os, line, true);

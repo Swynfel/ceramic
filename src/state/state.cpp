@@ -2,14 +2,14 @@
 
 #include <sstream>
 
-State::State(const Rules& rules)
+State::State(const std::shared_ptr<Rules>& rules)
   : rules(rules)
   , center()
   , factories()
-  , panels(rules.player_count, Panel(rules))
+  , panels(rules->player_count, Panel(rules))
   , bag()
   , bin() {
-    int factory_count = rules.factories();
+    int factory_count = rules->factory_count();
     for (int i = 1; i < factory_count; i++) {
         factories.push_back(Factory(i));
     }
@@ -33,8 +33,8 @@ State::State(const State& state)
 
 void
 State::assert_player_id(const ushort id) const {
-    if (id >= rules.player_count) {
-        throw std::invalid_argument("No player with id '" + to_string(id) + "', as there is only '" + to_string(rules.player_count) + "' players.");
+    if (id >= rules->player_count) {
+        throw std::invalid_argument("No player with id '" + to_string(id) + "', as there is only '" + to_string(rules->player_count) + "' players.");
     }
 }
 
@@ -50,7 +50,7 @@ State::assert_factory_id(const ushort id) const {
 
 void
 State::reset() {
-    bag = Tiles(vector<ushort>(rules.tile_types, rules.tile_count));
+    bag = Tiles(vector<ushort>(rules->tile_types, rules->tile_count));
     for (Factory& factory : factories) {
         factory.set_tiles(Tiles::ZERO);
     }
@@ -59,7 +59,7 @@ State::reset() {
     }
 }
 
-const Rules&
+const std::shared_ptr<Rules>&
 State::get_rules() const {
     return rules;
 }
@@ -134,7 +134,7 @@ State::set_current_player(ushort id) {
 
 void
 State::next_player() {
-    if (player + 1 >= rules.player_count) {
+    if (player + 1 >= rules->player_count) {
         player = 0;
     } else {
         player++;

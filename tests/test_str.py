@@ -1,14 +1,17 @@
 import pytest
-from ceramic import Factory, Panel, Pyramid, Rules, State, Tile, Tiles, Wall, TILE_TYPES
+from ceramic.rules import Rules
+from ceramic.state import Center, Factory, Panel, Pyramid, State, Tile, Tiles, Wall
+from ceramic import TILE_TYPES
 
 E = tuple()
 
 
 @pytest.mark.parametrize("cls, args", [
-    (Factory, (TILE_TYPES,)),
-    (Panel, (TILE_TYPES,)),
-    (Pyramid, (TILE_TYPES,)),
     (Rules, E),
+    (Center, E),
+    (Factory, (0,)),
+    (Panel, (Rules.DEFAULT,)),
+    (Pyramid, (TILE_TYPES,)),
     (State, (Rules.DEFAULT,)),
     (Tile, E),
     (Tile, (0,)),

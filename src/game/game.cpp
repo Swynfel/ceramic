@@ -4,7 +4,7 @@ uniform_int_distribution<> int_dist = uniform_int_distribution<>(1, 6);
 
 // Constuctors
 
-Game::Game(const Rules& rules)
+Game::Game(const std::shared_ptr<Rules>& rules)
   : state(rules)
   , randomness()
   , range() {}
@@ -26,7 +26,7 @@ Tile
 Game::pull_one_random_tile() {
     int v = rand(0, state.bag.total());
     int i;
-    for (i = 0; i < state.rules.tile_types - 1; i++) {
+    for (i = 0; i < state.rules->tile_types - 1; i++) {
         v -= state.bag[i];
         if (v < 0) {
             break;
@@ -85,7 +85,7 @@ Game::pull_random_tiles(int count) {
 void
 Game::start() {
     state.reset();
-    int first_player = rand(0, state.rules.player_count - 1);
+    int first_player = rand(0, state.rules->player_count - 1);
     state.get_panel_mut(first_player).set_first_token(true);
     start_round();
 }
@@ -93,7 +93,7 @@ Game::start() {
 void
 Game::start_round() {
     for (auto& factory : state.factories) {
-        factory.set_tiles(pull_random_tiles(state.rules.factory_tiles));
+        factory.set_tiles(pull_random_tiles(state.rules->factory_tiles));
         if (state.bag.is_empty() && state.bin.is_empty()) {
             break;
         }
@@ -106,9 +106,9 @@ Game::end_round() {
 
 bool
 Game::legal(const Action& action, const State& state) {
-    const Rules& rules = state.get_rules();
+    const std::shared_ptr<Rules>& rules = state.get_rules();
     // Check action is coherent with current rules
-    if (action.color >= rules.tile_types || action.pick > rules.factories()) {
+    if (action.color >= rules->tile_types || action.pick > rules->factory_count()) {
         return false;
     }
     // If action is not "throwing away"
@@ -135,7 +135,7 @@ Game::legal(const Action& action, const State& state) {
 
 void
 Game::apply(const Action& action, State& state) {
-    if (action.color >= state.get_rules().tile_types) {
+    if (action.color >= state.get_rules()->tile_types) {
         throw std::invalid_argument("No tile of color " + action.color.str() + " in game");
     }
     Panel panel = state.get_panel_mut(state.get_current_player());

@@ -2,19 +2,11 @@
 
 #include <sstream>
 
-Panel::Panel(const Rules& rules)
+Panel::Panel(const std::shared_ptr<Rules>& rules)
   : rules(rules)
   , score(0)
-  , pyramid(rules.tile_types)
-  , wall(rules.tile_types)
-  , first_token(false)
-  , floor(0) {}
-
-Panel::Panel(const ushort size)
-  : rules()
-  , score(0)
-  , pyramid(size)
-  , wall(size)
+  , pyramid(rules->tile_types)
+  , wall(rules->tile_types)
   , first_token(false)
   , floor(0) {}
 
@@ -78,7 +70,7 @@ Panel::get_floor() const {
 void
 Panel::add_floor(const ushort value) {
     floor += value;
-    floor = max(floor, rules.overflow_count);
+    floor = max(floor, rules->overflow_count);
 }
 
 void
@@ -88,7 +80,7 @@ Panel::clear_floor() {
 
 const ushort
 Panel::get_penalty() const {
-    return rules.penalty_for_floor(get_floor());
+    return rules->penalty_for_floor(get_floor());
 }
 
 // Reading
@@ -96,7 +88,7 @@ Panel::get_penalty() const {
 ostream&
 operator<<(ostream& os, const Panel& panel) {
     os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << endl;
-    for (int line = 1; line <= panel.rules.tile_types; line++) {
+    for (int line = 1; line <= panel.rules->tile_types; line++) {
         panel.wall.stream_line(os, line, true);
         os << ' ';
         panel.pyramid.stream_line(os, line, true);

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../global.hpp"
-#include "rules.hpp"
+#include "../rules/rules.hpp"
 #include "tiles.hpp"
 
 class Wall {
@@ -17,7 +17,7 @@ private:
 
 public:
     Wall(const ushort size);
-    Wall(const Rules& rule);
+    Wall(const std::shared_ptr<Rules>& rule);
     Wall(const Wall& wall);
 
     void clear();

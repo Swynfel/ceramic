@@ -2,28 +2,6 @@
 
 #include <sstream>
 
-Rules::Rules()
-  : player_count(4)
-  , tile_count(20)
-  , tile_types(TILE_TYPES)
-  , factory_tiles(4)
-  , line_bonus(7)
-  , column_bonus(3)
-  , type_bonus(15)
-  , overflow_count(7)
-  , overflow_penalty(3) {}
-
-Rules::Rules(const Rules& rules)
-  : player_count(rules.player_count)
-  , tile_count(rules.tile_count)
-  , tile_types(rules.tile_types)
-  , factory_tiles(rules.factory_tiles)
-  , line_bonus(rules.line_bonus)
-  , column_bonus(rules.column_bonus)
-  , type_bonus(rules.type_bonus)
-  , overflow_count(rules.overflow_count)
-  , overflow_penalty(rules.overflow_penalty) {}
-
 const ushort
 Rules::penalty_at(ushort position) const {
     if (position >= overflow_count) {
@@ -42,11 +20,42 @@ Rules::penalty_for_floor(ushort floor) const {
 }
 
 const ushort
-Rules::factories() const {
+Rules::factory_count() const {
     return 1 + 2 * player_count;
 }
 
-const Rules Rules::DEFAULT = Rules();
+const std::shared_ptr<Rules> Rules::DEFAULT = std::make_shared<Rules>();
+const std::shared_ptr<Rules> Rules::MINI = std::make_shared<Rules>(Rules{
+    .player_count = 2,
+    .tile_count = 15,
+    .tile_types = 3,
+    .factory_tiles = 3,
+    .line_bonus = 3,
+    .column_bonus = 2,
+    .type_bonus = 5,
+    .overflow_count = 4,
+    .overflow_penalty = 3,
+});
+
+
+bool
+operator==(const Rules left, const Rules right) {
+    return left.player_count == right.player_count &&
+           left.tile_count == right.tile_count &&
+           left.tile_types == right.tile_types &&
+           left.factory_tiles == right.factory_tiles &&
+           left.line_bonus == right.line_bonus &&
+           left.column_bonus == right.column_bonus &&
+           left.type_bonus == right.type_bonus &&
+           left.overflow_count == right.overflow_count &&
+           left.overflow_penalty == right.overflow_penalty;
+}
+
+bool
+operator!=(const Rules left, const Rules right) {
+    return !(left == right);
+}
+
 
 ostream&
 operator<<(ostream& os, const Rules& rules) {

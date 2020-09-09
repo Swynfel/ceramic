@@ -6,5 +6,6 @@
 namespace py = pybind11;
 
 void
-action_pybind(py::module& m) {
+py_bind_game(py::module& root) {
+    py::module m = root.def_submodule("game");
 }

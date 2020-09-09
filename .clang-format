@@ -7,3 +7,4 @@ AlwaysBreakAfterReturnType: TopLevelDefinitions
 BreakBeforeBraces: Attach
 ContinuationIndentWidth: 4
 MaxEmptyLinesToKeep: 2
+AlignAfterOpenBracket: DontAlign

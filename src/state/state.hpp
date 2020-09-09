@@ -5,17 +5,17 @@
 #include <string>
 #include <vector>
 
+#include "../rules/rules.hpp"
 #include "center.hpp"
 #include "factory.hpp"
 #include "panel.hpp"
-#include "rules.hpp"
 #include "tiles.hpp"
 
 class State {
     friend class Game;
 
 private:
-    const Rules rules;
+    const std::shared_ptr<Rules> rules;
     Center center;
     std::vector<Factory> factories;
     std::vector<Panel> panels;
@@ -27,12 +27,12 @@ private:
     void assert_factory_id(const ushort id) const;
 
 public:
-    State(const Rules& rules);
+    State(const std::shared_ptr<Rules>& rules);
     State(const State& state);
 
     void reset();
 
-    const Rules& get_rules() const;
+    const std::shared_ptr<Rules>& get_rules() const;
     const ushort get_current_player() const;
 
     const Center& get_center() const;

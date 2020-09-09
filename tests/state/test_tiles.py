@@ -1,5 +1,6 @@
 import pytest
-from ceramic import Tiles, Tile, TILE_TYPES
+from ceramic.state import Tiles, Tile
+from ceramic import TILE_TYPES
 
 # Tiles
 
