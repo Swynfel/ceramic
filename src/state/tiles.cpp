@@ -11,9 +11,12 @@
 Tiles::Tiles()
   : quantities() {}
 
-Tiles::Tiles(const Tile& tile)
+Tiles::Tiles(const Tile tile)
+  : Tiles(tile, 1) {}
+
+Tiles::Tiles(const Tile tile, const int count)
   : quantities() {
-    quantities[(int)(tile)] = 1;
+    quantities[(int)(tile)] = count;
 }
 
 Tiles::Tiles(const vector<ushort>& tiles)
@@ -34,7 +37,7 @@ Tiles::Tiles(const Tiles& tiles)
 // Utils
 
 ushort&
-Tiles::operator[](Tile tile) {
+Tiles::operator[](const Tile tile) {
     return quantities[tile];
 }
 
@@ -52,20 +55,20 @@ Tiles::is_empty() const {
 }
 
 bool
-Tiles::has_color(Tile color) const {
+Tiles::has_color(const Tile color) const {
     return quantities[color] > 0;
 }
 
-Tiles&
-Tiles::operator+=(const Tiles& other) {
+Tiles
+Tiles::operator+=(const Tiles other) {
     for (int i = 0; i < TILE_TYPES; i++) {
         this->quantities[i] += other.quantities[i];
     }
     return *this;
 }
 
-Tiles&
-Tiles::operator-=(const Tiles& other) {
+Tiles
+Tiles::operator-=(const Tiles other) {
     if (*this >= other) {
         throw std::invalid_argument("Not enough Tiles to substract");
     }
@@ -76,31 +79,31 @@ Tiles::operator-=(const Tiles& other) {
 }
 
 Tiles
-Tiles::operator+(const Tiles& other) const {
+Tiles::operator+(const Tiles other) const {
     Tiles t(*this);
     t += other;
     return t;
 }
 
 Tiles
-Tiles::operator-(const Tiles& other) const {
+Tiles::operator-(const Tiles other) const {
     Tiles t(*this);
     t -= other;
     return t;
 }
 
 bool
-operator==(const Tiles& left, const Tiles& right) {
+operator==(const Tiles left, const Tiles right) {
     return left.quantities == right.quantities;
 }
 
 bool
-operator!=(const Tiles& left, const Tiles& right) {
+operator!=(const Tiles left, const Tiles right) {
     return !(left == right);
 }
 
 bool
-operator<=(const Tiles& left, const Tiles& right) {
+operator<=(const Tiles left, const Tiles right) {
     for (int i = 0; i < TILE_TYPES; i++) {
         if (left.quantities[i] > right.quantities[i]) {
             return false;
@@ -110,7 +113,7 @@ operator<=(const Tiles& left, const Tiles& right) {
 }
 
 bool
-operator>=(const Tiles& left, const Tiles& right) {
+operator>=(const Tiles left, const Tiles right) {
     for (int i = 0; i < TILE_TYPES; i++) {
         if (left.quantities[i] < right.quantities[i]) {
             return false;
@@ -119,14 +122,14 @@ operator>=(const Tiles& left, const Tiles& right) {
     return true;
 }
 
-Tiles&
-Tiles::operator+=(const Tile& tile) {
+Tiles
+Tiles::operator+=(const Tile tile) {
     this->quantities[tile]++;
     return *this;
 }
 
-Tiles&
-Tiles::operator-=(const Tile& tile) {
+Tiles
+Tiles::operator-=(const Tile tile) {
     if (this->quantities[tile] == 0) {
         throw std::invalid_argument("Not enough Tiles to substract");
     }
@@ -135,21 +138,21 @@ Tiles::operator-=(const Tile& tile) {
 }
 
 Tiles
-Tiles::operator+(const Tile& tile) const {
+Tiles::operator+(const Tile tile) const {
     Tiles t(*this);
     t += tile;
     return t;
 }
 
 Tiles
-Tiles::operator-(const Tile& tile) const {
+Tiles::operator-(const Tile tile) const {
     Tiles t(*this);
     t -= tile;
     return t;
 }
 
 bool
-operator<=(const Tiles& left, const ushort& right) {
+operator<=(const Tiles left, const ushort& right) {
     for (int i = 0; i < TILE_TYPES; i++) {
         if (left.quantities[i] > right) {
             return false;
@@ -159,7 +162,7 @@ operator<=(const Tiles& left, const ushort& right) {
 }
 
 bool
-operator>=(const Tiles& left, const ushort& right) {
+operator>=(const Tiles left, const ushort& right) {
     for (int i = 0; i < TILE_TYPES; i++) {
         if (left.quantities[i] < right) {
             return false;
@@ -171,7 +174,7 @@ operator>=(const Tiles& left, const ushort& right) {
 // Reading
 
 ostream&
-operator<<(ostream& os, const Tiles& tiles) {
+operator<<(ostream& os, const Tiles tiles) {
     bool first = true;
     for (uint v : tiles.quantities) {
         if (first) {

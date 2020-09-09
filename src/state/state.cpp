@@ -15,16 +15,21 @@ State::State(const Rules& rules)
     }
 }
 
-void
-State::start() {
-    bag = Tiles(vector<ushort>(rules.tile_types, rules.tile_count));
-    for (Factory& factory : factories) {
-        factory.set_tiles(Tiles::ZERO);
+State::State(const State& state)
+  : rules(state.rules)
+  , center(state.center)
+  , factories()
+  , panels()
+  , bag(state.bag)
+  , bin(state.bin) {
+    for (auto& factory : state.factories) {
+        factories.push_back(Factory(factory));
     }
-    for (Panel& panel : panels) {
-        panel.clear();
+    for (auto& panel : state.panels) {
+        panels.push_back(Panel(panel));
     }
 }
+
 
 void
 State::assert_player_id(const ushort id) const {
@@ -44,7 +49,14 @@ State::assert_factory_id(const ushort id) const {
 }
 
 void
-State::start_round() {
+State::reset() {
+    bag = Tiles(vector<ushort>(rules.tile_types, rules.tile_count));
+    for (Factory& factory : factories) {
+        factory.set_tiles(Tiles::ZERO);
+    }
+    for (Panel& panel : panels) {
+        panel.clear();
+    }
 }
 
 const Rules&
@@ -56,6 +68,7 @@ const ushort
 State::get_current_player() const {
     return player;
 }
+
 
 const Center&
 State::get_center() const {
@@ -91,6 +104,28 @@ State::get_panel_mut(const ushort id) {
     return panels[id];
 }
 
+
+Tiles
+State::get_bag() const {
+    return bag;
+}
+
+Tiles&
+State::get_bag_mut() {
+    return bag;
+}
+
+Tiles
+State::get_bin() const {
+    return bin;
+}
+
+Tiles&
+State::get_bin_mut() {
+    return bin;
+}
+
+
 void
 State::set_current_player(ushort id) {
     assert_player_id(id);
@@ -105,6 +140,9 @@ State::next_player() {
         player++;
     }
 }
+
+
+// Reading
 
 ostream&
 operator<<(ostream& os, const State& state) {

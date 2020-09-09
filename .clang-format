@@ -6,3 +6,4 @@ AccessModifierOffset: -4
 AlwaysBreakAfterReturnType: TopLevelDefinitions
 BreakBeforeBraces: Attach
 ContinuationIndentWidth: 4
+MaxEmptyLinesToKeep: 2

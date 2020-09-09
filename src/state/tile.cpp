@@ -18,12 +18,12 @@ Tile::Tile(const Tile& tile)
 const Tile Tile::NONE = Tile();
 
 bool
-operator==(const Tile& left, const Tile& right) {
+operator==(const Tile left, const Tile right) {
     return left.value == right.value;
 }
 
 bool
-operator!=(const Tile& left, const Tile& right) {
+operator!=(const Tile left, const Tile right) {
     return !(left == right);
 }
 
@@ -37,7 +37,7 @@ Tile::operator int() const {
 }
 
 ostream&
-operator<<(ostream& os, const Tile& tile) {
+operator<<(ostream& os, const Tile tile) {
     if (tile.is_none()) {
         return os << "< >";
     }

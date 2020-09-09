@@ -9,7 +9,7 @@ Center::Center()
   , first_token(false) {}
 
 void
-Center::set_tiles(const Tiles& tiles) {
+Center::set_tiles(const Tiles tiles) {
     quantities = tiles.get_quantities();
 }
 

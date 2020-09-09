@@ -14,6 +14,7 @@ public:
     ushort player_count;
     ushort tile_count; //tile count of each tile type
     ushort tile_types;
+    ushort factory_tiles;
     ushort line_bonus;
     ushort column_bonus;
     ushort type_bonus;

@@ -12,6 +12,8 @@
 #include "tiles.hpp"
 
 class State {
+    friend class Game;
+
 private:
     const Rules rules;
     Center center;
@@ -26,19 +28,25 @@ private:
 
 public:
     State(const Rules& rules);
-    //State(const State& state);
+    State(const State& state);
 
-    void start();
-    void start_round();
+    void reset();
 
     const Rules& get_rules() const;
     const ushort get_current_player() const;
+
     const Center& get_center() const;
     Center& get_center_mut();
     const Factory& get_factory(const ushort id) const;
     Factory& get_factory_mut(const ushort id);
     const Panel& get_panel(const ushort id) const;
     Panel& get_panel_mut(const ushort id);
+
+    Tiles get_bag() const;
+    Tiles& get_bag_mut();
+    Tiles get_bin() const;
+    Tiles& get_bin_mut();
+
     void set_current_player(const ushort id);
     void next_player();
 

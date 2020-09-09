@@ -18,13 +18,13 @@ public:
 
     static const Tile NONE;
 
-    friend bool operator==(const Tile& left, const Tile& right);
-    friend bool operator!=(const Tile& left, const Tile& right);
+    friend bool operator==(const Tile left, const Tile right);
+    friend bool operator!=(const Tile left, const Tile right);
     bool is_none() const;
     operator int() const;
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Tile& tile);
+    friend ostream& operator<<(ostream& os, const Tile tile);
     string str() const;
     string repr() const;
 };

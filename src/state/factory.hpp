@@ -12,7 +12,7 @@ public:
     // Constructor
     Factory(ushort);
 
-    void set_tiles(const Tiles& tiles);
+    void set_tiles(const Tiles tiles);
 
     // Reading
     friend ostream& operator<<(ostream& os, const Factory& factory);

@@ -97,11 +97,10 @@ ostream&
 operator<<(ostream& os, const Panel& panel) {
     os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << endl;
     for (int line = 1; line <= panel.rules.tile_types; line++) {
-        os << (line == 1 ? '[' : ' ');
         panel.wall.stream_line(os, line, true);
         os << ' ';
         panel.pyramid.stream_line(os, line, true);
-        os << (line == panel.rules.tile_types ? ']' : '\n');
+        os << endl;
     }
     os << "Floor: " << panel.floor << " (-" << panel.get_penalty() << ")" << endl;
     return os;

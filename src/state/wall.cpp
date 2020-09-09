@@ -73,7 +73,7 @@ Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
         os << "[";
     }
     for (int i = 1; i <= size; i++) {
-        os << is_placed_at(i, line) ? 'x' : ' ';
+        os << (is_placed_at(i, line) ? 'x' : ' ');
     }
     if (brackets) {
         os << "]";

@@ -9,7 +9,7 @@ Factory::Factory(ushort _id)
   , id(_id) {}
 
 void
-Factory::set_tiles(const Tiles& tiles) {
+Factory::set_tiles(const Tiles tiles) {
     quantities = tiles.get_quantities();
 }
 
