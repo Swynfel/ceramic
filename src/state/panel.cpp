@@ -6,7 +6,7 @@ Panel::Panel(const std::shared_ptr<Rules>& rules)
   : rules(rules)
   , score(0)
   , pyramid(rules->tile_types)
-  , wall(rules->tile_types)
+  , wall(rules)
   , first_token(false)
   , floor(0) {}
 
@@ -27,7 +27,7 @@ Panel::clear() {
     floor = 0;
 }
 
-const ushort
+ushort
 Panel::get_score() const {
     return score;
 }
@@ -37,7 +37,7 @@ Panel::get_pyramid() const {
     return pyramid;
 }
 
-Pyramid
+Pyramid&
 Panel::get_pyramid_mut() {
     return pyramid;
 }
@@ -47,12 +47,12 @@ Panel::get_wall() const {
     return wall;
 }
 
-Wall
+Wall&
 Panel::get_wall_mut() {
     return wall;
 }
 
-const bool
+bool
 Panel::get_first_token() const {
     return first_token;
 }
@@ -62,13 +62,13 @@ Panel::set_first_token(bool value) {
     first_token = value;
 }
 
-const ushort
+ushort
 Panel::get_floor() const {
     return floor;
 }
 
 void
-Panel::add_floor(const ushort value) {
+Panel::add_floor(ushort value) {
     floor += value;
     floor = max(floor, rules->overflow_count);
 }
@@ -78,9 +78,18 @@ Panel::clear_floor() {
     floor = 0;
 }
 
-const ushort
+ushort
 Panel::get_penalty() const {
     return rules->penalty_for_floor(get_floor());
+}
+
+
+bool
+Panel::legal_line(Tile tile, ushort line) const {
+    if (wall.line_has_color(line, tile)) {
+        return false;
+    }
+    return pyramid.accept_color(tile, line);
 }
 
 // Reading

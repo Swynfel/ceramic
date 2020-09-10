@@ -23,8 +23,8 @@ private:
     Tiles bin;
     ushort player;
 
-    void assert_player_id(const ushort id) const;
-    void assert_factory_id(const ushort id) const;
+    void assert_player_id(ushort id) const;
+    void assert_factory_id(ushort id) const;
 
 public:
     State(const std::shared_ptr<Rules>& rules);
@@ -33,21 +33,21 @@ public:
     void reset();
 
     const std::shared_ptr<Rules>& get_rules() const;
-    const ushort get_current_player() const;
+    ushort get_current_player() const;
 
     const Center& get_center() const;
     Center& get_center_mut();
-    const Factory& get_factory(const ushort id) const;
-    Factory& get_factory_mut(const ushort id);
-    const Panel& get_panel(const ushort id) const;
-    Panel& get_panel_mut(const ushort id);
+    const Factory& get_factory(ushort id) const;
+    Factory& get_factory_mut(ushort id);
+    const Panel& get_panel(ushort id) const;
+    Panel& get_panel_mut(ushort id);
 
     Tiles get_bag() const;
     Tiles& get_bag_mut();
     Tiles get_bin() const;
     Tiles& get_bin_mut();
 
-    void set_current_player(const ushort id);
+    void set_current_player(ushort id);
     void next_player();
 
     // Reading

@@ -19,7 +19,7 @@ Pyramid::Pyramid(const Pyramid& pyramid)
 
 // Place before every direct acces to arrays tile_types and tile_filled
 void
-Pyramid::assert_line(const ushort line) const {
+Pyramid::assert_line(ushort line) const {
     if (line == 0) {
         throw std::range_error("No line '0', as it designates the floor.");
     }
@@ -36,6 +36,13 @@ Pyramid::clear() {
     tile_filled.assign(size, 0);
 }
 
+
+Tiles
+Pyramid::get_line(ushort line) {
+    assert_line(line);
+    return Tiles(tile_types[line - 1], tile_filled[line - 1]);
+}
+
 void
 Pyramid::clear_line(ushort line) {
     assert_line(line);
@@ -46,10 +53,8 @@ Pyramid::clear_line(ushort line) {
 void
 Pyramid::set_line(ushort line, ushort amount, Tile color) {
     assert_line(line);
-    Tile previous_color = tile_types[line - 1];
-    if (previous_color != Tile::NONE && color != previous_color) {
-        throw std::invalid_argument(
-            "Placing wrong tile color '" + color.str() + "' on pyramid line already holding tiles of color '" + previous_color.str() + "'");
+    if (amount > line) {
+        throw std::invalid_argument("Can't set amount over " + to_string(line) + " for line with the same id.");
     }
     tile_types[line - 1] = color;
     tile_filled[line - 1] = amount;
@@ -82,6 +87,13 @@ Pyramid::color(ushort line) const {
     return tile_types[line - 1];
 }
 
+bool
+Pyramid::accept_color(ushort line, Tile tile) const {
+    Tile current = color(line);
+    return current == Tile::NONE || (current == tile && !is_filled(line));
+}
+
+
 vector<bool>
 Pyramid::filled() const {
     vector<bool> result;
@@ -94,7 +106,7 @@ Pyramid::filled() const {
 // Reading
 
 void
-Pyramid::stream_line(ostream& os, const ushort line, bool brackets) const {
+Pyramid::stream_line(ostream& os, ushort line, bool brackets) const {
     int a = amount(line);
     string c = to_string(int(color(line)));
     if (brackets) {

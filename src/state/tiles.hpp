@@ -17,22 +17,22 @@ protected:
 public:
     // Constructors
     Tiles();
-    Tiles(const Tile tile);
-    Tiles(const Tile tile, const int count);
+    Tiles(Tile tile);
+    Tiles(Tile tile, int count);
     Tiles(const vector<ushort>& tiles);
     Tiles(const Tiles& tiles);
 
     // Utils
-    ushort& operator[](const Tile tile);
+    ushort& operator[](Tile tile);
     ushort total() const;
     constexpr ushort size() const { return TILE_TYPES; }
     bool is_empty() const;
     bool has_color(const Tile color) const;
 
-    friend bool operator==(const Tiles left, const Tiles right);
-    friend bool operator!=(const Tiles left, const Tiles right);
-    friend bool operator<=(const Tiles left, const Tiles right);
-    friend bool operator>=(const Tiles left, const Tiles right);
+    friend bool operator==(Tiles left, Tiles right);
+    friend bool operator!=(Tiles left, Tiles right);
+    friend bool operator<=(Tiles left, Tiles right);
+    friend bool operator>=(Tiles left, Tiles right);
 
     Tiles operator+(const Tiles other) const;
     Tiles operator-(const Tiles other) const;

@@ -18,23 +18,23 @@ py_bind_state(py::module& root) {
 
     py::class_<Tile>(m, "Tile")
         .def(py::init<>())
-        .def(py::init<const ushort>())
-        .def(py::init<const Tile&>())
+        .def(py::init<ushort>())
+        .def(py::init<Tile&>())
 
+        .def("__eq__", [](Tile self, Tile other) { return self == other; })
+        .def("__ne__", [](Tile self, Tile other) { return self != other; })
         .def("__int__", &Tile::operator int)
-        .def("__eq__", [](const Tile self, const Tile other) { return self == other; })
-        .def("__ne__", [](const Tile self, const Tile other) { return self != other; })
-        .def("is_none", &Tile::is_none)
-        .def("__str__", &Tile::str)
-        .def_property_readonly_static("NONE", [](py::object) { return Tile::NONE; })
+        .def("__bool__", &Tile::operator bool)
 
         .def("__str__", &Tile::str)
-        .def("__repr__", &Tile::repr);
+        .def("__repr__", &Tile::repr)
+
+        .def_property_readonly_static("NONE", [](py::object) { return Tile::NONE; });
 
 
     py::class_<Tiles>(m, "Tiles")
         .def(py::init<>())
-        .def(py::init<const Tile>())
+        .def(py::init<Tile>())
         .def(py::init<const vector<ushort>&>())
         .def(py::init<const Tiles&>())
 
@@ -53,20 +53,20 @@ py_bind_state(py::module& root) {
         .def("total", &Tiles::total)
         .def("__len__", &Tiles::size)
 
-        .def("__eq__", [](const Tiles self, const Tiles other) { return self == other; })
-        .def("__ne__", [](const Tiles self, const Tiles other) { return self != other; })
-        .def("__le__", [](const Tiles self, const Tiles other) { return self <= other; })
-        .def("__ge__", [](const Tiles self, const Tiles other) { return self >= other; })
+        .def("__eq__", [](const Tiles& self, const Tiles& other) { return self == other; })
+        .def("__ne__", [](const Tiles& self, const Tiles& other) { return self != other; })
+        .def("__le__", [](const Tiles& self, const Tiles& other) { return self <= other; })
+        .def("__ge__", [](const Tiles& self, const Tiles& other) { return self >= other; })
 
-        .def("__add__", [](const Tiles self, const Tiles other) { return self + other; })
-        .def("__sub__", [](const Tiles self, const Tiles other) { return self - other; })
-        .def("__radd__", [](Tiles self, const Tiles other) { self += other; })
-        .def("__rsub__", [](Tiles self, const Tiles other) { self -= other; })
+        .def("__add__", [](const Tiles& self, const Tiles& other) { return self + other; })
+        .def("__sub__", [](const Tiles& self, const Tiles& other) { return self - other; })
+        .def("__radd__", [](Tiles& self, const Tiles& other) { self += other; })
+        .def("__rsub__", [](Tiles& self, const Tiles& other) { self -= other; })
 
-        .def("__add__", [](const Tiles self, const Tile other) { return self + other; })
-        .def("__sub__", [](const Tiles self, const Tile other) { return self - other; })
-        .def("__radd__", [](Tiles self, const Tile other) { self += other; })
-        .def("__rsub__", [](Tiles self, const Tile other) { self -= other; })
+        .def("__add__", [](const Tiles& self, Tile other) { return self + other; })
+        .def("__sub__", [](const Tiles& self, Tile other) { return self - other; })
+        .def("__radd__", [](Tiles& self, Tile other) { self += other; })
+        .def("__rsub__", [](Tiles& self, Tile other) { self -= other; })
 
         .def_property_readonly("quantities", &Tiles::get_quantities)
         .def_property_readonly_static("ZERO", [](py::object) { return Tiles::ZERO; })
@@ -78,16 +78,16 @@ py_bind_state(py::module& root) {
     py::class_<Center, Tiles>(m, "Center")
         .def(py::init<>())
         .def_readonly("first_token", &Center::first_token)
-        .def_property_readonly("tiles", [](Center& center) { return (Tiles)center; })
+        .def_property_readonly("tiles", [](const Center& center) { return (Tiles)center; })
 
         .def("__str__", &Center::str)
         .def("__repr__", &Center::repr);
 
 
     py::class_<Factory, Tiles>(m, "Factory")
-        .def(py::init<const ushort>())
+        .def(py::init<ushort>())
         .def_readonly("id", &Factory::id)
-        .def_property_readonly("tiles", [](Factory& factory) { return (Tiles)factory; })
+        .def_property_readonly("tiles", [](const Factory& factory) { return (Tiles)factory; })
 
         .def("__str__", &Factory::str)
         .def("__repr__", &Factory::repr);
@@ -104,12 +104,14 @@ py_bind_state(py::module& root) {
         .def_property_readonly("floor", &Panel::get_floor)
         .def_property_readonly("penalty", &Panel::get_penalty)
 
+        .def("legal_line", &Panel::legal_line)
+
         .def("__str__", &Panel::str)
         .def("__repr__", &Panel::repr);
 
 
     py::class_<Pyramid>(m, "Pyramid")
-        .def(py::init<const ushort>())
+        .def(py::init<ushort>())
         .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const Pyramid&>())
 
@@ -122,6 +124,7 @@ py_bind_state(py::module& root) {
         .def("amount", &Pyramid::amount)
         .def("amount_remaining", &Pyramid::amount_remaining)
         .def("color", &Pyramid::color)
+        .def("accept_color", &Pyramid::accept_color)
         .def("filled", &Pyramid::filled)
 
         .def("__str__", &Pyramid::str)
@@ -133,22 +136,40 @@ py_bind_state(py::module& root) {
         .def(py::init<const State&>())
 
         .def_property_readonly("rules", &State::get_rules)
-        .def("get_center", &State::get_center_mut)
-        .def("get_factory", &State::get_factory_mut)
-        .def("get_panel", &State::get_panel_mut)
+        .def_property_readonly("center", &State::get_center_mut)
+        .def_property_readonly("factory", &State::get_factory_mut)
+        .def_property_readonly("panel", &State::get_panel_mut)
+        .def_property_readonly("bag", &State::get_bag_mut)
+        .def_property_readonly("bin", &State::get_bin_mut)
+
+        .def_property("current_player", &State::get_current_player, &State::set_current_player)
+        .def("next_player", &State::next_player)
 
         .def("__str__", &State::str)
         .def("__repr__", &State::repr);
 
 
     py::class_<Wall>(m, "Wall")
-        .def(py::init<const ushort>())
         .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const Wall&>())
 
         .def("clear", &Wall::clear)
-        .def("is_placed_at", &Wall::is_placed_at)
+        .def("get_placed_at", &Wall::get_placed_at)
+        .def("get_tile_at", &Wall::get_tile_at)
+        .def("get_color_at", &Wall::get_color_at)
+
         .def("get_placed", &Wall::get_placed)
+        .def("get_tiles", &Wall::get_tiles)
+        .def("get_placed_array", &Wall::get_placed_array)
+        .def("get_tiles_array", &Wall::get_tiles_array)
+
+        .def("line_has_color", &Wall::get_tiles_array)
+        .def("line_color_y", &Wall::get_tiles_array)
+
+        .def("score_for_placing", &Wall::score_for_placing)
+        .def("place_at", &Wall::place_at)
+        .def("set_tile_at", &Wall::set_tile_at)
+        .def("place_line_color", &Wall::place_line_color)
 
         .def("__str__", &Wall::str)
         .def("__repr__", &Wall::repr);

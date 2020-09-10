@@ -23,17 +23,19 @@ public:
 
     void clear();
 
-    const ushort get_score() const;
+    ushort get_score() const;
     const Pyramid get_pyramid() const;
-    Pyramid get_pyramid_mut();
+    Pyramid& get_pyramid_mut();
     const Wall get_wall() const;
-    Wall get_wall_mut();
-    const bool get_first_token() const;
-    void set_first_token(const bool value);
-    const ushort get_floor() const;
-    void add_floor(const ushort value);
+    Wall& get_wall_mut();
+    bool get_first_token() const;
+    void set_first_token(bool value);
+    ushort get_floor() const;
+    void add_floor(ushort value);
     void clear_floor();
-    const ushort get_penalty() const;
+    ushort get_penalty() const;
+
+    bool legal_line(Tile tile, ushort line) const;
 
     // Reading
     friend ostream& operator<<(ostream& os, const Panel& panel);

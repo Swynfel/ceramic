@@ -16,7 +16,7 @@ E = tuple()
     (Tile, E),
     (Tile, (0,)),
     (Tiles, E),
-    (Wall, (TILE_TYPES,)),
+    (Wall, (Rules.DEFAULT,)),
 ])
 def test_str_repr(cls, args):
     obj = cls(*args)

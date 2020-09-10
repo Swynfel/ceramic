@@ -22,9 +22,10 @@ struct Rules {
     friend bool operator==(const Rules left, const Rules right);
     friend bool operator!=(const Rules left, const Rules right);
 
-    const ushort penalty_at(ushort position) const;
-    const ushort penalty_for_floor(ushort floor) const;
-    const ushort factory_count() const;
+    ushort penalty_at(ushort position) const;
+    ushort penalty_for_floor(ushort floor) const;
+    ushort factory_count() const;
+    ushort tile_types_2() const;
 
     static const std::shared_ptr<Rules> DEFAULT;
     static const std::shared_ptr<Rules> MINI;

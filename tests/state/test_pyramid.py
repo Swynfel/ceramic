@@ -14,18 +14,26 @@ def test_pyramid_init(arg):
 
 def test_pyramid_methods():
     pyramid = Pyramid(TILE_TYPES)
-    assert pyramid.is_empty(2)
-    assert not pyramid.is_filled(2)
-    assert pyramid.color(2) == Tile.NONE
+    line = 2
+    tile1 = Tile(1)
+    tile2 = Tile(2)
 
-    pyramid.set_line(2, 1, Tile(2))
-    assert not pyramid.is_empty(2)
-    assert not pyramid.is_filled(2)
-    assert pyramid.color(2) == Tile(2)
+    assert pyramid.accept_color(line, tile1)
+    assert pyramid.accept_color(line, tile2)
+    assert pyramid.is_empty(line)
+    assert not pyramid.is_filled(line)
+    assert pyramid.color(line) == Tile.NONE
 
-    with pytest.raises(ValueError):
-        pyramid.set_line(2, 2, Tile(1))
-    pyramid.set_line(2, 2, Tile(2))
-    assert not pyramid.is_empty(2)
-    assert pyramid.is_filled(2)
-    assert pyramid.color(2) == Tile(2)
+    pyramid.set_line(line, 1, tile1)
+    assert pyramid.accept_color(line, tile1)
+    assert not pyramid.accept_color(line, tile2)
+    assert not pyramid.is_empty(line)
+    assert not pyramid.is_filled(line)
+    assert pyramid.color(line) == tile1
+
+    pyramid.set_line(line, line, tile2)
+    assert not pyramid.accept_color(line, tile1)
+    assert not pyramid.accept_color(line, tile2)
+    assert not pyramid.is_empty(line)
+    assert pyramid.is_filled(line)
+    assert pyramid.color(line) == tile2

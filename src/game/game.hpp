@@ -14,13 +14,14 @@
 using namespace boost::random;
 
 typedef mt11213b rng;
+typedef uniform_int_distribution<> int_range;
 
 class Game {
 
 private:
     State state;
     rng randomness;
-    uniform_int_distribution<> range;
+    int_range range;
 
     int rand(int min = 0, int max = std::numeric_limits<int>::max());
     Tile pull_one_random_tile();
@@ -34,8 +35,17 @@ public:
     void start_round();
     void end_round();
 
-    bool static legal(const Action& action, const State& state);
-    void static apply(const Action& action, State& state);
+    void setup_factories();
+    void score_panels();
+    void static score_panels(State& state);
+    void use_first_token();
+    void static use_first_token(State& state);
+
+    bool legal(Action action) const;
+    void apply(Action action);
+
+    bool static legal(Action action, const State& state);
+    void static apply(Action action, State& state);
 };
 
 #endif //GAME_HPP

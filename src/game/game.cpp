@@ -1,7 +1,5 @@
 #include "game.hpp"
 
-uniform_int_distribution<> int_dist = uniform_int_distribution<>(1, 6);
-
 // Constuctors
 
 Game::Game(const std::shared_ptr<Rules>& rules)
@@ -17,7 +15,7 @@ Game::Game()
 
 int
 Game::rand(int min, int max) {
-    return int_dist(randomness, uniform_int_distribution<>::param_type(0, max - 1));
+    return range(randomness, int_range::param_type(0, max - 1));
 }
 
 // Should only be called if there is at least
@@ -85,17 +83,40 @@ Game::pull_random_tiles(int count) {
 void
 Game::start() {
     state.reset();
-    int first_player = rand(0, state.rules->player_count - 1);
-    state.get_panel_mut(first_player).set_first_token(true);
+    state.set_current_player(rand(0, state.rules->player_count - 1));
     start_round();
 }
 
 void
 Game::start_round() {
+    setup_factories();
+}
+
+void
+Game::setup_factories() {
+    // Fill factories
     for (auto& factory : state.factories) {
         factory.set_tiles(pull_random_tiles(state.rules->factory_tiles));
         if (state.bag.is_empty() && state.bin.is_empty()) {
             break;
+        }
+    }
+    state.center.set_tiles(Tiles::ZERO);
+    state.center.first_token = true;
+}
+
+void
+Game::score_panels() {
+    score_panels(state);
+}
+
+void
+Game::score_panels(State& state) {
+    for (Panel& panel : state.panels) {
+        Pyramid& pyramid = panel.get_pyramid_mut();
+        for (int line = 1; line <= state.rules->tile_types; line++) {
+            if (pyramid.is_filled(line)) {
+            }
         }
     }
 }
@@ -104,11 +125,23 @@ void
 Game::end_round() {
 }
 
+
 bool
-Game::legal(const Action& action, const State& state) {
+Game::legal(Action action) const {
+    return legal(action, state);
+}
+
+void
+Game::apply(Action action) {
+    apply(action, state);
+}
+
+
+bool
+Game::legal(Action action, const State& state) {
     const std::shared_ptr<Rules>& rules = state.get_rules();
     // Check action is coherent with current rules
-    if (action.color >= rules->tile_types || action.pick > rules->factory_count()) {
+    if (ushort(action.color) >= rules->tile_types || action.pick > rules->factory_count()) {
         return false;
     }
     // If action is not "throwing away"
@@ -134,10 +167,12 @@ Game::legal(const Action& action, const State& state) {
 }
 
 void
-Game::apply(const Action& action, State& state) {
-    if (action.color >= state.get_rules()->tile_types) {
+Game::apply(Action action, State& state) {
+    // Check action is coherent with current rules
+    if (ushort(action.color) >= state.rules->tile_types) {
         throw std::invalid_argument("No tile of color " + action.color.str() + " in game");
     }
+
     Panel panel = state.get_panel_mut(state.get_current_player());
     Tiles picked;
     if (action.pick == 0) {
@@ -145,6 +180,7 @@ Game::apply(const Action& action, State& state) {
     } else {
         picked = state.get_factory_mut(action.pick);
     }
+
     // Check action color is present in picked Center / Factory
     if (picked.is_empty()) {
         throw std::invalid_argument("Factory " + picked.str() + " is empty");
@@ -152,29 +188,39 @@ Game::apply(const Action& action, State& state) {
     if (!picked.has_color(action.color)) {
         throw std::invalid_argument("Factory " + picked.str() + " has no tiles of color " + to_string(action.pick));
     }
-    int count = picked[action.color];
-    Pyramid pyramid = panel.get_pyramid_mut();
-    int overflow_count = max(0, count - pyramid.amount_remaining(action.place));
-    pyramid.set_line(action.place, count - overflow_count, action.color); // Can raise invalid_argument
+    // Check can place color on line
+    if (!panel.legal_line(action.color, action.place)) {
+        throw std::invalid_argument("Cannot place tile " + action.color.str() + " on line " + to_string(action.place));
+    }
 
     // Action is confirmed to be legal
     // Everything that follows should not raise exceptions
+    Pyramid pyramid = panel.get_pyramid_mut();
+    Center center = state.get_center_mut();
+
+    // Remove all tiles of corresponding color from picked
+    int count = picked[action.color];
+    picked[action.color] = 0;
+
+    // Throw excess tiles in bin
+    int overflow_count = max(0, count - pyramid.amount_remaining(action.place));
     if (overflow_count > 0) {
         state.get_bin_mut() += Tiles(action.color, overflow_count);
     }
-    Center center = state.get_center_mut();
-    picked[action.color] = 0;
+    // Place remaining tiles on pyramid
+    pyramid.set_line(action.place, count - overflow_count, action.color);
+
     if (action.pick == 0) {
+        // If center, check if first token is taken
         if (center.first_token) {
             center.first_token = false;
             overflow_count++;
             panel.set_first_token(true);
         }
     } else {
+        // If factory, move all tiles to center
         Factory factory = state.get_factory_mut(action.pick);
         center += factory;
         factory.set_tiles(Tiles::ZERO);
     }
-
-    state.next_player();
 }

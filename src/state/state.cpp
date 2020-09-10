@@ -32,14 +32,14 @@ State::State(const State& state)
 
 
 void
-State::assert_player_id(const ushort id) const {
+State::assert_player_id(ushort id) const {
     if (id >= rules->player_count) {
         throw std::invalid_argument("No player with id '" + to_string(id) + "', as there is only '" + to_string(rules->player_count) + "' players.");
     }
 }
 
 void
-State::assert_factory_id(const ushort id) const {
+State::assert_factory_id(ushort id) const {
     if (id == 0) {
         throw std::invalid_argument("No factory with id '0', as it designates the Center.");
     }
@@ -64,7 +64,7 @@ State::get_rules() const {
     return rules;
 }
 
-const ushort
+ushort
 State::get_current_player() const {
     return player;
 }
@@ -81,25 +81,25 @@ State::get_center_mut() {
 }
 
 const Factory&
-State::get_factory(const ushort id) const {
+State::get_factory(ushort id) const {
     assert_factory_id(id);
     return factories[id - 1];
 }
 
 Factory&
-State::get_factory_mut(const ushort id) {
+State::get_factory_mut(ushort id) {
     assert_factory_id(id);
     return factories[id - 1];
 }
 
 const Panel&
-State::get_panel(const ushort id) const {
+State::get_panel(ushort id) const {
     assert_player_id(id);
     return panels[id];
 }
 
 Panel&
-State::get_panel_mut(const ushort id) {
+State::get_panel_mut(ushort id) {
     assert_player_id(id);
     return panels[id];
 }

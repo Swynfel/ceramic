@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-const ushort
+ushort
 Rules::penalty_at(ushort position) const {
     if (position >= overflow_count) {
         return 0;
@@ -10,7 +10,7 @@ Rules::penalty_at(ushort position) const {
     return (ushort)(1 + position * (overflow_penalty - 1.0) / (overflow_count - 1) + 0.5);
 }
 
-const ushort
+ushort
 Rules::penalty_for_floor(ushort floor) const {
     ushort penalty = 0;
     for (int i = 0; i < floor && i < overflow_count; i++) {
@@ -19,9 +19,14 @@ Rules::penalty_for_floor(ushort floor) const {
     return penalty;
 }
 
-const ushort
+ushort
 Rules::factory_count() const {
     return 1 + 2 * player_count;
+}
+
+ushort
+Rules::tile_types_2() const {
+    return tile_types * tile_types;
 }
 
 const std::shared_ptr<Rules> Rules::DEFAULT = std::make_shared<Rules>();

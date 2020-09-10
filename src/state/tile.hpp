@@ -20,8 +20,9 @@ public:
 
     friend bool operator==(const Tile left, const Tile right);
     friend bool operator!=(const Tile left, const Tile right);
-    bool is_none() const;
     operator int() const;
+    operator bool() const;
+    operator ushort() const;
 
     // Reading
     friend ostream& operator<<(ostream& os, const Tile tile);

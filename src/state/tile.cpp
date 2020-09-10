@@ -5,7 +5,7 @@
 Tile::Tile()
   : value(TILE_TYPES) {}
 
-Tile::Tile(const ushort value)
+Tile::Tile(ushort value)
   : value(value) {
     if (value >= TILE_TYPES) {
         throw std::invalid_argument("Tile color was too big (" + std::to_string(value) + ")");
@@ -27,18 +27,21 @@ operator!=(const Tile left, const Tile right) {
     return !(left == right);
 }
 
-bool
-Tile::is_none() const {
-    return (this->value == TILE_TYPES);
+Tile::operator int() const {
+    return value;
 }
 
-Tile::operator int() const {
+Tile::operator bool() const {
+    return value != TILE_TYPES;
+}
+
+Tile::operator ushort() const {
     return value;
 }
 
 ostream&
 operator<<(ostream& os, const Tile tile) {
-    if (tile.is_none()) {
+    if (!tile) {
         return os << "< >";
     }
     return os << '<' << (int)tile << '>';
