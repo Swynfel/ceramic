@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "../global.hpp"
+#include "global.hpp"
 
 using namespace std;
 

@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "../global.hpp"
-#include "../rules/rules.hpp"
+#include "global.hpp"
+#include "rules/rules.hpp"
 #include "tiles.hpp"
 
 class Pyramid {

@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "../rules/rules.hpp"
 #include "center.hpp"
 #include "factory.hpp"
 #include "panel.hpp"
+#include "rules/rules.hpp"
 #include "tiles.hpp"
 
 class State {

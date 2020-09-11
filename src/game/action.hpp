@@ -1,8 +1,8 @@
 #ifndef ACTION_HPP
 #define ACTION_HPP
 
-#include "../global.hpp"
-#include "../state/tiles.hpp"
+#include "global.hpp"
+#include "state/tiles.hpp"
 
 struct Action {
     ushort pick;  // id of Factory to pick

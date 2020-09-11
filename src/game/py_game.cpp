@@ -2,6 +2,7 @@
 
 #include "action.hpp"
 #include "game.hpp"
+#include "py_utils.hpp"
 
 namespace py = pybind11;
 
@@ -15,18 +16,6 @@ py_create_action(
         .color = color,
         .place = place,
     };
-}
-
-template<class PyClass>
-bool
-py_eq(const PyClass& self, const PyClass& other) {
-    return self == other;
-}
-
-template<class PyClass>
-bool
-py_ne(const PyClass& self, const PyClass& other) {
-    return self != other;
 }
 
 void

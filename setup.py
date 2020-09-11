@@ -10,6 +10,7 @@ module = Extension(
     'ceramic',
     sources=sources,
     include_dirs=[
+        "src",
         pybind11.get_include()
     ],
     language='c++',

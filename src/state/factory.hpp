@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../global.hpp"
+#include "global.hpp"
 #include "tiles.hpp"
 
 class Factory : public Tiles {

@@ -1,7 +1,7 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include "../global.hpp"
+#include "global.hpp"
 #include <memory>
 #include <string>
 
@@ -31,7 +31,7 @@ public:
     char letter() const;
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Tile tile);
+    friend ostream& operator<<(ostream& os, Tile tile);
     string str() const;
     string repr() const;
 };

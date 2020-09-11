@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "../global.hpp"
+#include "global.hpp"
 #include "tile.hpp"
 
 using namespace std;
@@ -34,21 +34,21 @@ public:
     friend bool operator<=(Tiles left, Tiles right);
     friend bool operator>=(Tiles left, Tiles right);
 
-    Tiles operator+(const Tiles other) const;
-    Tiles operator-(const Tiles other) const;
-    Tiles operator+=(const Tiles other);
-    Tiles operator-=(const Tiles other);
+    Tiles operator+(Tiles other) const;
+    Tiles operator-(Tiles other) const;
+    Tiles& operator+=(Tiles other);
+    Tiles& operator-=(Tiles other);
 
-    Tiles operator+(const Tile tile) const;
-    Tiles operator-(const Tile tile) const;
-    Tiles operator+=(const Tile tile);
-    Tiles operator-=(const Tile tile);
+    Tiles operator+(Tile tile) const;
+    Tiles operator-(Tile tile) const;
+    Tiles& operator+=(Tile tile);
+    Tiles& operator-=(Tile tile);
 
-    friend bool operator<=(const Tiles left, const ushort& right);
-    friend bool operator>=(const Tiles left, const ushort& right);
+    friend bool operator<=(Tiles left, ushort right);
+    friend bool operator>=(Tiles left, ushort right);
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Tiles tiles);
+    friend ostream& operator<<(ostream& os, Tiles tiles);
     string virtual str() const;
     string virtual repr() const;
 

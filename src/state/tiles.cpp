@@ -11,10 +11,10 @@
 Tiles::Tiles()
   : quantities() {}
 
-Tiles::Tiles(const Tile tile)
+Tiles::Tiles(Tile tile)
   : Tiles(tile, 1) {}
 
-Tiles::Tiles(const Tile tile, const int count)
+Tiles::Tiles(Tile tile, int count)
   : quantities() {
     quantities[(int)(tile)] = count;
 }
@@ -55,20 +55,20 @@ Tiles::is_empty() const {
 }
 
 bool
-Tiles::has_color(const Tile color) const {
+Tiles::has_color(Tile color) const {
     return quantities[int(color)] > 0;
 }
 
-Tiles
-Tiles::operator+=(const Tiles other) {
+Tiles&
+Tiles::operator+=(Tiles other) {
     for (int i = 0; i < TILE_TYPES; i++) {
         this->quantities[i] += other.quantities[i];
     }
     return *this;
 }
 
-Tiles
-Tiles::operator-=(const Tiles other) {
+Tiles&
+Tiles::operator-=(Tiles other) {
     if (*this >= other) {
         throw std::invalid_argument("Not enough Tiles to substract");
     }
@@ -122,13 +122,13 @@ operator>=(Tiles left, Tiles right) {
     return true;
 }
 
-Tiles
+Tiles&
 Tiles::operator+=(Tile tile) {
     this->quantities[int(tile)]++;
     return *this;
 }
 
-Tiles
+Tiles&
 Tiles::operator-=(Tile tile) {
     if (this->quantities[int(tile)] == 0) {
         throw std::invalid_argument("Not enough Tiles to substract");

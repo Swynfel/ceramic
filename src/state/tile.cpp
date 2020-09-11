@@ -77,7 +77,7 @@ Tile::letter() const {
 // Reading
 
 ostream&
-operator<<(ostream& os, const Tile tile) {
+operator<<(ostream& os, Tile tile) {
     return os << '<' << tile.letter() << '>';
 }
 

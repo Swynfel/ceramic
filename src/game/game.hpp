@@ -7,9 +7,9 @@
 #include <memory>
 #include <vector>
 
-#include "../rules/rules.hpp"
-#include "../state/state.hpp"
 #include "action.hpp"
+#include "rules/rules.hpp"
+#include "state/state.hpp"
 
 using namespace boost::random;
 

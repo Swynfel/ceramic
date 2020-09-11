@@ -4,6 +4,7 @@
 #include "center.hpp"
 #include "factory.hpp"
 #include "panel.hpp"
+#include "py_utils.hpp"
 #include "pyramid.hpp"
 #include "state.hpp"
 #include "tile.hpp"
@@ -21,8 +22,8 @@ py_bind_state(py::module& root) {
         .def(py::init<ushort>())
         .def(py::init<Tile&>())
 
-        .def("__eq__", [](Tile self, Tile other) { return self == other; })
-        .def("__ne__", [](Tile self, Tile other) { return self != other; })
+        .def("__eq__", &py_eq<Tile>)
+        .def("__ne__", &py_ne<Tile>)
         .def("__int__", &Tile::operator int)
         .def("__bool__", &Tile::operator bool)
 
@@ -58,20 +59,20 @@ py_bind_state(py::module& root) {
         .def("total", &Tiles::total)
         .def("__len__", &Tiles::size)
 
-        .def("__eq__", [](const Tiles& self, const Tiles& other) { return self == other; })
-        .def("__ne__", [](const Tiles& self, const Tiles& other) { return self != other; })
-        .def("__le__", [](const Tiles& self, const Tiles& other) { return self <= other; })
-        .def("__ge__", [](const Tiles& self, const Tiles& other) { return self >= other; })
+        .def("__eq__", &py_eq<Tiles>)
+        .def("__ne__", &py_ne<Tiles>)
+        .def("__le__", &py_le<Tiles>)
+        .def("__ge__", &py_ge<Tiles>)
 
-        .def("__add__", [](const Tiles& self, const Tiles& other) { return self + other; })
-        .def("__sub__", [](const Tiles& self, const Tiles& other) { return self - other; })
-        .def("__radd__", [](Tiles& self, const Tiles& other) { self += other; })
-        .def("__rsub__", [](Tiles& self, const Tiles& other) { self -= other; })
+        .def("__add__", &py_add<Tiles>)
+        .def("__sub__", &py_sub<Tiles>)
+        .def("__radd__", &py_radd<Tiles>)
+        .def("__rsub__", &py_rsub<Tiles>)
 
-        .def("__add__", [](const Tiles& self, Tile other) { return self + other; })
-        .def("__sub__", [](const Tiles& self, Tile other) { return self - other; })
-        .def("__radd__", [](Tiles& self, Tile other) { self += other; })
-        .def("__rsub__", [](Tiles& self, Tile other) { self -= other; })
+        .def("__add__", &py_add<Tiles, Tile>)
+        .def("__sub__", &py_sub<Tiles, Tile>)
+        .def("__radd__", &py_radd<Tiles, Tile>)
+        .def("__rsub__", &py_rsub<Tiles, Tile>)
 
         .def_property_readonly("quantities", &Tiles::get_quantities)
         .def_property_readonly_static("ZERO", [](py::object) { return Tiles::ZERO; })

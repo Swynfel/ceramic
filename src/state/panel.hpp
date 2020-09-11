@@ -3,9 +3,9 @@
 
 #include <memory>
 
-#include "../global.hpp"
-#include "../rules/rules.hpp"
+#include "global.hpp"
 #include "pyramid.hpp"
+#include "rules/rules.hpp"
 #include "wall.hpp"
 
 class Panel {
