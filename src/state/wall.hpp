@@ -25,7 +25,7 @@ public:
 
     bool get_placed_at(ushort x, ushort y) const;
     Tile get_tile_at(ushort x, ushort y) const;
-    Tile get_color_at(ushort x, ushort y) const;
+    Tile color_at(ushort x, ushort y) const;
 
     vector<bool> get_placed() const;
     const vector<Tile>& get_tiles() const;
@@ -33,7 +33,7 @@ public:
     vector<vector<Tile>> get_tiles_array() const;
 
     bool line_has_color(ushort line, Tile color) const;
-    ushort line_color_y(ushort line, Tile color) const;
+    ushort line_color_x(ushort line, Tile color) const;
 
     // Scoring
     ushort score_for_placing(ushort x, ushort y);

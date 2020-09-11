@@ -44,3 +44,23 @@ def test_wall_others():
     array = Wall(Rules.DEFAULT).get_tiles_array()
     assert len(array) == N
     assert len(array[0]) == N
+
+
+@pytest.mark.parametrize("x", [1, 2, 3, 4, 5])
+@pytest.mark.parametrize("y", [1, 2, 3, 4, 5])
+def test_wall_layout(x, y):
+    wall_manual = Wall(Rules.DEFAULT)
+    wall_color = Wall(Rules.DEFAULT)
+    walls = [wall_manual, wall_color]
+    c = wall_manual.color_at(x, y)
+    assert c == wall_color.color_at(x, y)
+    for wall in walls:
+        assert not wall.get_placed_at(x, y)
+        assert not wall.get_tile_at(x, y)
+        assert not wall.line_has_color(y, c)
+    wall_manual.place_at(x, y)
+    wall_color.place_line_color(y, c)
+    for wall in walls:
+        assert wall.get_placed_at(x, y)
+        assert wall.get_tile_at(x, y) == c
+        assert wall.line_has_color(y, c)

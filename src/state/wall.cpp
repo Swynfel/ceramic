@@ -50,7 +50,7 @@ Wall::clear() {
 
 bool
 Wall::get_placed_at(ushort x, ushort y) const {
-    return get_tile_at(x, y) != Tile::NONE;
+    return get_tile_at(x, y);
 }
 
 Tile
@@ -61,10 +61,10 @@ Wall::get_tile_at(ushort x, ushort y) const {
 }
 
 Tile
-Wall::get_color_at(ushort x, ushort y) const {
+Wall::color_at(ushort x, ushort y) const {
     assert_line(y);
     assert_line(x);
-    return Tile(x - y % rules->tile_types);
+    return Tile(x >= y ? x - y : rules->tile_types + x - y);
 }
 
 
@@ -120,12 +120,13 @@ Wall::line_has_color(ushort line, Tile color) const {
     // vector<Tile>::const_iterator slice_start = placed.begin() + (line - 1) * rules->tile_types;
     // vector<Tile>::const_iterator slice_end = slice_start + rules->tile_types;
     // return std::find(slice_start, slice_end, color) != slice_end;
-    return get_tile_at(line, line_color_y(line, color)) != Tile::NONE;
+    return get_tile_at(line_color_x(line, color), line) != Tile::NONE;
 }
 
 ushort
-Wall::line_color_y(ushort line, Tile color) const {
-    return line + ushort(color) % rules->tile_types;
+Wall::line_color_x(ushort line, Tile color) const {
+    assert_line(line);
+    return (line - 1 + ushort(color)) % rules->tile_types + 1;
 }
 
 // Scoring
@@ -153,7 +154,7 @@ Wall::score_for_placing(ushort x, ushort y) {
 
 ushort
 Wall::place_at(ushort x, ushort y) {
-    return set_tile_at(x, y, get_color_at(x, y));
+    return set_tile_at(x, y, color_at(x, y));
 }
 
 ushort
@@ -167,9 +168,9 @@ Wall::set_tile_at(ushort x, ushort y, Tile tile) {
 ushort
 Wall::place_line_color(ushort line, Tile color) {
     // Can call unsafe because of 'line_color_y'
-    ushort y = line_color_y(line, color);
-    set_tile_at_unsafe(line, y, color);
-    return score_for_placing(line, y);
+    ushort x = line_color_x(line, color);
+    set_tile_at_unsafe(x, line, color);
+    return score_for_placing(x, line);
 }
 
 // Reading

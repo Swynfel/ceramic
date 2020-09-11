@@ -162,15 +162,15 @@ py_bind_state(py::module& root) {
         .def("clear", &Wall::clear)
         .def("get_placed_at", &Wall::get_placed_at)
         .def("get_tile_at", &Wall::get_tile_at)
-        .def("get_color_at", &Wall::get_color_at)
+        .def("color_at", &Wall::color_at)
 
         .def("get_placed", &Wall::get_placed)
         .def("get_tiles", &Wall::get_tiles)
         .def("get_placed_array", &Wall::get_placed_array)
         .def("get_tiles_array", &Wall::get_tiles_array)
 
-        .def("line_has_color", &Wall::get_tiles_array)
-        .def("line_color_y", &Wall::get_tiles_array)
+        .def("line_has_color", &Wall::line_has_color)
+        .def("line_color_x", &Wall::line_color_x)
 
         .def("score_for_placing", &Wall::score_for_placing)
         .def("place_at", &Wall::place_at)
