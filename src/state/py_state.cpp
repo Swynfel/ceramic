@@ -26,6 +26,11 @@ py_bind_state(py::module& root) {
         .def("__int__", &Tile::operator int)
         .def("__bool__", &Tile::operator bool)
 
+        .def_static("value_to_letter", &Tile::value_to_letter)
+        .def_static("letter_to_value", &Tile::letter_to_value)
+        .def_static("from_letter", &Tile::from_letter)
+        .def("letter", &Tile::letter)
+
         .def("__str__", &Tile::str)
         .def("__repr__", &Tile::repr)
 

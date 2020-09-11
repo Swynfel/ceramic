@@ -1,4 +1,5 @@
 import pytest
+from ceramic.game import Action
 from ceramic.rules import Rules
 from ceramic.state import Center, Factory, Panel, Pyramid, State, Tile, Tiles, Wall
 from ceramic import TILE_TYPES
@@ -7,6 +8,7 @@ E = tuple()
 
 
 @pytest.mark.parametrize("cls, args", [
+    (Action, (0, Tile(), 0)),
     (Rules, E),
     (Center, E),
     (Factory, (0,)),

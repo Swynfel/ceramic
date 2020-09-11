@@ -60,9 +60,9 @@ py_bind_rules(py::module& root) {
         .def("__eq__", [](const Rules self, const Rules other) { return self == other; })
         .def("__ne__", [](const Rules self, const Rules other) { return self != other; })
 
-        .def("penalty_at", &Rules::penalty_at)
-        .def("penalty_for_floor", &Rules::penalty_for_floor)
-        .def("factory_count", &Rules::factory_count)
+        .def_property_readonly("penalty_at", &Rules::penalty_at)
+        .def_property_readonly("penalty_for_floor", &Rules::penalty_for_floor)
+        .def_property_readonly("factory_count", &Rules::factory_count)
 
         .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; })
         .def_property_readonly_static("MINI", [](py::object) { return Rules::MINI; })
