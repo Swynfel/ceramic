@@ -32,6 +32,14 @@ Panel::get_score() const {
     return score;
 }
 
+void
+Panel::add_score(int value) {
+    if (score > -value) {
+        score += value;
+    }
+    score = 0;
+}
+
 const Pyramid
 Panel::get_pyramid() const {
     return pyramid;
@@ -80,7 +88,7 @@ Panel::clear_floor() {
 
 ushort
 Panel::get_penalty() const {
-    return rules->penalty_for_floor(get_floor());
+    return rules->penalty_for_floor(floor);
 }
 
 

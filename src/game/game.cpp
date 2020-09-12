@@ -18,6 +18,11 @@ Game::rand(int min, int max) {
     return range(randomness, int_range::param_type(0, max - 1));
 }
 
+const State
+Game::get_state() const {
+    return state;
+}
+
 // Should only be called if there is at least
 // one tile in bag
 Tile
@@ -113,11 +118,46 @@ Game::score_panels() {
 void
 Game::score_panels(State& state) {
     for (Panel& panel : state.panels) {
-        Pyramid& pyramid = panel.get_pyramid_mut();
+        int score = 0;
+        Pyramid pyramid = panel.get_pyramid_mut();
+        Wall wall = panel.get_wall_mut();
         for (int line = 1; line <= state.rules->tile_types; line++) {
             if (pyramid.is_filled(line)) {
+                // Take tiles of pyramid line
+                Tile color = pyramid.color(line);
+                Tiles tiles = pyramid.get_line(line);
+                pyramid.clear_line(line);
+                // Place then on wall and add score
+                if (!wall.line_has_color(line, color)) {
+                    // The wall should never have the color on its line
+                    // But we check in case it was manually edited, out of Game
+                    score += wall.place_line_color(line, color);
+                    tiles -= color;
+                }
+                state.bin += tiles;
             }
         }
+        score -= panel.get_penalty();
+        panel.clear_floor();
+        panel.add_score(score);
+    }
+}
+
+void
+Game::apply_first_token() {
+    apply_first_token(state);
+}
+
+void
+Game::apply_first_token(State& state) {
+    ushort id = 0;
+    for (Panel& panel : state.panels) {
+        if (panel.get_first_token()) {
+            panel.set_first_token(false);
+            state.set_current_player(id);
+            return;
+        }
+        id++;
     }
 }
 

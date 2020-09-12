@@ -24,6 +24,7 @@ public:
     void clear();
 
     ushort get_score() const;
+    void add_score(int value);
     const Pyramid get_pyramid() const;
     Pyramid& get_pyramid_mut();
     const Wall get_wall() const;

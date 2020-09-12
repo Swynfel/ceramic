@@ -37,4 +37,21 @@ py_bind_game(py::module& root) {
 
         .def("__str__", &Action::str)
         .def("__repr__", &Action::repr);
+
+    py::class_<Game>(m, "Game")
+        .def(py::init<>())
+        .def(py::init<std::shared_ptr<Rules>&>())
+
+        .def_property_readonly("state", &Game::get_state)
+
+        .def("start", &Game::start)
+        .def("start_round", &Game::start_round)
+        .def("end_round", &Game::end_round)
+
+        .def("setup_factories", &Game::setup_factories)
+        .def("score_panels", [](Game& game) { game.score_panels(); })
+        .def("apply_first_token", [](Game& game) { game.apply_first_token(); })
+
+        .def("legal", [](const Game& game, Action action) { game.legal(action); })
+        .def("apply", [](Game& game, Action action) { game.apply(action); });
 }

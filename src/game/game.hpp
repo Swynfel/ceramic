@@ -31,6 +31,8 @@ public:
     Game();
     Game(const std::shared_ptr<Rules>& rules);
 
+    const State get_state() const;
+
     void start();
     void start_round();
     void end_round();
@@ -38,8 +40,8 @@ public:
     void setup_factories();
     void score_panels();
     void static score_panels(State& state);
-    void use_first_token();
-    void static use_first_token(State& state);
+    void apply_first_token();
+    void static apply_first_token(State& state);
 
     bool legal(Action action) const;
     void apply(Action action);
