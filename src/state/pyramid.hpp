@@ -21,7 +21,7 @@ public:
     Pyramid(const Pyramid& pyramid);
 
     void clear();
-    Tiles get_line(ushort line);
+    Tiles get_line(ushort line) const;
     void set_line(ushort line, ushort amount, Tile color);
     void clear_line(ushort line);
 

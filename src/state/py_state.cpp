@@ -124,8 +124,9 @@ py_bind_state(py::module& root) {
         .def(py::init<const Pyramid&>())
 
         .def("clear", &Pyramid::clear)
-        .def("clear_line", &Pyramid::clear_line)
+        .def("get_line", &Pyramid::get_line)
         .def("set_line", &Pyramid::set_line)
+        .def("clear_line", &Pyramid::clear_line)
 
         .def("is_filled", &Pyramid::is_filled)
         .def("is_empty", &Pyramid::is_empty)
@@ -149,6 +150,8 @@ py_bind_state(py::module& root) {
         .def("panel", &State::get_panel_mut)
         .def_property_readonly("bag", &State::get_bag_mut)
         .def_property_readonly("bin", &State::get_bin_mut)
+
+        .def("get_total_tiles", &State::get_total_tiles)
 
         .def_property("current_player", &State::get_current_player, &State::set_current_player)
         .def("next_player", &State::next_player)

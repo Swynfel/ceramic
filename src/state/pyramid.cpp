@@ -38,8 +38,11 @@ Pyramid::clear() {
 
 
 Tiles
-Pyramid::get_line(ushort line) {
+Pyramid::get_line(ushort line) const {
     assert_line(line);
+    if (tile_filled[line - 1] == 0) {
+        return Tiles::ZERO;
+    }
     return Tiles(tile_types[line - 1], tile_filled[line - 1]);
 }
 

@@ -17,7 +17,7 @@ Player::get_id() const {
 Action
 Player::play(const State& state) {
     auto rules = state.get_rules();
-    for (int place = rules->tile_types; place > 0; place--) {
+    for (int place = rules->tile_types; place >= 0; place--) {
         for (int pick = 0; pick <= rules->factory_count(); pick++) {
             for (int color = 0; color < rules->tile_types; color++) {
                 Action action = Action{ .pick = pick, .color = color, .place = place };

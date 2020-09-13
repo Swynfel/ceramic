@@ -47,6 +47,8 @@ public:
     Tiles get_bin() const;
     Tiles& get_bin_mut();
 
+    Tiles get_total_tiles() const;
+
     void set_current_player(ushort id);
     void next_player();
 

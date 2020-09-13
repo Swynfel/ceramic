@@ -128,6 +128,29 @@ State::get_bin_mut() {
 }
 
 
+Tiles
+State::get_total_tiles() const {
+    Tiles result = Tiles();
+    for (const Panel& panel : panels) {
+        const Pyramid& pyramid = panel.get_pyramid();
+        for (int line = 1; line <= rules->tile_types; line++) {
+            result += pyramid.get_line(line);
+        }
+        auto wall_tiles = panel.get_wall().get_tiles();
+        for (Tile tile : wall_tiles) {
+            result += tile;
+        }
+    }
+    result += center;
+    for (const Factory& factory : factories) {
+        result += factory;
+    }
+
+    result += bag;
+    result += bin;
+    return result;
+}
+
 void
 State::set_current_player(ushort id) {
     assert_player_id(id);

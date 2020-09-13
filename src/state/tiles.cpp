@@ -15,7 +15,9 @@ Tiles::Tiles(Tile tile)
 
 Tiles::Tiles(Tile tile, int count)
   : quantities() {
-    quantities[(int)(tile)] = count;
+    if (bool(tile)) {
+        quantities[(int)(tile)] = count;
+    }
 }
 
 Tiles::Tiles(const vector<ushort>& tiles)
@@ -37,6 +39,9 @@ Tiles::Tiles(const Tiles& tiles)
 
 ushort&
 Tiles::operator[](Tile tile) {
+    if (!tile) {
+        throw range_error("Can't get amount of null tiles");
+    }
     return quantities[int(tile)];
 }
 
@@ -55,6 +60,9 @@ Tiles::is_empty() const {
 
 bool
 Tiles::has_color(Tile color) const {
+    if (!color) {
+        throw range_error("Can't call with null tile color");
+    }
     return quantities[int(color)] > 0;
 }
 
@@ -123,16 +131,20 @@ operator>=(Tiles left, Tiles right) {
 
 Tiles&
 Tiles::operator+=(Tile tile) {
-    this->quantities[int(tile)]++;
+    if (bool(tile)) {
+        this->quantities[int(tile)]++;
+    }
     return *this;
 }
 
 Tiles&
 Tiles::operator-=(Tile tile) {
-    if (this->quantities[int(tile)] == 0) {
-        throw std::invalid_argument("Not enough Tiles to substract");
+    if (bool(tile)) {
+        if (this->quantities[int(tile)] == 0) {
+            throw std::invalid_argument("Not enough Tiles to substract");
+        }
+        this->quantities[int(tile)]--;
     }
-    this->quantities[int(tile)]--;
     return *this;
 }
 

@@ -1,6 +1,6 @@
 import pytest
 from ceramic.game import Game, Action, Player
-from ceramic.state import Tile
+from ceramic.state import Tile, Tiles
 from ceramic.rules import Rules
 
 
@@ -22,10 +22,12 @@ def test_game_methods(rules):
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_roll(rules):
     game = Game(rules)
+    expected_total_tiles = Tiles([rules.tile_count] * rules.tile_types)
     player = Player()
     while not game.state.is_game_finished():
         game.start_round()
         while not game.state.is_round_finished():
+            assert game.state.get_total_tiles() == expected_total_tiles
             action = player.play(game.state)
             game.apply(action)
             game.next_player()

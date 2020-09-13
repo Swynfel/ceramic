@@ -205,8 +205,8 @@ void
 Game::score_panels(State& state) {
     for (Panel& panel : state.panels) {
         int score = 0;
-        Pyramid pyramid = panel.get_pyramid_mut();
-        Wall wall = panel.get_wall_mut();
+        Pyramid& pyramid = panel.get_pyramid_mut();
+        Wall& wall = panel.get_wall_mut();
         for (int line = 1; line <= state.rules->tile_types; line++) {
             if (pyramid.is_filled(line)) {
                 // Take tiles of pyramid line
@@ -322,8 +322,11 @@ Game::apply(Action action, State& state) {
         // Else pyramid, some will be placed in a line
         Pyramid& pyramid = panel.get_pyramid_mut();
         overflow_count = max(0, count - pyramid.amount_remaining(action.place));
-        // Placed
-        pyramid.set_line(action.place, count - overflow_count, action.color);
+        // Determine new amount of tiles on pyramid line
+        count -= overflow_count;
+        count += pyramid.amount(action.place);
+        // And set it
+        pyramid.set_line(action.place, count, action.color);
     }
     if (overflow_count > 0) {
         // Throw excess tiles in bin
