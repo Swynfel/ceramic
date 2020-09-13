@@ -4,8 +4,19 @@
 
 Game::Game(const std::shared_ptr<Rules>& rules)
   : state(rules)
+  , players()
   , randomness()
   , range() {}
+
+Game::Game(const std::shared_ptr<Rules>& rules, vector<Player> players)
+  : state(rules)
+  , players(players)
+  , randomness()
+  , range() {
+    if (players.size() > rules->player_count) {
+        throw invalid_argument("Too many players for rules");
+    }
+}
 
 Game::Game()
   : Game(Rules::DEFAULT) {}
@@ -85,6 +96,35 @@ Game::pull_random_tiles(int count) {
 
 // Public methods
 
+
+ushort
+Game::players_missing() const {
+    return state.rules->player_count - players.size();
+}
+bool
+Game::has_enough_players() const {
+    return players_missing() == 0;
+}
+
+void
+Game::add_player(Player& player) {
+    if (has_enough_players()) {
+        throw logic_error("Already enough players");
+    }
+    player.join_game(players.size());
+    players.push_back(player);
+}
+
+void
+Game::add_players(vector<Player> _players) {
+    if (players_missing() < _players.size()) {
+        throw out_of_range("Not enough seats for this many players");
+    }
+    for (Player& player : _players) {
+        add_player(player);
+    }
+}
+
 void
 Game::start() {
     state.reset();
@@ -96,6 +136,50 @@ void
 Game::start_round() {
     setup_factories();
 }
+
+void
+Game::end_round() {
+    score_panels();
+    apply_first_token();
+}
+
+
+void
+Game::roll_round() {
+    if (!has_enough_players()) {
+        throw logic_error("Not enough players to play a round");
+    }
+    while (!state.is_round_finished()) {
+        Player player = players[state.player];
+        Action action = player.play(state);
+        try {
+            apply(action);
+            state.next_player();
+        } catch (exception e) {
+            player.error(e.what());
+            cout << e.what() << endl;
+        }
+    }
+}
+
+
+void
+Game::roll_game() {
+    if (!has_enough_players()) {
+        throw logic_error("Not enough players to start the game");
+    }
+    start();
+    bool first = true;
+    while (!state.is_game_finished()) {
+        if (first) {
+            start_round();
+            first = false;
+        }
+        roll_round();
+        end_round();
+    }
+}
+
 
 void
 Game::setup_factories() {
@@ -159,10 +243,6 @@ Game::apply_first_token(State& state) {
         }
         id++;
     }
-}
-
-void
-Game::end_round() {
 }
 
 

@@ -4,7 +4,6 @@
 #include <iterator>
 #include <numeric>
 #include <sstream>
-#include <stdexcept>
 
 // Constructors
 
@@ -44,8 +43,8 @@ Tiles::operator[](Tile tile) {
 ushort
 Tiles::total() const {
     return accumulate(
-        this->quantities.begin(),
-        this->quantities.end(),
+        quantities.begin(),
+        quantities.end(),
         0);
 }
 

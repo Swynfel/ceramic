@@ -1,7 +1,9 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include "action.hpp"
 #include "game.hpp"
+#include "player.hpp"
 #include "py_utils.hpp"
 
 namespace py = pybind11;
@@ -44,9 +46,17 @@ py_bind_game(py::module& root) {
 
         .def_property_readonly("state", &Game::get_state)
 
+        .def("players_missing", &Game::players_missing)
+        .def("has_enough_players", &Game::has_enough_players)
+        .def("add_player", &Game::add_player)
+        .def("add_players", &Game::add_players)
+
         .def("start", &Game::start)
         .def("start_round", &Game::start_round)
         .def("end_round", &Game::end_round)
+
+        .def("roll_round", &Game::roll_round)
+        .def("roll_game", &Game::roll_game)
 
         .def("setup_factories", &Game::setup_factories)
         .def("score_panels", [](Game& game) { game.score_panels(); })
@@ -54,4 +64,12 @@ py_bind_game(py::module& root) {
 
         .def("legal", [](const Game& game, Action action) { game.legal(action); })
         .def("apply", [](Game& game, Action action) { game.apply(action); });
+
+
+    py::class_<Player>(m, "Player")
+        .def(py::init<>())
+
+        .def_property_readonly("id", &Player::get_id)
+
+        .def("play", &Player::play);
 }

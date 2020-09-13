@@ -100,6 +100,7 @@ Panel::legal_line(Tile tile, ushort line) const {
     return pyramid.accept_color(tile, line);
 }
 
+
 // Reading
 
 ostream&

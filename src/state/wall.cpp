@@ -1,6 +1,7 @@
 #include "wall.hpp"
 
 #include <algorithm>
+#include <numeric>
 #include <sstream>
 
 Wall::Wall(const std::shared_ptr<Rules>& rules)
@@ -129,6 +130,24 @@ Wall::line_color_x(ushort line, Tile color) const {
     return (line - 1 + ushort(color)) % rules->tile_types + 1;
 }
 
+
+bool
+Wall::has_completed_line() const {
+    for (int line = 1; line <= rules->tile_types; line++) {
+        int x;
+        for (x = 1; x <= rules->tile_types; x++) {
+            if (!get_tile_at_unsafe(x, line)) {
+                break;
+            }
+        }
+        if (x > rules->tile_types) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 // Scoring
 
 ushort
@@ -138,14 +157,27 @@ Wall::score_for_placing(ushort x, ushort y) {
     // left
     for (int left = x - 1; left > 0; left--) {
         if (get_tile_at_unsafe(left, y)) {
+            width++;
         }
     }
     // right
-
+    for (int right = x + 1; right <= rules->tile_types; right++) {
+        if (get_tile_at_unsafe(right, y)) {
+            width++;
+        }
+    }
     // up
-
+    for (int up = y - 1; up > 0; up--) {
+        if (get_tile_at_unsafe(x, up)) {
+            height++;
+        }
+    }
     // down
-
+    for (int down = y + 1; down <= rules->tile_types; down++) {
+        if (get_tile_at_unsafe(x, down)) {
+            height++;
+        }
+    }
     if (width != 1 && height != 1) {
         return width + height;
     }
@@ -172,6 +204,7 @@ Wall::place_line_color(ushort line, Tile color) {
     set_tile_at_unsafe(x, line, color);
     return score_for_placing(x, line);
 }
+
 
 // Reading
 

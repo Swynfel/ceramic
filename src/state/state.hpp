@@ -50,6 +50,9 @@ public:
     void set_current_player(ushort id);
     void next_player();
 
+    bool is_round_finished() const;
+    bool is_game_finished() const;
+
     // Reading
     friend ostream& operator<<(ostream& os, const State& state);
     string str() const;

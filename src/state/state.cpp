@@ -142,6 +142,31 @@ State::next_player() {
 }
 
 
+bool
+State::is_round_finished() const {
+    if (!center.is_empty()) {
+        return false;
+    }
+    for (const Factory& factory : factories) {
+        if (!factory.is_empty()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+bool
+State::is_game_finished() const {
+    for (const Panel& panel : panels) {
+        if (panel.get_wall().has_completed_line()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 // Reading
 
 ostream&

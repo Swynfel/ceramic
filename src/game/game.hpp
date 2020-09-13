@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "action.hpp"
+#include "player.hpp"
 #include "rules/rules.hpp"
 #include "state/state.hpp"
 
@@ -22,6 +23,7 @@ private:
     State state;
     rng randomness;
     int_range range;
+    vector<Player> players;
 
     int rand(int min = 0, int max = std::numeric_limits<int>::max());
     Tile pull_one_random_tile();
@@ -30,12 +32,21 @@ private:
 public:
     Game();
     Game(const std::shared_ptr<Rules>& rules);
+    Game(const std::shared_ptr<Rules>& rules, vector<Player> players);
 
     const State get_state() const;
+
+    ushort players_missing() const;
+    bool has_enough_players() const;
+    void add_player(Player& player);
+    void add_players(vector<Player> players);
 
     void start();
     void start_round();
     void end_round();
+
+    void roll_round();
+    void roll_game();
 
     void setup_factories();
     void score_panels();

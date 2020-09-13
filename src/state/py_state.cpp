@@ -151,6 +151,9 @@ py_bind_state(py::module& root) {
         .def_property("current_player", &State::get_current_player, &State::set_current_player)
         .def("next_player", &State::next_player)
 
+        .def("is_round_finished", &State::is_round_finished)
+        .def("is_game_finished", &State::is_game_finished)
+
         .def("__str__", &State::str)
         .def("__repr__", &State::repr);
 
@@ -171,6 +174,8 @@ py_bind_state(py::module& root) {
 
         .def("line_has_color", &Wall::line_has_color)
         .def("line_color_x", &Wall::line_color_x)
+
+        .def("has_completed_line", &Wall::has_completed_line)
 
         .def("score_for_placing", &Wall::score_for_placing)
         .def("place_at", &Wall::place_at)
