@@ -46,12 +46,12 @@ Wall::set_tile_at_unsafe(ushort x, ushort y, Tile tile) {
 
 void
 Wall::clear() {
-    placed.assign(rules->tile_types_2(), false);
+    placed.assign(rules->tile_types_2(), Tile::NONE);
 }
 
 bool
 Wall::get_placed_at(ushort x, ushort y) const {
-    return get_tile_at(x, y);
+    return bool(get_tile_at(x, y));
 }
 
 Tile
@@ -73,7 +73,7 @@ vector<bool>
 vec_tile_to_bool(vector<Tile>::const_iterator begin, vector<Tile>::const_iterator end) {
     vector<bool> result;
     while (begin != end) {
-        result.push_back(*begin++);
+        result.push_back(bool(*begin++));
     }
     return result;
 }

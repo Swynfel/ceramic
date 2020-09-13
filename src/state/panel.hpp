@@ -36,7 +36,7 @@ public:
     void clear_floor();
     ushort get_penalty() const;
 
-    bool legal_line(Tile tile, ushort line) const;
+    bool legal_line(ushort line, Tile tile) const;
 
     // Reading
     friend ostream& operator<<(ostream& os, const Panel& panel);

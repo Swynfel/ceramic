@@ -7,7 +7,7 @@ from ceramic.rules import Rules
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_methods(rules):
     game = Game(rules)
-    game.start()
+    game.reset()
     game.start_round()
     game.end_round()
     game.setup_factories()
@@ -22,6 +22,11 @@ def test_game_methods(rules):
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_roll(rules):
     game = Game(rules)
-    for _ in range(0, rules.player_count):
-        game.add_player(Player())
-    game.roll_game()
+    player = Player()
+    while not game.state.is_game_finished():
+        game.start_round()
+        while not game.state.is_round_finished():
+            action = player.play(game.state)
+            game.apply(action)
+            game.next_player()
+        game.end_round()

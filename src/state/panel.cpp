@@ -93,11 +93,11 @@ Panel::get_penalty() const {
 
 
 bool
-Panel::legal_line(Tile tile, ushort line) const {
+Panel::legal_line(ushort line, Tile tile) const {
     if (wall.line_has_color(line, tile)) {
         return false;
     }
-    return pyramid.accept_color(tile, line);
+    return pyramid.accept_color(line, tile);
 }
 
 

@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, Extension, find_packages
 import pybind11
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 sources = sorted(p.as_posix() for p in Path("src/").rglob("*.cpp"))
 

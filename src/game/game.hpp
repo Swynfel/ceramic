@@ -21,9 +21,9 @@ class Game {
 
 private:
     State state;
+    vector<Player> players;
     rng randomness;
     int_range range;
-    vector<Player> players;
 
     int rand(int min = 0, int max = std::numeric_limits<int>::max());
     Tile pull_one_random_tile();
@@ -41,10 +41,11 @@ public:
     void add_player(Player& player);
     void add_players(vector<Player> players);
 
-    void start();
+    void reset();
     void start_round();
     void end_round();
 
+    void next_player();
     void roll_round();
     void roll_game();
 

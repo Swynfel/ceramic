@@ -8,9 +8,10 @@ State::State(const std::shared_ptr<Rules>& rules)
   , factories()
   , panels(rules->player_count, Panel(rules))
   , bag()
-  , bin() {
+  , bin()
+  , player() {
     int factory_count = rules->factory_count();
-    for (int i = 1; i < factory_count; i++) {
+    for (int i = 1; i <= factory_count; i++) {
         factories.push_back(Factory(i));
     }
 }
@@ -21,7 +22,8 @@ State::State(const State& state)
   , factories()
   , panels()
   , bag(state.bag)
-  , bin(state.bin) {
+  , bin(state.bin)
+  , player(state.player) {
     for (auto& factory : state.factories) {
         factories.push_back(Factory(factory));
     }
@@ -171,7 +173,15 @@ State::is_game_finished() const {
 
 ostream&
 operator<<(ostream& os, const State& state) {
-    return os << "<Ceramic State " << &state << ">";
+    os << state.center << endl;
+    for (const Factory& factory : state.factories) {
+        os << factory << endl;
+    }
+    os << "--------------------" << endl;
+    for (const Panel& panel : state.panels) {
+        os << panel << endl;
+    }
+    return os;
 }
 
 string
@@ -183,5 +193,7 @@ State::str() const {
 
 string
 State::repr() const {
-    return str();
+    ostringstream os;
+    os << "<Ceramic State " << this << ">";
+    return os.str();
 }

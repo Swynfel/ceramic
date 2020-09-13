@@ -21,9 +21,9 @@ public:
 
     friend bool operator==(Tile left, Tile right);
     friend bool operator!=(Tile left, Tile right);
-    operator int() const;
-    operator bool() const;
-    operator ushort() const;
+    explicit operator int() const;
+    explicit operator bool() const;
+    explicit operator ushort() const;
 
     static char value_to_letter(ushort v);
     static ushort letter_to_value(char c);

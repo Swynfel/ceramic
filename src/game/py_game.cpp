@@ -51,18 +51,19 @@ py_bind_game(py::module& root) {
         .def("add_player", &Game::add_player)
         .def("add_players", &Game::add_players)
 
-        .def("start", &Game::start)
+        .def("reset", &Game::reset)
         .def("start_round", &Game::start_round)
         .def("end_round", &Game::end_round)
 
         .def("roll_round", &Game::roll_round)
         .def("roll_game", &Game::roll_game)
+        .def("next_player", &Game::next_player)
 
         .def("setup_factories", &Game::setup_factories)
         .def("score_panels", [](Game& game) { game.score_panels(); })
         .def("apply_first_token", [](Game& game) { game.apply_first_token(); })
 
-        .def("legal", [](const Game& game, Action action) { game.legal(action); })
+        .def("legal", [](const Game& game, Action action) { return game.legal(action); })
         .def("apply", [](Game& game, Action action) { game.apply(action); });
 
 

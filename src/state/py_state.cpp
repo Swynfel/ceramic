@@ -58,6 +58,8 @@ py_bind_state(py::module& root) {
         })
         .def("total", &Tiles::total)
         .def("__len__", &Tiles::size)
+        .def("is_empty", &Tiles::is_empty)
+        .def("has_color", &Tiles::has_color)
 
         .def("__eq__", &py_eq<Tiles>)
         .def("__ne__", &py_ne<Tiles>)
@@ -143,8 +145,8 @@ py_bind_state(py::module& root) {
 
         .def_property_readonly("rules", &State::get_rules)
         .def_property_readonly("center", &State::get_center_mut)
-        .def_property_readonly("factory", &State::get_factory_mut)
-        .def_property_readonly("panel", &State::get_panel_mut)
+        .def("factory", &State::get_factory_mut)
+        .def("panel", &State::get_panel_mut)
         .def_property_readonly("bag", &State::get_bag_mut)
         .def_property_readonly("bin", &State::get_bin_mut)
 
