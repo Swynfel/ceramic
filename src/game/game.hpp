@@ -1,9 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_smallint.hpp>
-#include <limits>
+#include <algorithm>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -12,11 +11,7 @@
 #include "player.hpp"
 #include "rules/rules.hpp"
 #include "state/state.hpp"
-
-using namespace boost::random;
-
-typedef mt11213b rng;
-typedef uniform_int_distribution<> int_range;
+#include "utils/random.hpp"
 
 class Game {
 private:
@@ -25,15 +20,15 @@ private:
     vector<Observer*> observers;
     vector<ushort> order;
     rng randomness;
-    int_range range;
+    ushort_range range;
 
-    int rand(int min = 0, int max = std::numeric_limits<int>::max());
     Tile pull_one_random_tile();
     Tiles pull_random_tiles(int count);
 
 public:
     Game();
     Game(const std::shared_ptr<Rules>& rules);
+    Game(const std::shared_ptr<Rules>& rules, int seed);
     Game(const std::shared_ptr<Rules>& rules, vector<Player*> players);
     ~Game();
 
@@ -67,6 +62,7 @@ public:
 
     bool static legal(Action action, const State& state);
     void static apply(Action action, State& state);
+    vector<Action> static all_legal(const State& state);
 };
 
 #endif //GAME_HPP

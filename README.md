@@ -3,7 +3,7 @@ A python module for playing variations of the board game Azul, implemented in C+
 
 ## Dependencies
 
-Before building this repository make sure to install the following dependencies.
+Before building this repository make sure to install the following dependency.
 
 ### Pybind11
 
@@ -12,15 +12,6 @@ Before building this repository make sure to install the following dependencies.
 It can be installed with `pip` by executing the following command
 ```
 python -m pip install pybind11
-```
-
-### Boost
-
-[Boost](https://www.boost.org/) is a collection of C++ libraries. We need it for quick random number generation.
-
-On Ubuntu, it can be installed with
-```
-sudo apt-get install libboost-all-dev
 ```
 
 

@@ -1,13 +1,13 @@
 import pytest
 from ceramic.game import Game, Action, Player, legal
-from ceramic.players import FirstLegalPlayer
+from ceramic.players import FirstLegalPlayer, RandomPlayer
 from ceramic.state import Tile, Tiles
 from ceramic.rules import Rules
 
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_methods(rules):
-    game = Game(rules)
+    game = Game(rules, 0)
     game.reset()
     game.start_round()
     game.end_round()
@@ -21,10 +21,10 @@ def test_game_methods(rules):
 
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
-def test_game_roll(rules):
-    game = Game(rules)
+@pytest.mark.parametrize("player", [FirstLegalPlayer(), RandomPlayer()])
+def test_game_roll(rules, player):
+    game = Game(rules, 0)
     expected_total_tiles = Tiles([rules.tile_count] * rules.tile_types)
-    player = FirstLegalPlayer()
     while not game.state.is_game_finished():
         game.start_round()
         while not game.state.is_round_finished():
@@ -50,7 +50,7 @@ def test_game_roll_with_python_player(rules):
                     for color in range(0, rules.tile_types):
                         action = Action(
                             pick=pick, color=Tile(color), place=place)
-                        if(legal(action, state)):
+                        if legal(action, state):
                             return action
             raise RuntimeError("No legal action")
 

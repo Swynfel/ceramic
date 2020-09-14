@@ -82,6 +82,7 @@ py_bind_game(py::module& root) {
     py::class_<Game>(m, "Game")
         .def(py::init<>())
         .def(py::init<std::shared_ptr<Rules>&>())
+        .def(py::init<std::shared_ptr<Rules>&, int>())
         .def(py::init<std::shared_ptr<Rules>&, vector<Player*>>())
 
         .def_property_readonly("state", &Game::get_state)
@@ -126,5 +127,6 @@ py_bind_game(py::module& root) {
         .def("__repr__", &Player::repr);
 
     m.def("legal", [](Action action, const State& state) { return Game::legal(action, state); });
+    m.def("all_legal", &Game::all_legal);
     m.def("apply", [](Action action, State& state) { Game::apply(action, state); });
 }

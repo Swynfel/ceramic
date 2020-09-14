@@ -1,15 +1,19 @@
 #include "game.hpp"
 
-#include <random>
-
 // Constuctors
 
+Game::Game()
+  : Game(Rules::DEFAULT) {}
+
 Game::Game(const std::shared_ptr<Rules>& rules)
+  : Game(rules, random_seed()) {}
+
+Game::Game(const std::shared_ptr<Rules>& rules, int seed)
   : state(rules)
   , players()
   , observers()
   , order()
-  , randomness()
+  , randomness(seed)
   , range() {
     reset();
 }
@@ -19,7 +23,7 @@ Game::Game(const std::shared_ptr<Rules>& rules, vector<Player*> players)
   , players(players)
   , observers()
   , order()
-  , randomness()
+  , randomness(random_seed())
   , range() {
     if (players.size() > rules->player_count) {
         throw invalid_argument("Too many players for rules");
@@ -32,9 +36,6 @@ Game::Game(const std::shared_ptr<Rules>& rules, vector<Player*> players)
     }
     reset();
 }
-
-Game::Game()
-  : Game(Rules::DEFAULT) {}
 
 Game::~Game() {
     for (Player* player : players) {
@@ -51,11 +52,6 @@ Game::~Game() {
 
 // Private methods
 
-int
-Game::rand(int min, int max) {
-    return range(randomness, int_range::param_type(0, max - 1));
-}
-
 const State
 Game::get_state() const {
     return state;
@@ -65,7 +61,7 @@ Game::get_state() const {
 // one tile in bag
 Tile
 Game::pull_one_random_tile() {
-    int v = rand(0, state.bag.total());
+    int v = random_range(randomness, range, 0, state.bag.total());
     int i;
     for (i = 0; i < state.rules->tile_types - 1; i++) {
         v -= state.bag[i];
@@ -366,6 +362,33 @@ Game::legal(Action action, const State& state) {
         return false;
     }
     return true;
+}
+
+
+vector<Action>
+Game::all_legal(const State& state) {
+    vector<Action> legal_actions{};
+    std::shared_ptr<Rules> rules = state.get_rules();
+    const Panel& panel = state.get_panel(state.player);
+    for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
+        Tiles tiles = (pick == 0) ? (Tiles)state.center : (Tiles)state.get_factory(pick);
+        if (tiles.is_empty()) {
+            continue;
+        }
+        for (ushort color = 0; color < rules->tile_types; color++) {
+            Tile tile = Tile(color);
+            if (!tiles.has_color(tile)) {
+                continue;
+            }
+            for (ushort place = 0; place <= rules->tile_types; place++) {
+                if (place > 0 && !panel.legal_line(place, tile)) {
+                    continue;
+                }
+                legal_actions.push_back(Action{ .pick = pick, .color = tile, .place = place });
+            }
+        }
+    }
+    return legal_actions;
 }
 
 void
