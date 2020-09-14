@@ -1,40 +1,45 @@
 #include "player.hpp"
 
 #include "game.hpp"
+#include <iostream>
 #include <sstream>
 
+
 bool
-Player::check_rules(const Rules& rules) {
+Player::join_game(Game* game, ushort _id) {
+    if (joined_game != nullptr) {
+        throw runtime_error("Already joined game");
+    }
+    if (!check_rules(*(game->get_state().get_rules()))) {
+        return false;
+    }
+    id = _id;
+    joined_game = game;
     return true;
 }
 
 void
-Player::start_game(ushort _position) {
+Player::set_position(ushort _position) {
     position = _position;
 }
 
-bool
-Player::join_game(const Rules& rules, ushort _id) {
-    if (joined_game) {
-        throw runtime_error("Already joined game");
-    }
-    if (!check_rules(rules)) {
-        return false;
-    }
-    joined_game = true;
-    id = _id;
-    return true;
+void
+Player::delete_game() {
+    joined_game = nullptr;
 }
 
-void
-Player::new_round(const State& state) {}
 
-void
-Player::action_played(Action action) {}
+Player::~Player() {
+    if (joined_game != nullptr) {
+        joined_game->remove_player(this);
+    }
+}
 
-void
-Player::end_game(const State& state, ushort winner_id, ushort winner_position) {}
 
+bool
+Player::has_joined_game() const {
+    return joined_game;
+}
 
 ushort
 Player::get_id() const {
@@ -46,36 +51,35 @@ Player::get_position() const {
     return position;
 }
 
+
+Observer*
+Player::observer() const {
+    return nullptr;
+}
+
+
 bool
-Player::has_joined_game() const {
-    return joined_game;
+Player::check_rules(const Rules& rules) const {
+    return true;
 }
 
-
-Action
-Player::play(const State& state) {
-    auto rules = state.get_rules();
-    for (ushort place = rules->tile_types; place >= 0; place--) {
-        for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
-            for (ushort color = 0; color < rules->tile_types; color++) {
-                Action action = Action{ .pick = pick, .color = color, .place = place };
-                if (Game::legal(action, state)) {
-                    return action;
-                }
-            }
-        }
-    }
-    throw runtime_error("No action was legal");
-}
 
 void
 Player::error(string message) {
-    cout << "[PLAYER#" << id << ":ERROR]" << message << endl;
+    std::cout << "[PLAYER#" << id << ":ERROR]" << message << endl;
+}
+
+
+// Reading
+
+string
+Player::player_type() const {
+    return "";
 }
 
 ostream&
 operator<<(ostream& os, const Player& player) {
-    return os << "<Player#" << player.id << ">";
+    return os << "<Player#" << player.id << ":" << player.player_type() << ">";
 }
 
 string

@@ -3,30 +3,38 @@
 
 #include "action.hpp"
 #include "global.hpp"
+#include "observer.hpp"
 #include "state/state.hpp"
 
+class Game;
 class Player {
+private:
+    friend class Game;
+    bool join_game(Game* game, ushort id);
+    void set_position(ushort position);
+    void delete_game();
+
 protected:
-    bool joined_game = false;
+    Game* joined_game = nullptr;
     ushort id;
     ushort position;
 
 public:
-    bool check_rules(const Rules& rules);
-    bool join_game(const Rules& rules, ushort id);
-    void start_game(ushort position);
-    void new_round(const State& state);
-    void action_played(Action action);
-    void end_game(const State& state, ushort winner_id, ushort winner_position);
+    ~Player();
 
+    bool has_joined_game() const;
     ushort get_id() const;
     ushort get_position() const;
-    bool has_joined_game() const;
 
-    Action play(const State& state);
-    void error(string message);
+    virtual bool check_rules(const Rules& rules) const;
+
+    virtual Observer* observer() const;
+
+    virtual Action play(const State& state) = 0;
+    virtual void error(string message);
 
     // Reading
+    virtual string player_type() const;
     friend ostream& operator<<(ostream& os, const Player& player);
     string str() const;
     string repr() const;

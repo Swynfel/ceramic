@@ -20,6 +20,45 @@ py_create_action(
     };
 }
 
+class PyPlayer : public Player {
+public:
+    using Player::Player;
+
+    bool check_rules(const Rules& rules) const override {
+        PYBIND11_OVERLOAD(
+            bool,
+            Player,
+            check_rules,
+            rules);
+    }
+    Observer* observer() const override {
+        PYBIND11_OVERLOAD(
+            Observer*,
+            Player,
+            observer);
+    }
+    Action play(const State& state) override {
+        PYBIND11_OVERLOAD_PURE(
+            Action,
+            Player,
+            play,
+            state);
+    }
+    void error(string message) override {
+        PYBIND11_OVERLOAD(
+            void,
+            Player,
+            error,
+            message);
+    }
+    string player_type() const override {
+        PYBIND11_OVERLOAD(
+            string,
+            Player,
+            player_type);
+    }
+};
+
 void
 py_bind_game(py::module& root) {
     py::module m = root.def_submodule("game");
@@ -43,7 +82,7 @@ py_bind_game(py::module& root) {
     py::class_<Game>(m, "Game")
         .def(py::init<>())
         .def(py::init<std::shared_ptr<Rules>&>())
-        .def(py::init<std::shared_ptr<Rules>&, vector<Player>>())
+        .def(py::init<std::shared_ptr<Rules>&, vector<Player*>>())
 
         .def_property_readonly("state", &Game::get_state)
 
@@ -68,13 +107,24 @@ py_bind_game(py::module& root) {
         .def("legal", [](const Game& game, Action action) { return game.legal(action); })
         .def("apply", [](Game& game, Action action) { game.apply(action); });
 
-
-    py::class_<Player>(m, "Player")
+    py::class_<Player, PyPlayer>(m, "Player")
         .def(py::init<>())
 
+        .def("has_joined_game", &Player::has_joined_game)
         .def_property_readonly("id", &Player::get_id)
         .def_property_readonly("position", &Player::get_position)
-        .def_property_readonly("joined_game", &Player::has_joined_game)
 
-        .def("play", &Player::play);
+        .def("check_rules", &Player::check_rules)
+
+        .def("observer", &Player::observer)
+
+        .def("play", &Player::play)
+        .def("error", &Player::error)
+
+        .def("player_type", &Player::player_type)
+        .def("__str__", &Player::str)
+        .def("__repr__", &Player::repr);
+
+    m.def("legal", [](Action action, const State& state) { return Game::legal(action, state); });
+    m.def("apply", [](Action action, State& state) { Game::apply(action, state); });
 }

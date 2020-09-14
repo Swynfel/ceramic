@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "action.hpp"
+#include "observer.hpp"
 #include "player.hpp"
 #include "rules/rules.hpp"
 #include "state/state.hpp"
@@ -18,10 +19,10 @@ typedef mt11213b rng;
 typedef uniform_int_distribution<> int_range;
 
 class Game {
-
 private:
     State state;
-    vector<Player> players;
+    vector<Player*> players;
+    vector<Observer*> observers;
     vector<ushort> order;
     rng randomness;
     int_range range;
@@ -33,14 +34,18 @@ private:
 public:
     Game();
     Game(const std::shared_ptr<Rules>& rules);
-    Game(const std::shared_ptr<Rules>& rules, vector<Player> players);
+    Game(const std::shared_ptr<Rules>& rules, vector<Player*> players);
+    ~Game();
 
     const State get_state() const;
 
     ushort players_missing() const;
     bool has_enough_players() const;
-    void add_player(Player& player);
-    void add_players(vector<Player> players);
+    void add_player(Player* player);
+    void add_players(vector<Player*> players);
+    void remove_player(Player* player);
+    void add_observer(Observer* observer);
+    void remove_observer(Observer* observer);
 
     void reset();
     void start_round();
