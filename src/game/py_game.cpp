@@ -43,6 +43,7 @@ py_bind_game(py::module& root) {
     py::class_<Game>(m, "Game")
         .def(py::init<>())
         .def(py::init<std::shared_ptr<Rules>&>())
+        .def(py::init<std::shared_ptr<Rules>&, vector<Player>>())
 
         .def_property_readonly("state", &Game::get_state)
 
@@ -54,6 +55,7 @@ py_bind_game(py::module& root) {
         .def("reset", &Game::reset)
         .def("start_round", &Game::start_round)
         .def("end_round", &Game::end_round)
+        .def("score_final", &Game::score_final)
 
         .def("roll_round", &Game::roll_round)
         .def("roll_game", &Game::roll_game)
@@ -71,6 +73,8 @@ py_bind_game(py::module& root) {
         .def(py::init<>())
 
         .def_property_readonly("id", &Player::get_id)
+        .def_property_readonly("position", &Player::get_position)
+        .def_property_readonly("joined_game", &Player::has_joined_game)
 
         .def("play", &Player::play);
 }

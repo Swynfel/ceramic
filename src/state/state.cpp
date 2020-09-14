@@ -184,13 +184,51 @@ State::is_round_finished() const {
 bool
 State::is_game_finished() const {
     for (const Panel& panel : panels) {
-        if (panel.get_wall().has_completed_line()) {
+        if (panel.get_wall().completed_line_count() > 0) {
             return true;
         }
     }
     return false;
 }
 
+vector<ushort>
+State::highest_score_players() const {
+    ushort highest_score = 0;
+    vector<ushort> highest_players;
+    ushort seat;
+    for (const Panel& panel : panels) {
+        if (panel.get_score() >= highest_score) {
+            if (panel.get_score() != highest_score) {
+                highest_players.clear();
+            }
+            highest_players.push_back(seat);
+        }
+        seat++;
+    }
+    return highest_players;
+}
+
+ushort
+State::winning_player() const {
+    // The winner is the player with the highest score
+    vector<ushort> highest_players = highest_score_players();
+    if (highest_players.size() == 1) {
+        return highest_players.front();
+    }
+    // Break ties by number of completed lines on wall
+    ushort winner;
+    ushort highest_count = 0;
+    for (ushort player : highest_players) {
+        const Panel& panel = panels[player];
+        ushort count = panel.get_wall().completed_line_count();
+        // Break ties again by taking last player with the highest_count
+        if (count >= highest_count) {
+            highest_count = count;
+            winner = player;
+        }
+    }
+    return player;
+}
 
 // Reading
 

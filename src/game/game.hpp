@@ -22,6 +22,7 @@ class Game {
 private:
     State state;
     vector<Player> players;
+    vector<ushort> order;
     rng randomness;
     int_range range;
 
@@ -44,6 +45,7 @@ public:
     void reset();
     void start_round();
     void end_round();
+    void score_final();
 
     void next_player();
     void roll_round();

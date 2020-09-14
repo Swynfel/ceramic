@@ -144,6 +144,8 @@ py_bind_state(py::module& root) {
         .def(py::init<const std::shared_ptr<Rules>>())
         .def(py::init<const State&>())
 
+        .def("reset", &State::reset)
+
         .def_property_readonly("rules", &State::get_rules)
         .def_property_readonly("center", &State::get_center_mut)
         .def("factory", &State::get_factory_mut)
@@ -158,6 +160,8 @@ py_bind_state(py::module& root) {
 
         .def("is_round_finished", &State::is_round_finished)
         .def("is_game_finished", &State::is_game_finished)
+        .def("highest_score_players", &State::highest_score_players)
+        .def("winning_player", &State::winning_player)
 
         .def("__str__", &State::str)
         .def("__repr__", &State::repr);
@@ -180,7 +184,9 @@ py_bind_state(py::module& root) {
         .def("line_has_color", &Wall::line_has_color)
         .def("line_color_x", &Wall::line_color_x)
 
-        .def("has_completed_line", &Wall::has_completed_line)
+        .def("completed_column_count", &Wall::completed_column_count)
+        .def("completed_line_count", &Wall::completed_line_count)
+        .def("completed_type_count", &Wall::completed_type_count)
 
         .def("score_for_placing", &Wall::score_for_placing)
         .def("place_at", &Wall::place_at)

@@ -54,6 +54,8 @@ public:
 
     bool is_round_finished() const;
     bool is_game_finished() const;
+    vector<ushort> highest_score_players() const;
+    ushort winning_player() const;
 
     // Reading
     friend ostream& operator<<(ostream& os, const State& state);

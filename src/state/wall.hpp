@@ -35,7 +35,10 @@ public:
     bool line_has_color(ushort line, Tile color) const;
     ushort line_color_x(ushort line, Tile color) const;
 
-    bool has_completed_line() const;
+    ushort completed_column_count() const;
+    ushort completed_line_count() const;
+    ushort completed_type_count() const;
+    ushort final_score_bonus() const;
 
     // Scoring
     ushort score_for_placing(ushort x, ushort y);

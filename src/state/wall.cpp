@@ -130,9 +130,26 @@ Wall::line_color_x(ushort line, Tile color) const {
     return (line - 1 + ushort(color)) % rules->tile_types + 1;
 }
 
+ushort
+Wall::completed_column_count() const {
+    int count = 0;
+    for (int column = 1; column <= rules->tile_types; column++) {
+        int y;
+        for (y = 1; y <= rules->tile_types; y++) {
+            if (!get_tile_at_unsafe(column, y)) {
+                break;
+            }
+        }
+        if (y > rules->tile_types) {
+            count++;
+        }
+    }
+    return count;
+}
 
-bool
-Wall::has_completed_line() const {
+ushort
+Wall::completed_line_count() const {
+    int count = 0;
     for (int line = 1; line <= rules->tile_types; line++) {
         int x;
         for (x = 1; x <= rules->tile_types; x++) {
@@ -141,10 +158,35 @@ Wall::has_completed_line() const {
             }
         }
         if (x > rules->tile_types) {
-            return true;
+            count++;
         }
     }
-    return false;
+    return count;
+}
+
+ushort
+Wall::completed_type_count() const {
+    int count = 0;
+    for (int type = 0; type < rules->tile_types; type++) {
+        Tile tile = Tile(type);
+        int line;
+        for (line = 1; line <= rules->tile_types; line++) {
+            if (!line_has_color(line, tile)) {
+                break;
+            }
+        }
+        if (line > rules->tile_types) {
+            count++;
+        }
+    }
+    return count;
+}
+
+ushort
+Wall::final_score_bonus() const {
+    return rules->column_bonus * completed_column_count() +
+           rules->line_bonus * completed_line_count() +
+           rules->type_bonus * completed_type_count();
 }
 
 

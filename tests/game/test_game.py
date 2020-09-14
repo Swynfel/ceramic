@@ -32,3 +32,5 @@ def test_game_roll(rules):
             game.apply(action)
             game.next_player()
         game.end_round()
+    assert max([game.state.panel(p).wall.completed_line_count()
+                for p in range(0, rules.player_count)]) > 0

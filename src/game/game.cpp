@@ -1,10 +1,13 @@
 #include "game.hpp"
 
+#include <random>
+
 // Constuctors
 
 Game::Game(const std::shared_ptr<Rules>& rules)
   : state(rules)
   , players()
+  , order()
   , randomness()
   , range() {
     reset();
@@ -13,6 +16,7 @@ Game::Game(const std::shared_ptr<Rules>& rules)
 Game::Game(const std::shared_ptr<Rules>& rules, vector<Player> players)
   : state(rules)
   , players(players)
+  , order()
   , randomness()
   , range() {
     if (players.size() > rules->player_count) {
@@ -114,7 +118,7 @@ Game::add_player(Player& player) {
     if (has_enough_players()) {
         throw logic_error("Already enough players");
     }
-    player.join_game(players.size());
+    player.join_game(*state.rules, players.size());
     players.push_back(player);
 }
 
@@ -131,7 +135,13 @@ Game::add_players(vector<Player> _players) {
 void
 Game::reset() {
     state.reset();
-    state.set_current_player(rand(0, state.rules->player_count - 1));
+    if (order.empty()) {
+        for (ushort i = 0; i < state.rules->player_count; i++) {
+            order.push_back(i);
+        }
+    }
+    std::shuffle(order.begin(), order.end(), randomness);
+    state.set_current_player(0);
 }
 
 void
@@ -143,6 +153,14 @@ void
 Game::end_round() {
     score_panels();
     apply_first_token();
+}
+
+void
+Game::score_final() {
+    for (Panel& panel : state.panels) {
+        const Wall& wall = panel.get_wall();
+        panel.add_score(wall.final_score_bonus());
+    }
 }
 
 
@@ -175,10 +193,22 @@ Game::roll_game() {
         throw logic_error("Not enough players to start the game");
     }
     reset();
+    for (int p = 0; p < state.rules->player_count; p++) {
+        players[order[p]].start_game(p);
+    }
     while (!state.is_game_finished()) {
         start_round();
+        for (Player& player : players) {
+            player.new_round(state);
+        }
         roll_round();
         end_round();
+    }
+    score_final();
+    ushort winner_position = state.winning_player();
+    ushort winner_id = order[winner_position];
+    for (Player& player : players) {
+        player.end_game(state, winner_id, winner_position);
     }
 }
 
