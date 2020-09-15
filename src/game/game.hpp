@@ -16,8 +16,8 @@
 class Game {
 private:
     State state;
-    vector<Player*> players;
-    vector<Observer*> observers;
+    vector<std::shared_ptr<Player>> players;
+    vector<std::shared_ptr<Observer>> observers;
     vector<ushort> order;
     rng randomness;
     ushort_range range;
@@ -29,18 +29,17 @@ public:
     Game();
     Game(const std::shared_ptr<Rules>& rules);
     Game(const std::shared_ptr<Rules>& rules, int seed);
-    Game(const std::shared_ptr<Rules>& rules, vector<Player*> players);
-    ~Game();
+    Game(const std::shared_ptr<Rules>& rules, vector<std::shared_ptr<Player>> players);
 
     const State get_state() const;
 
     ushort players_missing() const;
     bool has_enough_players() const;
-    void add_player(Player* player);
-    void add_players(vector<Player*> players);
-    void remove_player(Player* player);
-    void add_observer(Observer* observer);
-    void remove_observer(Observer* observer);
+    void add_player(std::shared_ptr<Player> player);
+    void add_players(vector<std::shared_ptr<Player>> players);
+    void remove_player(std::shared_ptr<Player> player);
+    void add_observer(std::shared_ptr<Observer> observer);
+    void remove_observer(std::shared_ptr<Observer> observer);
 
     void reset();
     void start_round();

@@ -22,7 +22,7 @@ def test_game_methods(rules):
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 @pytest.mark.parametrize("player", [FirstLegalPlayer(), RandomPlayer()])
-def test_game_roll(rules, player):
+def test_game_manual_roll(rules, player):
     game = Game(rules, 0)
     expected_total_tiles = Tiles([rules.tile_count] * rules.tile_types)
     while not game.state.is_game_finished():
@@ -55,8 +55,9 @@ def test_game_roll_with_python_player(rules):
             raise RuntimeError("No legal action")
 
     game = Game(rules)
-    players = [PythonFirstLegalPlayer() for _ in range(0, rules.player_count)]
-    game.add_players(players)
+    python_first_legal_player = PythonFirstLegalPlayer()
+    game.add_players(
+        [python_first_legal_player for _ in range(0, rules.player_count)])
     game.roll_game()
     assert max([game.state.panel(p).wall.completed_line_count()
                 for p in range(0, rules.player_count)]) > 0

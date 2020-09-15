@@ -18,9 +18,9 @@ Game::Game(const std::shared_ptr<Rules>& rules, int seed)
     reset();
 }
 
-Game::Game(const std::shared_ptr<Rules>& rules, vector<Player*> players)
+Game::Game(const std::shared_ptr<Rules>& rules, vector<std::shared_ptr<Player>> players)
   : state(rules)
-  , players(players)
+  , players()
   , observers()
   , order()
   , randomness(random_seed())
@@ -28,27 +28,16 @@ Game::Game(const std::shared_ptr<Rules>& rules, vector<Player*> players)
     if (players.size() > rules->player_count) {
         throw invalid_argument("Too many players for rules");
     }
-    for (Player* player : players) {
-        Observer* observer = player->observer();
+    for (std::shared_ptr<Player> player : players) {
+        players.push_back(std::move(player));
+        std::shared_ptr<Observer> observer = player->observer();
         if (observer != nullptr) {
-            observers.push_back(observer);
+            observers.push_back(std::move(observer));
         }
     }
     reset();
 }
 
-Game::~Game() {
-    for (Player* player : players) {
-        if (player != nullptr) {
-            player->delete_game();
-        }
-    }
-    for (Observer* observer : observers) {
-        if (observer != nullptr) {
-            observer->delete_game();
-        }
-    }
-}
 
 // Private methods
 
@@ -130,15 +119,15 @@ Game::has_enough_players() const {
 }
 
 void
-Game::add_player(Player* player) {
+Game::add_player(std::shared_ptr<Player> player) {
     if (has_enough_players()) {
         throw logic_error("Already enough players");
     }
-    if (player->join_game(this, players.size())) {
+    if (player->check_rules(*state.rules)) {
         players.push_back(player);
-        Observer* observer = player->observer();
+        std::shared_ptr<Observer> observer = player->observer();
         if (observer != nullptr) {
-            observers.push_back(observer);
+            observers.push_back(std::move(observer));
         }
     } else {
         throw runtime_error("Failed adding player");
@@ -146,32 +135,31 @@ Game::add_player(Player* player) {
 }
 
 void
-Game::add_players(vector<Player*> _players) {
+Game::add_players(vector<std::shared_ptr<Player>> _players) {
     if (players_missing() < _players.size()) {
         throw out_of_range("Not enough seats for this many players");
     }
-    for (Player* player : _players) {
+    for (const std::shared_ptr<Player>& player : _players) {
         add_player(player);
     }
 }
 
 void
-Game::remove_player(Player* player) {
-    vector<Player*>::iterator p = std::find(players.begin(), players.end(), player);
+Game::remove_player(std::shared_ptr<Player> player) {
+    vector<std::shared_ptr<Player>>::iterator p = std::find(players.begin(), players.end(), player);
     if (p != players.end()) {
         players.erase(p);
     }
 }
 
 void
-Game::add_observer(Observer* observer) {
-    observer->observe_game(this);
+Game::add_observer(std::shared_ptr<Observer> observer) {
     observers.push_back(observer);
 }
 
 void
-Game::remove_observer(Observer* observer) {
-    vector<Observer*>::iterator obs = std::find(observers.begin(), observers.end(), observer);
+Game::remove_observer(std::shared_ptr<Observer> observer) {
+    vector<std::shared_ptr<Observer>>::iterator obs = std::find(observers.begin(), observers.end(), observer);
     if (obs != observers.end()) {
         observers.erase(obs);
     }
@@ -220,11 +208,11 @@ Game::roll_round() {
         throw logic_error("Not enough players to play a round");
     }
     while (!state.is_round_finished()) {
-        Player* player = players[state.player];
+        const std::shared_ptr<Player>& player = players[state.player];
         Action action = player->play(state);
         try {
             apply(action);
-            for (Observer* observer : observers) {
+            for (const std::shared_ptr<Observer>& observer : observers) {
                 observer->action_played(action);
             }
             state.next_player();
@@ -241,15 +229,12 @@ Game::roll_game() {
         throw logic_error("Not enough players to start the game");
     }
     reset();
-    for (int p = 0; p < state.rules->player_count; p++) {
-        players[order[p]]->set_position(p);
-    }
-    for (Observer* observer : observers) {
+    for (const std::shared_ptr<Observer>& observer : observers) {
         observer->start_game(order);
     }
     while (!state.is_game_finished()) {
         start_round();
-        for (Observer* observer : observers) {
+        for (const std::shared_ptr<Observer>& observer : observers) {
             observer->new_round(state);
         }
         roll_round();
@@ -257,9 +242,8 @@ Game::roll_game() {
     }
     score_final();
     ushort winner_position = state.winning_player();
-    ushort winner_id = order[winner_position];
-    for (Observer* observer : observers) {
-        observer->end_game(state, winner_id, winner_position);
+    for (const std::shared_ptr<Observer>& observer : observers) {
+        observer->end_game(state, winner_position);
     }
 }
 

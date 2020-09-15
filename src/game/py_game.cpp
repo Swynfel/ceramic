@@ -31,9 +31,9 @@ public:
             check_rules,
             rules);
     }
-    Observer* observer() const override {
+    std::shared_ptr<Observer> observer() override {
         PYBIND11_OVERLOAD(
-            Observer*,
+            std::shared_ptr<Observer>,
             Player,
             observer);
     }
@@ -56,6 +56,41 @@ public:
             string,
             Player,
             player_type);
+    }
+};
+
+class PyObserver : public Observer {
+public:
+    using Observer::Observer;
+
+    void start_game(vector<ushort> order) override {
+        PYBIND11_OVERLOAD(
+            void,
+            Observer,
+            start_game,
+            order);
+    }
+    void new_round(const State& state) override {
+        PYBIND11_OVERLOAD(
+            void,
+            Observer,
+            new_round,
+            state);
+    }
+    void action_played(Action action) override {
+        PYBIND11_OVERLOAD(
+            void,
+            Observer,
+            action_played,
+            action);
+    }
+    void end_game(const State& state, ushort winner_position) override {
+        PYBIND11_OVERLOAD(
+            void,
+            Observer,
+            end_game,
+            state,
+            winner_position);
     }
 };
 
@@ -83,7 +118,7 @@ py_bind_game(py::module& root) {
         .def(py::init<>())
         .def(py::init<std::shared_ptr<Rules>&>())
         .def(py::init<std::shared_ptr<Rules>&, int>())
-        .def(py::init<std::shared_ptr<Rules>&, vector<Player*>>())
+        .def(py::init<std::shared_ptr<Rules>&, vector<std::shared_ptr<Player>>>())
 
         .def_property_readonly("state", &Game::get_state)
 
@@ -108,12 +143,8 @@ py_bind_game(py::module& root) {
         .def("legal", [](const Game& game, Action action) { return game.legal(action); })
         .def("apply", [](Game& game, Action action) { game.apply(action); });
 
-    py::class_<Player, PyPlayer>(m, "Player")
+    py::class_<Player, std::shared_ptr<Player>, PyPlayer>(m, "Player")
         .def(py::init<>())
-
-        .def("has_joined_game", &Player::has_joined_game)
-        .def_property_readonly("id", &Player::get_id)
-        .def_property_readonly("position", &Player::get_position)
 
         .def("check_rules", &Player::check_rules)
 
@@ -125,6 +156,16 @@ py_bind_game(py::module& root) {
         .def("player_type", &Player::player_type)
         .def("__str__", &Player::str)
         .def("__repr__", &Player::repr);
+
+    py::class_<Observer, std::shared_ptr<Observer>, PyObserver>(m, "Observer")
+        .def(py::init<>())
+
+        .def("start_game", &Observer::start_game)
+
+        .def("new_round", &Observer::new_round)
+
+        .def("action_played", &Observer::action_played)
+        .def("end_game", &Observer::end_game);
 
     m.def("legal", [](Action action, const State& state) { return Game::legal(action, state); });
     m.def("all_legal", &Game::all_legal);

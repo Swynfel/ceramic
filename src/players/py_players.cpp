@@ -11,10 +11,10 @@ void
 py_bind_players(py::module& root) {
     py::module m = root.def_submodule("players");
 
-    py::class_<FirstLegalPlayer, Player>(m, "FirstLegalPlayer")
+    py::class_<FirstLegalPlayer, std::shared_ptr<FirstLegalPlayer>, Player>(m, "FirstLegalPlayer")
         .def(py::init<>());
 
-    py::class_<RandomPlayer, Player>(m, "RandomPlayer")
+    py::class_<RandomPlayer, std::shared_ptr<RandomPlayer>, Player>(m, "RandomPlayer")
         .def(py::init<>())
         .def(py::init<int>());
 }
