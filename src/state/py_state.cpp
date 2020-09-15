@@ -187,6 +187,7 @@ py_bind_state(py::module& root) {
         .def("completed_column_count", &Wall::completed_column_count)
         .def("completed_line_count", &Wall::completed_line_count)
         .def("completed_type_count", &Wall::completed_type_count)
+        .def("final_score_bonus", &Wall::final_score_bonus)
 
         .def("score_for_placing", &Wall::score_for_placing)
         .def("place_at", &Wall::place_at)

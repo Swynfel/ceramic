@@ -36,8 +36,9 @@ void
 Panel::add_score(int value) {
     if (score > -value) {
         score += value;
+    } else {
+        score = 0;
     }
-    score = 0;
 }
 
 const Pyramid&
