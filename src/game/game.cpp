@@ -5,10 +5,10 @@
 Game::Game()
   : Game(Rules::DEFAULT) {}
 
-Game::Game(const std::shared_ptr<Rules>& rules)
+Game::Game(std::shared_ptr<Rules> rules)
   : Game(rules, random_seed()) {}
 
-Game::Game(const std::shared_ptr<Rules>& rules, int seed)
+Game::Game(std::shared_ptr<Rules> rules, int seed)
   : state(rules)
   , players()
   , observers()
@@ -18,7 +18,7 @@ Game::Game(const std::shared_ptr<Rules>& rules, int seed)
     reset();
 }
 
-Game::Game(const std::shared_ptr<Rules>& rules, vector<std::shared_ptr<Player>> players)
+Game::Game(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> players)
   : state(rules)
   , players()
   , observers()
@@ -41,7 +41,7 @@ Game::Game(const std::shared_ptr<Rules>& rules, vector<std::shared_ptr<Player>> 
 
 // Private methods
 
-const State
+const State&
 Game::get_state() const {
     return state;
 }

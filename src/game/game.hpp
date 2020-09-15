@@ -27,11 +27,11 @@ private:
 
 public:
     Game();
-    Game(const std::shared_ptr<Rules>& rules);
-    Game(const std::shared_ptr<Rules>& rules, int seed);
-    Game(const std::shared_ptr<Rules>& rules, vector<std::shared_ptr<Player>> players);
+    Game(std::shared_ptr<Rules> rules);
+    Game(std::shared_ptr<Rules> rules, int seed);
+    Game(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> players);
 
-    const State get_state() const;
+    const State& get_state() const;
 
     ushort players_missing() const;
     bool has_enough_players() const;

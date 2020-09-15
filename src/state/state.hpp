@@ -27,7 +27,7 @@ private:
     void assert_factory_id(ushort id) const;
 
 public:
-    State(const std::shared_ptr<Rules>& rules);
+    State(std::shared_ptr<Rules> rules);
     State(const State& state);
 
     void reset();

@@ -40,7 +40,7 @@ Panel::add_score(int value) {
     score = 0;
 }
 
-const Pyramid
+const Pyramid&
 Panel::get_pyramid() const {
     return pyramid;
 }
@@ -50,7 +50,7 @@ Panel::get_pyramid_mut() {
     return pyramid;
 }
 
-const Wall
+const Wall&
 Panel::get_wall() const {
     return wall;
 }

@@ -2,15 +2,15 @@
 
 #include <sstream>
 
-State::State(const std::shared_ptr<Rules>& rules)
+State::State(std::shared_ptr<Rules> rules)
   : rules(rules)
   , center()
   , factories()
-  , panels(rules->player_count, Panel(rules))
+  , panels(rules->player_count, Panel(std::move(rules)))
   , bag()
   , bin()
   , player() {
-    int factory_count = rules->factory_count();
+    int factory_count = this->rules->factory_count();
     for (int i = 1; i <= factory_count; i++) {
         factories.push_back(Factory(i));
     }
@@ -195,7 +195,7 @@ vector<ushort>
 State::highest_score_players() const {
     ushort highest_score = 0;
     vector<ushort> highest_players;
-    ushort seat;
+    ushort seat = 0;
     for (const Panel& panel : panels) {
         if (panel.get_score() >= highest_score) {
             if (panel.get_score() != highest_score) {
@@ -207,6 +207,8 @@ State::highest_score_players() const {
     }
     return highest_players;
 }
+
+#include <iostream>
 
 ushort
 State::winning_player() const {

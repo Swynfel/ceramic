@@ -25,9 +25,9 @@ public:
 
     ushort get_score() const;
     void add_score(int value);
-    const Pyramid get_pyramid() const;
+    const Pyramid& get_pyramid() const;
     Pyramid& get_pyramid_mut();
-    const Wall get_wall() const;
+    const Wall& get_wall() const;
     Wall& get_wall_mut();
     bool get_first_token() const;
     void set_first_token(bool value);
