@@ -52,4 +52,8 @@ make
 
 Executable and libraries will be placed in the `build` directory.
 
-Currently, there is only the `ceramic-test` executable, which runs a game with 4 random players.
+#### ceramic-test
+Runs a game with 4 random players.
+
+#### ceramic-terminal-player
+Play a game against 3 random players using the terminal.

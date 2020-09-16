@@ -50,6 +50,7 @@ public:
     // Reading
     friend ostream& operator<<(ostream& os, Tiles tiles);
     string virtual str() const;
+    string virtual letter_str() const;
     string virtual repr() const;
 
     array<ushort, TILE_TYPES> get_quantities() const;

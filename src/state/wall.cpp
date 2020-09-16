@@ -256,7 +256,12 @@ Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
         os << "[";
     }
     for (int i = 1; i <= rules->tile_types; i++) {
-        os << (get_placed_at(i, line) ? 'x' : ' ');
+        Tile color = color_at(i, line);
+        if (get_placed_at(i, line)) {
+            os << color.letter();
+        } else {
+            os << "\x1b[1;30;40m" << color.lc_letter() << "\x1b[0m";
+        }
     }
     if (brackets) {
         os << "]";

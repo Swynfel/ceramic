@@ -111,12 +111,12 @@ Pyramid::filled() const {
 void
 Pyramid::stream_line(ostream& os, ushort line, bool brackets) const {
     int a = amount(line);
-    string c = to_string(int(color(line)));
+    char c = color(line).letter();
     if (brackets) {
         os << "[";
     }
     for (int i = 1; i <= line; i++) {
-        os << (i <= a ? c : " ");
+        os << (i <= a ? c : ' ');
     }
     if (brackets) {
         os << "]";

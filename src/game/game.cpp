@@ -208,7 +208,7 @@ Game::roll_round() {
         throw logic_error("Not enough players to play a round");
     }
     while (!state.is_round_finished()) {
-        const std::shared_ptr<Player>& player = players[state.player];
+        const std::shared_ptr<Player>& player = players[order[state.player]];
         Action action = player->play(state);
         try {
             apply(action);

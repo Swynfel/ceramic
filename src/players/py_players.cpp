@@ -2,8 +2,8 @@
 #include <pybind11/stl.h>
 
 #include "first_legal_player.hpp"
-#include "game/player.hpp"
 #include "random_player.hpp"
+#include "terminal_player.hpp"
 
 namespace py = pybind11;
 
@@ -17,4 +17,7 @@ py_bind_players(py::module& root) {
     py::class_<RandomPlayer, std::shared_ptr<RandomPlayer>, Player>(m, "RandomPlayer")
         .def(py::init<>())
         .def(py::init<int>());
+
+    py::class_<TerminalPlayer, std::shared_ptr<TerminalPlayer>, Player>(m, "TerminalPlayer")
+        .def(py::init<>());
 }

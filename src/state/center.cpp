@@ -17,7 +17,7 @@ Center::set_tiles(const Tiles tiles) {
 
 ostream&
 operator<<(ostream& os, const Center& center) {
-    os << "<" << (Tiles)(center) << (center.first_token ? "<+>" : "") << ">";
+    os << "<" << center.letter_str() << (center.first_token ? "<+>" : "") << ">";
     return os;
 }
 

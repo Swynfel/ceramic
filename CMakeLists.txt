@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ceramic VERSION 0.1.5)
+project(ceramic VERSION 0.1.6)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -13,3 +13,7 @@ target_include_directories(ceramic-core PUBLIC src)
 add_executable(ceramic-test src/targets/test.cpp)
 target_include_directories(ceramic-test PUBLIC src)
 target_link_libraries(ceramic-test PUBLIC ceramic-core)
+
+add_executable(ceramic-terminal-player src/targets/terminal-player.cpp)
+target_include_directories(ceramic-terminal-player PUBLIC src)
+target_link_libraries(ceramic-terminal-player PUBLIC ceramic-core)

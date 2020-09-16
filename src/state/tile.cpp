@@ -50,6 +50,11 @@ Tile::value_to_letter(ushort v) {
     return v != TILE_TYPES ? INT_OF_CHAR_A + v : ' ';
 }
 
+char
+Tile::value_to_lc_letter(ushort v) {
+    return v != TILE_TYPES ? INT_OF_CHAR_a + v : ' ';
+}
+
 ushort
 Tile::letter_to_value(char l) {
     if (l == ' ' || l == '-' || l == '_') {
@@ -72,6 +77,11 @@ Tile::from_letter(char l) {
 char
 Tile::letter() const {
     return value_to_letter(value);
+}
+
+char
+Tile::lc_letter() const {
+    return value_to_lc_letter(value);
 }
 
 // Reading

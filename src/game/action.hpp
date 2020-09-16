@@ -14,6 +14,7 @@ struct Action {
 
     // Reading
     friend ostream& operator<<(ostream& os, Action tile);
+    friend istream& operator>>(istream& is, Action& tile);
     string str() const;
     string repr() const;
 };

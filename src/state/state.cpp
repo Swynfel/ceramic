@@ -241,8 +241,15 @@ operator<<(ostream& os, const State& state) {
         os << factory << endl;
     }
     os << "--------------------" << endl;
+    bool finished = state.is_game_finished();
+    ushort player = finished ? state.winning_player() : state.player;
+    ushort id = 0;
     for (const Panel& panel : state.panels) {
+        if (player == id) {
+            os << (finished ? "(winner)" : "(current)") << endl;
+        }
         os << panel << endl;
+        id++;
     }
     return os;
 }

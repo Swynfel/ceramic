@@ -191,6 +191,18 @@ Tiles::str() const {
 }
 
 string
+Tiles::letter_str() const {
+    ostringstream os;
+    for (ushort tile_value = 0; tile_value < TILE_TYPES; tile_value++) {
+        Tile tile = Tile(tile_value);
+        for (int i = 0; i < quantities[int(tile)]; i++) {
+            os << tile.letter();
+        }
+    }
+    return os.str();
+}
+
+string
 Tiles::repr() const {
     ostringstream os;
     os << "Tiles:" << *this;

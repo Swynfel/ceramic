@@ -17,7 +17,7 @@ Factory::set_tiles(const Tiles tiles) {
 
 ostream&
 operator<<(ostream& os, const Factory& factory) {
-    os << "<#" << factory.id << ":" << (Tiles)(factory) << ">";
+    os << "<#" << factory.id << ":" << factory.letter_str() << ">";
     return os;
 }
 

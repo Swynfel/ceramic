@@ -79,7 +79,7 @@ Panel::get_floor() const {
 void
 Panel::add_floor(ushort value) {
     floor += value;
-    floor = max(floor, rules->overflow_count);
+    floor = min(floor, rules->overflow_count);
 }
 
 void
