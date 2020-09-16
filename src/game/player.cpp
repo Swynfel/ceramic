@@ -9,11 +9,6 @@ Player::check_rules(const Rules& rules) const {
     return true;
 }
 
-std::shared_ptr<Player>
-Player::ptr() {
-    return shared_from_this();
-}
-
 std::shared_ptr<Observer>
 Player::observer() {
     return nullptr;

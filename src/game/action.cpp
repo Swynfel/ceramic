@@ -1,5 +1,6 @@
 #include "action.hpp"
 
+#include <iostream>
 #include <sstream>
 
 bool
@@ -21,26 +22,16 @@ operator<<(ostream& os, Action action) {
 
 istream&
 operator>>(istream& is, Action& action) {
-    istream::sentry sentry(is);
-    if (!sentry) {
-        is.setstate(std::ios_base::failbit);
-        return is;
+    string opt;
+    std::getline(std::cin, opt);
+    if (opt.size() != 3) {
+        throw invalid_argument("Wrong number of characters for Action");
     }
-    // Pull characters
-    if (!is.good()) {
-        throw invalid_argument("Not enough characters for Action");
-    }
-    char pick_char = is.get();
-    if (!is.good()) {
-        throw invalid_argument("Not enough characters for Action");
-    }
-    char color_char = is.get();
-    if (!is.good()) {
-        throw invalid_argument("Not enough characters for Action");
-    }
-    char place_char = is.get();
+    char pick_char = opt[0];
+    char color_char = opt[1];
+    char place_char = opt[2];
     // Convert characters
-    int pick = pick_char - '0';
+    int pick = opt[0] - '0';
     if (pick < 0 || pick >= 10) {
         throw invalid_argument("Wrong character for pick: " + pick_char);
     }

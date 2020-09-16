@@ -260,7 +260,7 @@ Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
         if (get_placed_at(i, line)) {
             os << color.letter();
         } else {
-            os << "\x1b[1;30;40m" << color.lc_letter() << "\x1b[0m";
+            os << color.lc_letter();
         }
     }
     if (brackets) {

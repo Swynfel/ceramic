@@ -43,11 +43,17 @@ Make sure you have the following tools:
 
 ### Build
 
-Execute the following
+Execute the following:
 ```
 mkdir build
+cd build
 cmake ..
 make
+```
+
+If you want debugging symbols, replace `cmake ..` with
+```
+cmake .. -DCMAKE_BUILD_TYPE=Debug
 ```
 
 Executable and libraries will be placed in the `build` directory.
@@ -57,3 +63,10 @@ Runs a game with 4 random players.
 
 #### ceramic-terminal-player
 Play a game against 3 random players using the terminal.
+
+Call with argument 'f' for full-color, 'g' for grey-scale, and 'n' for none. For example, to use color, execute
+```
+./ceramic-terminal-player f
+```
+
+You can type `-help` during the game to see action format.

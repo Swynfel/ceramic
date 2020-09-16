@@ -197,18 +197,18 @@ State::highest_score_players() const {
     vector<ushort> highest_players;
     ushort seat = 0;
     for (const Panel& panel : panels) {
-        if (panel.get_score() >= highest_score) {
-            if (panel.get_score() != highest_score) {
+        ushort score = panel.get_score();
+        if (score >= highest_score) {
+            if (score != highest_score) {
                 highest_players.clear();
             }
             highest_players.push_back(seat);
+            highest_score = score;
         }
         seat++;
     }
     return highest_players;
 }
-
-#include <iostream>
 
 ushort
 State::winning_player() const {

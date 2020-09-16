@@ -7,14 +7,13 @@
 #include "state/state.hpp"
 
 class Game;
-class Player : public std::enable_shared_from_this<Player> {
+class Player {
 private:
     friend class Game;
 
 public:
     virtual bool check_rules(const Rules& rules) const;
 
-    std::shared_ptr<Player> ptr();
     virtual std::shared_ptr<Observer> observer();
 
     virtual Action play(const State& state) = 0;
