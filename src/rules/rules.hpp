@@ -27,8 +27,8 @@ struct Rules {
     ushort factory_count() const;
     ushort tile_types_2() const;
 
-    static const std::shared_ptr<Rules> DEFAULT;
-    static const std::shared_ptr<Rules> MINI;
+    static const std::shared_ptr<const Rules> DEFAULT;
+    static const std::shared_ptr<const Rules> MINI;
 
     // Reading
     friend ostream& operator<<(ostream& os, const Rules& rules);

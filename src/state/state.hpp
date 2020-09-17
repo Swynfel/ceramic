@@ -15,7 +15,7 @@ class State {
     friend class Game;
 
 private:
-    const std::shared_ptr<Rules> rules;
+    const std::shared_ptr<const Rules> rules;
     Center center;
     std::vector<Factory> factories;
     std::vector<Panel> panels;
@@ -27,12 +27,12 @@ private:
     void assert_factory_id(ushort id) const;
 
 public:
-    State(std::shared_ptr<Rules> rules);
+    State(std::shared_ptr<const Rules> rules);
     State(const State& state);
 
     void reset();
 
-    const std::shared_ptr<Rules>& get_rules() const;
+    const std::shared_ptr<const Rules>& get_rules() const;
     ushort get_current_player() const;
 
     const Center& get_center() const;

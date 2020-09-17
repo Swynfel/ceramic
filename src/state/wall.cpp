@@ -4,7 +4,7 @@
 #include <numeric>
 #include <sstream>
 
-Wall::Wall(const std::shared_ptr<Rules>& rules)
+Wall::Wall(const std::shared_ptr<const Rules>& rules)
   : rules(rules)
   , placed(rules->tile_types_2(), Tile::NONE) {}
 

@@ -9,7 +9,7 @@ Pyramid::Pyramid(ushort size)
     clear();
 }
 
-Pyramid::Pyramid(const std::shared_ptr<Rules>& rule)
+Pyramid::Pyramid(const std::shared_ptr<const Rules>& rule)
   : Pyramid(rule->tile_types) {}
 
 Pyramid::Pyramid(const Pyramid& pyramid)

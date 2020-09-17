@@ -116,9 +116,9 @@ py_bind_game(py::module& root) {
 
     py::class_<Game>(m, "Game")
         .def(py::init<>())
-        .def(py::init<std::shared_ptr<Rules>>())
-        .def(py::init<std::shared_ptr<Rules>, int>())
-        .def(py::init<std::shared_ptr<Rules>, vector<std::shared_ptr<Player>>>())
+        .def(py::init<std::shared_ptr<const Rules>>())
+        .def(py::init<std::shared_ptr<const Rules>, int>())
+        .def(py::init<std::shared_ptr<const Rules>, vector<std::shared_ptr<Player>>>())
 
         .def_property_readonly("state", &Game::get_state)
 

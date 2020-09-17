@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-Panel::Panel(const std::shared_ptr<Rules>& rules)
+Panel::Panel(const std::shared_ptr<const Rules>& rules)
   : rules(rules)
   , score(0)
   , pyramid(rules->tile_types)

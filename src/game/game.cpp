@@ -5,10 +5,10 @@
 Game::Game()
   : Game(Rules::DEFAULT) {}
 
-Game::Game(std::shared_ptr<Rules> rules)
+Game::Game(std::shared_ptr<const Rules> rules)
   : Game(rules, random_seed()) {}
 
-Game::Game(std::shared_ptr<Rules> rules, int seed)
+Game::Game(std::shared_ptr<const Rules> rules, int seed)
   : state(rules)
   , players()
   , observers()
@@ -18,7 +18,7 @@ Game::Game(std::shared_ptr<Rules> rules, int seed)
     reset();
 }
 
-Game::Game(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> players)
+Game::Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> players)
   : state(rules)
   , players()
   , observers()
@@ -326,7 +326,7 @@ Game::apply(Action action) {
 
 bool
 Game::legal(Action action, const State& state) {
-    const std::shared_ptr<Rules>& rules = state.get_rules();
+    const std::shared_ptr<const Rules>& rules = state.get_rules();
     // Check action is coherent with current rules
     if (ushort(action.color) >= rules->tile_types || action.pick > rules->factory_count()) {
         return false;
@@ -352,7 +352,7 @@ Game::legal(Action action, const State& state) {
 vector<Action>
 Game::all_legal(const State& state) {
     vector<Action> legal_actions{};
-    std::shared_ptr<Rules> rules = state.get_rules();
+    std::shared_ptr<const Rules> rules = state.get_rules();
     const Panel& panel = state.get_panel(state.player);
     for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
         Tiles tiles = (pick == 0) ? (Tiles)state.center : (Tiles)state.get_factory(pick);

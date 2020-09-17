@@ -79,7 +79,7 @@ TerminalPlayer::colored_tiles(Tiles tiles) const {
 
 void
 TerminalPlayer::print_state(const State& state) const {
-    const std::shared_ptr<Rules>& rules = state.get_rules();
+    const std::shared_ptr<const Rules>& rules = state.get_rules();
     bool brackets = color_type != TerminalPlayer::COLORED_TYPE::FULL;
     // Center
     std::cout << "Center#0:" << colored_tiles(state.get_center());

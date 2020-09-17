@@ -9,7 +9,7 @@
 
 class Wall {
 private:
-    const std::shared_ptr<Rules> rules;
+    const std::shared_ptr<const Rules> rules;
     vector<Tile> placed;
 
     void assert_line(ushort line) const;
@@ -18,7 +18,7 @@ private:
     void set_tile_at_unsafe(ushort x, ushort y, Tile tile);
 
 public:
-    Wall(const std::shared_ptr<Rules>& rule);
+    Wall(const std::shared_ptr<const Rules>& rule);
     Wall(const Wall& wall);
 
     void clear();

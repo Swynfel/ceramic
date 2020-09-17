@@ -29,7 +29,10 @@ main(int argc, char* argv[]) {
         }
     }
     // Game
-    std::shared_ptr<Rules> rules(Rules::DEFAULT);
+    std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::DEFAULT);
+    rules->player_count = 3;
+    std::cout << "current: " << rules->player_count << std::endl;
+    std::cout << "default: " << Rules::DEFAULT->player_count << std::endl;
     Game game = Game(rules);
     std::shared_ptr<Player> random_player = std::make_shared<RandomPlayer>();
     game.add_player(terminal_player);

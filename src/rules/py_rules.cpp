@@ -46,6 +46,7 @@ py_bind_rules(py::module& root) {
             py::arg("type_bonus") = 15,
             py::arg("overflow_count") = 7,
             py::arg("overflow_penalty") = 3)
+        .def(py::init<const Rules&>())
 
         .def_readwrite("player_count", &Rules::player_count)
         .def_readwrite("tile_count", &Rules::tile_count)

@@ -27,9 +27,9 @@ private:
 
 public:
     Game();
-    Game(std::shared_ptr<Rules> rules);
-    Game(std::shared_ptr<Rules> rules, int seed);
-    Game(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> players);
+    Game(std::shared_ptr<const Rules> rules);
+    Game(std::shared_ptr<const Rules> rules, int seed);
+    Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> players);
 
     const State& get_state() const;
 

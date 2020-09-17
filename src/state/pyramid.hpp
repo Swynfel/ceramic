@@ -17,7 +17,7 @@ private:
 
 public:
     Pyramid(ushort size);
-    Pyramid(const std::shared_ptr<Rules>& rule);
+    Pyramid(const std::shared_ptr<const Rules>& rule);
     Pyramid(const Pyramid& pyramid);
 
     void clear();

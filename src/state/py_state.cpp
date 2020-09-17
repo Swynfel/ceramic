@@ -102,7 +102,7 @@ py_bind_state(py::module& root) {
 
 
     py::class_<Panel>(m, "Panel")
-        .def(py::init<const std::shared_ptr<Rules>>())
+        .def(py::init<const std::shared_ptr<const Rules>>())
         .def(py::init<const Panel&>())
 
         .def_property_readonly("score", &Panel::get_score)
@@ -120,7 +120,7 @@ py_bind_state(py::module& root) {
 
     py::class_<Pyramid>(m, "Pyramid")
         .def(py::init<ushort>())
-        .def(py::init<const std::shared_ptr<Rules>>())
+        .def(py::init<const std::shared_ptr<const Rules>>())
         .def(py::init<const Pyramid&>())
 
         .def("clear", &Pyramid::clear)
@@ -141,7 +141,7 @@ py_bind_state(py::module& root) {
 
 
     py::class_<State>(m, "State")
-        .def(py::init<const std::shared_ptr<Rules>>())
+        .def(py::init<const std::shared_ptr<const Rules>>())
         .def(py::init<const State&>())
 
         .def("reset", &State::reset)
@@ -168,7 +168,7 @@ py_bind_state(py::module& root) {
 
 
     py::class_<Wall>(m, "Wall")
-        .def(py::init<const std::shared_ptr<Rules>>())
+        .def(py::init<const std::shared_ptr<const Rules>>())
         .def(py::init<const Wall&>())
 
         .def("clear", &Wall::clear)

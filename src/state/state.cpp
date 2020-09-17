@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-State::State(std::shared_ptr<Rules> rules)
+State::State(std::shared_ptr<const Rules> rules)
   : rules(rules)
   , center()
   , factories()
@@ -61,7 +61,7 @@ State::reset() {
     }
 }
 
-const std::shared_ptr<Rules>&
+const std::shared_ptr<const Rules>&
 State::get_rules() const {
     return rules;
 }

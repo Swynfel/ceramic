@@ -10,7 +10,7 @@
 
 class Panel {
 private:
-    const std::shared_ptr<Rules> rules;
+    const std::shared_ptr<const Rules> rules;
     ushort score;
     Pyramid pyramid;
     Wall wall;
@@ -18,7 +18,7 @@ private:
     ushort floor;
 
 public:
-    Panel(const std::shared_ptr<Rules>& rules);
+    Panel(const std::shared_ptr<const Rules>& rules);
     Panel(const Panel& panel);
 
     void clear();

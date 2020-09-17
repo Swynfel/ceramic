@@ -29,8 +29,8 @@ Rules::tile_types_2() const {
     return tile_types * tile_types;
 }
 
-const std::shared_ptr<Rules> Rules::DEFAULT = std::make_shared<Rules>();
-const std::shared_ptr<Rules> Rules::MINI = std::make_shared<Rules>(Rules{
+const std::shared_ptr<const Rules> Rules::DEFAULT = std::make_shared<Rules>();
+const std::shared_ptr<const Rules> Rules::MINI = std::make_shared<Rules>(Rules{
     .player_count = 2,
     .tile_count = 15,
     .tile_types = 3,
@@ -85,6 +85,6 @@ Rules::str() const {
 string
 Rules::repr() const {
     ostringstream os;
-    os << "<Ceramic Rules (" << player_count << "p)" << this << ">" << endl;
+    os << "<Ceramic Rules (" << player_count << "p)" << this << ">";
     return os.str();
 }

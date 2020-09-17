@@ -4,7 +4,9 @@ import pybind11
 
 __version__ = '0.1.6'
 
-sources = sorted(p.as_posix() for p in Path("src/").rglob("*.cpp"))
+sources = ["src/py_main.cpp"] + \
+    sorted(p.as_posix() for dir in ["game", "players", "rules", "state"]
+           for p in Path(f"src/{dir}/").rglob("*.cpp"))
 
 module = Extension(
     'ceramic',
