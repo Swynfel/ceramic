@@ -62,11 +62,21 @@ Executable and libraries will be placed in the `build` directory.
 Runs a game with 4 random players.
 
 #### ceramic-terminal-player
-Play a game against 3 random players using the terminal.
+Play a game using the terminal.
 
-Call with argument 'f' for full-color, 'g' for grey-scale, and 'n' for none. For example, to use color, execute
+To play a default game against 3 random players, call
 ```
-./ceramic-terminal-player f
+./ceramic-terminal-player
+```
+
+To play against one random player and one first-legal player, using colors in the terminal, call
+```
+./ceramic-terminal-player rf -c f
+```
+
+For additional options, call with `-h` option.
+```
+./ceramic-terminal-player -h
 ```
 
 You can type `-help` during the game to see action format.

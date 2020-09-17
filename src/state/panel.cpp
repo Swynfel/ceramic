@@ -106,14 +106,14 @@ Panel::legal_line(ushort line, Tile tile) const {
 
 ostream&
 operator<<(ostream& os, const Panel& panel) {
-    os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << endl;
+    os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << '\n';
     for (int line = 1; line <= panel.rules->tile_types; line++) {
         panel.wall.stream_line(os, line, true);
         os << ' ';
         panel.pyramid.stream_line(os, line, true);
-        os << endl;
+        os << '\n';
     }
-    os << "Floor: " << panel.floor << " (-" << panel.get_penalty() << ")" << endl;
+    os << "Floor: " << panel.floor << " (-" << panel.get_penalty() << ")" << '\n';
     return os;
 }
 

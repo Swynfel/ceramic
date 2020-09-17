@@ -33,12 +33,12 @@ operator>>(istream& is, Action& action) {
     // Convert characters
     int pick = opt[0] - '0';
     if (pick < 0 || pick >= 10) {
-        throw invalid_argument("Wrong character for pick: " + pick_char);
+        throw invalid_argument(string("Wrong character for pick: ") + pick_char);
     }
     Tile color = Tile::from_letter(color_char);
     int place = place_char - '0';
     if (place < 0 || place >= 10) {
-        throw invalid_argument("Wrong character for place: " + place_char);
+        throw invalid_argument(string("Wrong character for place: ") + place_char);
     }
     // Set
     action.pick = pick;
