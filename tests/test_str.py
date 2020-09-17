@@ -8,14 +8,13 @@ E = tuple()
 
 
 @pytest.mark.parametrize("cls, args", [
-    (Action, (0, Tile(), 0)),
+    (Action, (0, Tile.NONE, 0)),
     (Rules, E),
     (Center, E),
     (Factory, (0,)),
     (Panel, (Rules.DEFAULT,)),
     (Pyramid, (TILE_TYPES,)),
     (State, (Rules.DEFAULT,)),
-    (Tile, E),
     (Tile, (0,)),
     (Tiles, E),
     (Wall, (Rules.DEFAULT,)),

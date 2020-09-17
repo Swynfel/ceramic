@@ -5,8 +5,8 @@
 #include "random_player.hpp"
 #include "terminal_player.hpp"
 
-using namespace pybind11::literals;
 namespace py = pybind11;
+using namespace py::literals;
 
 void
 py_bind_players(py::module& root) {

@@ -10,7 +10,7 @@ class Factory : public Tiles {
 public:
     ushort id;
     // Constructor
-    Factory(ushort);
+    Factory(ushort id);
 
     void set_tiles(const Tiles tiles);
 

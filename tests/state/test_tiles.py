@@ -11,9 +11,10 @@ TILES_VALUES = [
 
 
 def test_tiles_init_others():
-    Tiles()
-    tiles = Tiles(Tile())
-    Tiles(tiles)
+    tiles = Tiles(Tile.NONE)
+    assert Tiles() == Tiles(tiles)
+    tiles[Tile(0)] = 5
+    assert tiles == Tiles(Tile(0), 5)
 
 
 @pytest.mark.parametrize("values", TILES_VALUES)
@@ -84,10 +85,6 @@ def test_tile_tiles_operation(tiles, tile):
 
 
 # Constants
-
-def test_tiles_zero():
-    assert Tiles() == Tiles.ZERO
-
 
 def test_tiles_len():
     assert len(Tiles()) == TILE_TYPES

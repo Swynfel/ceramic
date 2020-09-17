@@ -7,6 +7,7 @@
 #include "py_utils.hpp"
 
 namespace py = pybind11;
+using namespace py::literals;
 
 Action
 py_create_action(
@@ -116,16 +117,34 @@ py_bind_game(py::module& root) {
 
     py::class_<Game>(m, "Game")
         .def(py::init<>())
-        .def(py::init<std::shared_ptr<const Rules>>())
-        .def(py::init<std::shared_ptr<const Rules>, int>())
-        .def(py::init<std::shared_ptr<const Rules>, vector<std::shared_ptr<Player>>>())
+        .def(py::init<std::shared_ptr<const Rules>>(),
+            "rules"_a)
+        .def(py::init<std::shared_ptr<const Rules>, int>(),
+            "rules"_a,
+            "seed"_a)
+        .def(py::init<std::shared_ptr<const Rules>, vector<std::shared_ptr<Player>>>(),
+            "rules"_a,
+            "players"_a)
 
         .def_property_readonly("state", &Game::get_state)
 
         .def("players_missing", &Game::players_missing)
         .def("has_enough_players", &Game::has_enough_players)
-        .def("add_player", &Game::add_player)
-        .def("add_players", &Game::add_players)
+        .def("add_player",
+            &Game::add_player,
+            "player"_a)
+        .def("add_players",
+            &Game::add_players,
+            "players"_a)
+        .def("remove_player",
+            &Game::remove_player,
+            "player"_a)
+        .def("add_observer",
+            &Game::add_observer,
+            "observer"_a)
+        .def("remove_observer",
+            &Game::remove_observer,
+            "observer"_a)
 
         .def("reset", &Game::reset)
         .def("start_round", &Game::start_round)
@@ -140,18 +159,30 @@ py_bind_game(py::module& root) {
         .def("score_panels", [](Game& game) { game.score_panels(); })
         .def("apply_first_token", [](Game& game) { game.apply_first_token(); })
 
-        .def("legal", [](const Game& game, Action action) { return game.legal(action); })
-        .def("apply", [](Game& game, Action action) { game.apply(action); });
+        .def(
+            "legal",
+            [](const Game& game, Action action) { return game.legal(action); },
+            "action"_a)
+        .def(
+            "apply",
+            [](Game& game, Action action) { game.apply(action); },
+            "action"_a);
 
     py::class_<Player, std::shared_ptr<Player>, PyPlayer>(m, "Player")
         .def(py::init<>())
 
-        .def("check_rules", &Player::check_rules)
+        .def("check_rules",
+            &Player::check_rules,
+            "rules"_a)
 
         .def("observer", &Player::observer)
 
-        .def("play", &Player::play)
-        .def("error", &Player::error)
+        .def("play",
+            &Player::play,
+            "state"_a)
+        .def("error",
+            &Player::error,
+            "message"_a)
 
         .def("player_type", &Player::player_type)
         .def("__str__", &Player::str)
@@ -160,17 +191,28 @@ py_bind_game(py::module& root) {
     py::class_<Observer, std::shared_ptr<Observer>, PyObserver>(m, "Observer")
         .def(py::init<>())
 
-        .def("start_game", &Observer::start_game)
+        .def("start_game",
+            &Observer::start_game,
+            "order"_a)
 
-        .def("new_round", &Observer::new_round)
+        .def("new_round",
+            &Observer::new_round,
+            "state"_a)
 
-        .def("action_played", &Observer::action_played)
-        .def("end_game", &Observer::end_game);
+        .def("action_played",
+            &Observer::action_played,
+            "action"_a)
+        .def("end_game",
+            &Observer::end_game,
+            "state"_a,
+            "winner_position"_a);
 
     m.def_submodule("GameHelper")
+        .def("score_panels", [](State& state) { Game::score_panels(state); })
+        .def("apply_first_token", [](State& state) { Game::apply_first_token(state); })
         .def("legal", [](Action action, const State& state) { return Game::legal(action, state); })
+        .def("apply", [](Action action, State& state) { Game::apply(action, state); })
         .def("all_legal", &Game::all_legal)
         .def("all_smart_legal", &Game::all_smart_legal)
-        .def("all_penalty_legal", &Game::all_penalty_legal)
-        .def("apply", [](Action action, State& state) { Game::apply(action, state); });
+        .def("all_penalty_legal", &Game::all_penalty_legal);
 }

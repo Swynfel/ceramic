@@ -25,10 +25,10 @@ public:
     explicit operator bool() const;
     explicit operator ushort() const;
 
-    static char value_to_letter(ushort v);
-    static char value_to_lc_letter(ushort v);
-    static ushort letter_to_value(char c);
-    static Tile from_letter(char c);
+    static char value_to_letter(ushort value);
+    static char value_to_lc_letter(ushort value);
+    static ushort letter_to_value(char letter);
+    static Tile from_letter(char letter);
     char letter() const;
     char lc_letter() const;
 

@@ -7,7 +7,8 @@
 int
 main() {
     std::shared_ptr<const Rules> rules(Rules::DEFAULT);
-    std::cout << "Rules: " << *rules << std::endl;
+    std::cout << "Rules: \n"
+              << *rules << std::endl;
     Game game = Game(rules);
     std::shared_ptr<Player> random_player = std::make_shared<RandomPlayer>();
     for (ushort p = 0; p < rules->player_count; p++) {
@@ -16,8 +17,9 @@ main() {
     std::cout << "Starting game" << std::endl;
     game.roll_game();
     const State& state = game.get_state();
-    std::cout << "Winner: " << state.winning_player() << std::endl;
-    std::cout << "Scores:";
+    std::cout << '\n'
+              << "Winner: " << state.winning_player() << '\n'
+              << "Scores:";
     for (ushort p = 0U; p < rules->player_count; p++) {
         std::cout << " " << state.get_panel(p).get_score();
     }
