@@ -32,5 +32,5 @@ RandomPlayer::play(const State& state) {
 
 string
 RandomPlayer::player_type() const {
-    return "random";
+    return string("random") + (smart ? "" : "-naive");
 }

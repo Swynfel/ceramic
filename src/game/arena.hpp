@@ -18,6 +18,8 @@ private:
     vector<thread> threads;
     vector<Game> games;
 
+    int total_groups;
+    int processed_groups;
     queue<vector<int>> groups;
     vector<vector<int>> results;
 
@@ -51,17 +53,26 @@ public:
     void add_players(vector<std::shared_ptr<Player>> players);
     void remove_player(std::shared_ptr<Player> player);
 
+    string mode_name();
+
     bool ready() const;
     void run();
 
 private:
+    void print_current();
+
+    void run_single(vector<int> ids);
+
     void run_from_queue();
     void run_from_queue_async();
-    void run_single(vector<int> ids);
+
     void exact_groups();
     void subset_groups();
     void pairs_groups();
     void all_groups();
+
+    void default_results();
+    void pairs_results();
 };
 
 #endif //ARENA_HPP

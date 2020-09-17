@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup, Extension, find_packages
 import pybind11
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 sources = ["src/py_main.cpp"] + \
     sorted(p.as_posix() for dir in ["game", "players", "rules", "state"]

@@ -59,7 +59,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Debug
 Executable and libraries will be placed in the `build` directory.
 
 #### ceramic-test
-Runs a game with 4 random players.
+Runs a test game with 4 random players.
 
 #### ceramic-terminal-player
 Play a game using the terminal.
@@ -80,3 +80,23 @@ For additional options, call with `-h` option.
 ```
 
 You can type `-help` during the game to see action format.
+
+#### ceramic-arena
+Compare the performance of different agents.
+
+Currently, no arguments can be passed.
+The default will run a 1000 games with the default rules, for each possible games configuration (except for only the same player), out of the three players "first-legal", "random" with `smart=false`, and "random" with `smart=true`.
+```
+./ceramic-arena
+```
+
+It will output a recap table.
+```
+      player | winrate |  avg  |  std  
+-------------+---------+-------+-------
+ first-legal | 28.02 % |  20.0 |  11.1
+random-naive |  2.26 % |   3.6 |   5.7
+      random | 44.71 % |  25.0 |  13.7
+```
+- *avg* designates average score
+- *std* designates the standard deviation of the score

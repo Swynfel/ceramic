@@ -1,5 +1,8 @@
 #include "arena.hpp"
 
+#include <cmath>
+#include <stdio.h>
+
 Arena::Arena()
   : Arena(std::make_shared<Rules>(*Rules::DEFAULT)) {}
 
@@ -31,6 +34,8 @@ Arena::add_results(
         player_results[2] += new_scores[i];
         player_results[3] += new_squared_scores[i];
     }
+    processed_groups++;
+    print_current();
 }
 
 void
@@ -52,6 +57,24 @@ Arena::remove_player(std::shared_ptr<Player> player) {
         players.erase(it);
     }
 }
+
+
+string
+Arena::mode_name() {
+    switch (mode) {
+        case Arena::MODE::EXACT:
+            return "Exact";
+        case Arena::MODE::SUBSET:
+            return "Subset";
+        case Arena::MODE::PAIRS:
+            return "Pairs";
+        case Arena::MODE::ALL:
+            return "All";
+        default:
+            throw runtime_error("Unknown Mode");
+    }
+}
+
 
 bool
 Arena::ready() const {
@@ -86,47 +109,61 @@ Arena::run() {
                 throw runtime_error("Needs at least two players");
             }
     }
+    std::cout << "Mode: " << mode_name() << "\n";
     // Setup all game groups
     while (!groups.empty()) {
         groups.pop();
     }
-    vector<string> columns;
+    int column_count;
     switch (mode) {
         case Arena::MODE::EXACT:
+            column_count = 4;
             exact_groups();
             break;
         case Arena::MODE::SUBSET:
+            column_count = 4;
             subset_groups();
             break;
         case Arena::MODE::PAIRS:
+            column_count = 0;
             pairs_groups();
             break;
         case Arena::MODE::ALL:
+            column_count = 4;
             all_groups();
             break;
     }
+    processed_groups = 0;
+    total_groups = groups.size();
     // Clear results
-    int column_count = columns.size();
     results = vector<vector<int>>(player_count, vector<int>(column_count, 0));
-    // TODO: Start threads
-    // For now, just print list of groups to check it works as intended
-    while (!groups.empty()) {
-        for (int x : groups.front()) {
-            std::cout << x << " ";
-        }
-        std::cout << std::endl;
-        groups.pop();
+    // Start threads
+    threads.clear();
+    for (int i = 0; i < thread_limit; i++) {
+        threads.push_back(thread(&Arena::run_from_queue_async, this));
     }
+    print_current();
+    for (auto& t : threads) {
+        t.join();
+    }
+    std::cout << std::endl;
     // Print results
-    for (int line = 0; line < player_count; line++) {
-        std::cout << players[line]->player_type();
-        for (int column = 0; column < column_count; column++) {
-            std::cout << " | " << results[line][column];
-        }
-        std::cout << '\n';
+    switch (mode) {
+        case Arena::MODE::PAIRS:
+            pairs_results();
+            break;
+        default:
+            default_results();
+            break;
     }
-    std::cout << std::flush;
 }
+
+
+void
+Arena::print_current() {
+    std::cout << "Played " << processed_groups << "/" << total_groups << '\r' << std::flush;
+}
+
 
 void
 Arena::run_single(vector<int> ids) {
@@ -153,6 +190,7 @@ Arena::run_single(vector<int> ids) {
     add_results(ids, play_count, win_count, score_sum, squared_score_sum);
 }
 
+
 void
 Arena::run_from_queue() {
     while (!groups.empty()) {
@@ -176,6 +214,7 @@ Arena::run_from_queue_async() {
         run_single(ids);
     }
 }
+
 
 void
 Arena::exact_groups() {
@@ -249,4 +288,38 @@ Arena::all_groups() {
         }
         ids.back()++;
     }
+}
+
+void
+Arena::default_results() {
+    int player_count = players.size();
+    int max_player_length = 6;
+    for (int line = 0; line < player_count; line++) {
+        max_player_length = max(max_player_length, int(players[line]->player_type().size()));
+    }
+    int games_per_player = results[0][0];
+    printf("Games per group:  %d\nGames per player: %d\n\n", count, games_per_player);
+    printf("%*s | winrate |  avg  |  std  \n", max_player_length, "player");
+    for (int i = 0; i < max_player_length; i++) {
+        printf("-");
+    }
+    printf("-+---------+-------+-------\n");
+    for (int line = 0; line < player_count; line++) {
+        double winrate = 100. * results[line][1] / games_per_player;
+        double avg_score = double(results[line][2]) / games_per_player;
+        double score_var = std::sqrt(double(results[line][3]) / games_per_player - avg_score * avg_score);
+        printf("%*.*s | %5.2f %% | %5.1f | %5.1f\n",
+            max_player_length,
+            max_player_length,
+            players[line]->player_type().c_str(),
+            winrate,
+            avg_score,
+            score_var);
+    }
+    std::cout << std::flush;
+}
+
+void
+Arena::pairs_results() {
+    throw logic_error("Not implemented");
 }
