@@ -17,3 +17,7 @@ target_link_libraries(ceramic-test PUBLIC ceramic-core)
 add_executable(ceramic-terminal-player src/targets/terminal-player.cpp)
 target_include_directories(ceramic-terminal-player PUBLIC src)
 target_link_libraries(ceramic-terminal-player PUBLIC ceramic-core)
+
+add_executable(ceramic-arena src/targets/arena.cpp)
+target_include_directories(ceramic-arena PUBLIC src)
+target_link_libraries(ceramic-arena PUBLIC ceramic-core)

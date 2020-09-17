@@ -13,8 +13,11 @@
 #include "state/state.hpp"
 #include "utils/random.hpp"
 
+class Arena;
 class Game {
 private:
+    friend class Arena;
+
     State state;
     vector<std::shared_ptr<Player>> players;
     vector<std::shared_ptr<Observer>> observers;
