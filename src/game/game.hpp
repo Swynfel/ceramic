@@ -25,6 +25,8 @@ private:
     Tile pull_one_random_tile();
     Tiles pull_random_tiles(int count);
 
+    vector<Action> static all_legal_between(const State& state, ushort begin_place, ushort end_place);
+
 public:
     Game();
     Game(std::shared_ptr<const Rules> rules);
@@ -62,6 +64,8 @@ public:
     bool static legal(Action action, const State& state);
     void static apply(Action action, State& state);
     vector<Action> static all_legal(const State& state);
+    vector<Action> static all_smart_legal(const State& state);
+    vector<Action> static all_penalty_legal(const State& state);
 };
 
 #endif //GAME_HPP

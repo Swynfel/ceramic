@@ -167,7 +167,10 @@ py_bind_game(py::module& root) {
         .def("action_played", &Observer::action_played)
         .def("end_game", &Observer::end_game);
 
-    m.def("legal", [](Action action, const State& state) { return Game::legal(action, state); });
-    m.def("all_legal", &Game::all_legal);
-    m.def("apply", [](Action action, State& state) { Game::apply(action, state); });
+    m.def_submodule("GameHelper")
+        .def("legal", [](Action action, const State& state) { return Game::legal(action, state); })
+        .def("all_legal", &Game::all_legal)
+        .def("all_smart_legal", &Game::all_smart_legal)
+        .def("all_penalty_legal", &Game::all_penalty_legal)
+        .def("apply", [](Action action, State& state) { Game::apply(action, state); });
 }

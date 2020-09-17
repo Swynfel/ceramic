@@ -6,7 +6,9 @@
 #include "global.hpp"
 #include "state/state.hpp"
 
-class TerminalPlayer : public Player
+class TerminalPlayer
+  : public enable_shared_from_this<TerminalPlayer>
+  , public Player
   , public Observer {
 public:
     enum COLORED_TYPE {

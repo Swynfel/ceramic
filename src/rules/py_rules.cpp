@@ -5,6 +5,7 @@
 
 #include <memory>
 
+using namespace pybind11::literals;
 namespace py = pybind11;
 
 std::shared_ptr<Rules>
@@ -37,15 +38,15 @@ py_bind_rules(py::module& root) {
 
     py::class_<Rules, std::shared_ptr<Rules>>(m, "Rules")
         .def(py::init(&py_create_rule),
-            py::arg("player_count") = 4,
-            py::arg("tile_count") = 20,
-            py::arg("tile_types") = 5,
-            py::arg("factory_tiles") = 4,
-            py::arg("line_bonus") = 7,
-            py::arg("column_bonus") = 3,
-            py::arg("type_bonus") = 15,
-            py::arg("overflow_count") = 7,
-            py::arg("overflow_penalty") = 3)
+            "player_count"_a = 4,
+            "tile_count"_a = 20,
+            "tile_types"_a = 5,
+            "factory_tiles"_a = 4,
+            "line_bonus"_a = 7,
+            "column_bonus"_a = 3,
+            "type_bonus"_a = 15,
+            "overflow_count"_a = 7,
+            "overflow_penalty"_a = 3)
         .def(py::init<const Rules&>())
 
         .def_readwrite("player_count", &Rules::player_count)

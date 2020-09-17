@@ -105,6 +105,32 @@ Game::pull_random_tiles(int count) {
     return result;
 }
 
+vector<Action>
+Game::all_legal_between(const State& state, ushort begin_place, ushort end_place) {
+    vector<Action> legal_actions{};
+    std::shared_ptr<const Rules> rules = state.get_rules();
+    const Panel& panel = state.get_panel(state.player);
+    for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
+        Tiles tiles = (pick == 0) ? (Tiles)state.center : (Tiles)state.get_factory(pick);
+        if (tiles.is_empty()) {
+            continue;
+        }
+        for (ushort color = 0; color < rules->tile_types; color++) {
+            Tile tile = Tile(color);
+            if (!tiles.has_color(tile)) {
+                continue;
+            }
+            for (ushort place = begin_place; place <= end_place; place++) {
+                if (place > 0 && !panel.legal_line(place, tile)) {
+                    continue;
+                }
+                legal_actions.push_back(Action{ .pick = pick, .color = tile, .place = place });
+            }
+        }
+    }
+    return legal_actions;
+}
+
 
 // Public methods
 
@@ -349,32 +375,6 @@ Game::legal(Action action, const State& state) {
 }
 
 
-vector<Action>
-Game::all_legal(const State& state) {
-    vector<Action> legal_actions{};
-    std::shared_ptr<const Rules> rules = state.get_rules();
-    const Panel& panel = state.get_panel(state.player);
-    for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
-        Tiles tiles = (pick == 0) ? (Tiles)state.center : (Tiles)state.get_factory(pick);
-        if (tiles.is_empty()) {
-            continue;
-        }
-        for (ushort color = 0; color < rules->tile_types; color++) {
-            Tile tile = Tile(color);
-            if (!tiles.has_color(tile)) {
-                continue;
-            }
-            for (ushort place = 0; place <= rules->tile_types; place++) {
-                if (place > 0 && !panel.legal_line(place, tile)) {
-                    continue;
-                }
-                legal_actions.push_back(Action{ .pick = pick, .color = tile, .place = place });
-            }
-        }
-    }
-    return legal_actions;
-}
-
 void
 Game::apply(Action action, State& state) {
     // Check action is coherent with current rules
@@ -440,4 +440,19 @@ Game::apply(Action action, State& state) {
     }
     // Add thrown tiles as floor penalty
     panel.add_floor(overflow_count);
+}
+
+vector<Action>
+Game::all_legal(const State& state) {
+    return all_legal_between(state, 0, state.rules->tile_types);
+}
+
+vector<Action>
+Game::all_smart_legal(const State& state) {
+    return all_legal_between(state, 1, state.rules->tile_types);
+}
+
+vector<Action>
+Game::all_penalty_legal(const State& state) {
+    return all_legal_between(state, 0, 0);
 }

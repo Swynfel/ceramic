@@ -11,10 +11,11 @@ class RandomPlayer : public Player {
 private:
     rng randomness;
     ushort_range range;
+    const bool smart = true;
 
 public:
-    RandomPlayer();
-    RandomPlayer(int seed);
+    RandomPlayer(bool smart = true);
+    RandomPlayer(int seed, bool smart = true);
 
     Action play(const State& state) override;
 

@@ -7,9 +7,8 @@
 
 class Game;
 
-class Observer : public std::enable_shared_from_this<Observer> {
+class Observer {
 public:
-    std::shared_ptr<Observer> ptr();
     void virtual start_game(vector<ushort> order) {}
     void virtual new_round(const State& state) {}
     void virtual action_played(Action action) {}

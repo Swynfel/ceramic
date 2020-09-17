@@ -2,17 +2,26 @@
 
 #include "game/game.hpp"
 
-RandomPlayer::RandomPlayer()
-  : RandomPlayer(random_seed()) {}
+RandomPlayer::RandomPlayer(bool smart)
+  : RandomPlayer(random_seed(), smart) {}
 
-RandomPlayer::RandomPlayer(int seed)
+RandomPlayer::RandomPlayer(int seed, bool smart)
   : randomness(seed)
-  , range() {}
+  , range()
+  , smart(smart) {}
 
 
 Action
 RandomPlayer::play(const State& state) {
-    vector<Action> legal_actions = Game::all_legal(state);
+    vector<Action> legal_actions;
+    if (smart) {
+        legal_actions = Game::all_smart_legal(state);
+        if (legal_actions.size() == 0) {
+            legal_actions = Game::all_penalty_legal(state);
+        }
+    } else {
+        legal_actions = Game::all_legal(state);
+    }
     if (legal_actions.size() == 0) {
         throw runtime_error("No action was legal");
     }

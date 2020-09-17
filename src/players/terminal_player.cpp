@@ -228,7 +228,7 @@ TerminalPlayer::player_type() const {
 
 std::shared_ptr<Observer>
 TerminalPlayer::observer() {
-    return ptr();
+    return shared_from_this();
 }
 
 void

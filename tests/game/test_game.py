@@ -1,5 +1,6 @@
 import pytest
-from ceramic.game import Game, Action, Player, legal
+import random
+from ceramic.game import Game, Action, Player, GameHelper
 from ceramic.players import FirstLegalPlayer, RandomPlayer
 from ceramic.state import Tile, Tiles
 from ceramic.rules import Rules
@@ -39,25 +40,20 @@ def test_game_manual_roll(rules, player):
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_roll_with_python_player(rules):
-    class PythonFirstLegalPlayer(Player):
+    class PythonRandomPlayer(Player):
         def __init__(self):
             Player.__init__(self)
 
         def play(self, state):
-            rules = state.rules
-            for place in range(rules.tile_types, -1, -1):
-                for pick in range(0, rules.factory_count + 1):
-                    for color in range(0, rules.tile_types):
-                        action = Action(
-                            pick=pick, color=Tile(color), place=place)
-                        if legal(action, state):
-                            return action
-            raise RuntimeError("No legal action")
+            possible_actions = GameHelper.all_smart_legal(state)
+            if len(possible_actions) == 0:
+                possible_actions = GameHelper.all_penalty_legal(state)
+            return random.choice(possible_actions)
 
     game = Game(rules)
-    python_first_legal_player = PythonFirstLegalPlayer()
+    python_random_player = PythonRandomPlayer()
     game.add_players(
-        [python_first_legal_player for _ in range(0, rules.player_count)])
+        [python_random_player for _ in range(0, rules.player_count)])
     game.roll_game()
     assert max([game.state.panel(p).wall.completed_line_count()
                 for p in range(0, rules.player_count)]) > 0
