@@ -32,7 +32,7 @@ print_help() {
 bool
 options(int argc, char* argv[], std::shared_ptr<TerminalPlayer>& terminal_player, std::shared_ptr<Rules>& rules) {
     int option;
-    while ((option = getopt(argc, argv, ":c:")) != -1) { //get option from the getopt() method
+    while ((option = getopt(argc, argv, ":hc:n:")) != -1) { //get option from the getopt() method
         switch (option) {
             // Options
             case 'h':
