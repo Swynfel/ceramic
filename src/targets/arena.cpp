@@ -3,7 +3,7 @@
 #include <memory>
 #include <unistd.h>
 
-// #include "analysis/all_arena.hpp"
+#include "analysis/all_arena.hpp"
 #include "analysis/arena.hpp"
 #include "analysis/pairs_arena.hpp"
 #include "players/first_legal_player.hpp"
@@ -130,10 +130,9 @@ main(int argc, char* argv[]) {
         case ArenaMode::PAIRS:
             arena = std::make_unique<PairsArena>(rules, players);
             break;
-            // case ArenaMode::ALL:
-            //     arena = std::make_unique<AllArena>(rules, players);
-            //     break;
-
+        case ArenaMode::ALL:
+            arena = std::make_unique<AllArena>(rules, players);
+            break;
         default:
             throw runtime_error("Unkown Arena Mode");
     }
