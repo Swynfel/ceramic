@@ -94,6 +94,7 @@ Arena::add_results(
         player_results[3] += new_squared_scores[i];
     }
     processed_steps++;
+    print_current();
 }
 
 
@@ -129,26 +130,28 @@ Arena::print_results(vector<vector<int>> results) {
     int player_count = results.size();
     int max_player_length = 6;
     for (int line = 0; line < player_count; line++) {
-        max_player_length = max(max_player_length, int(players[line]->player_type().size()));
+        max_player_length = max(max_player_length, int(players[line]->analysed_player->player_type().size()));
     }
     int games_per_player = results[0][0] * count;
     printf("Games per group:  %d\nGames per player: %d\n\n", count, games_per_player);
-    printf("%*s | winrate |  avg  |  std  \n", max_player_length, "player");
+    printf("%*s | winrate |  avg  |  std  | move time \n", max_player_length, "player");
     for (int i = 0; i < max_player_length; i++) {
         printf("-");
     }
-    printf("-+---------+-------+-------\n");
+    printf("-+---------+-------+-------+-----------\n");
     for (int line = 0; line < player_count; line++) {
         double winrate = 100. * results[line][1] / games_per_player;
         double avg_score = double(results[line][2]) / games_per_player;
         double score_var = std::sqrt(double(results[line][3]) / games_per_player - avg_score * avg_score);
-        printf("%*.*s | %5.2f %% | %5.1f | %5.1f\n",
+        double time_per_move = players[line]->time * 1.0 / players[line]->move_counter;
+        printf("%*.*s | %5.2f %% | %5.1f | %5.1f | %.3e\n",
             max_player_length,
             max_player_length,
-            players[line]->player_type().c_str(),
+            players[line]->analysed_player->player_type().c_str(),
             winrate,
             avg_score,
-            score_var);
+            score_var,
+            time_per_move);
     }
     std::cout << std::flush;
 }
@@ -170,7 +173,7 @@ Arena::Arena(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> playe
 
 void
 Arena::add_player(std::shared_ptr<Player> player) {
-    players.push_back(std::move(player));
+    players.push_back(std::make_shared<AnalysisPlayer>(std::move(player)));
 }
 
 void
@@ -182,9 +185,12 @@ Arena::add_players(vector<std::shared_ptr<Player>> players) {
 
 void
 Arena::remove_player(std::shared_ptr<Player> player) {
-    auto it = std::find(players.begin(), players.end(), player);
-    if (it != players.end()) {
-        players.erase(it);
+    auto it = players.begin();
+    while (it != players.end()) {
+        if ((*it)->analysed_player == player) {
+            players.erase(it);
+            return;
+        }
     }
 }
 

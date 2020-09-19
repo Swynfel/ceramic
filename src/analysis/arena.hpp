@@ -8,6 +8,7 @@
 #include <thread>
 #include <vector>
 
+#include "analysis_player.hpp"
 #include "game/game.hpp"
 #include "game/player.hpp"
 #include "rules/rules.hpp"
@@ -33,7 +34,7 @@ private:
     void run_from_queue_async();
 
 protected:
-    vector<std::shared_ptr<Player>> players;
+    vector<std::shared_ptr<AnalysisPlayer>> players;
     vector<vector<int>> results;
 
     int total_steps;

@@ -67,13 +67,13 @@ PairsArena::print_results(vector<vector<int>> results) {
     int max_player_length = 6;
     int prop_count = rules->player_count - 1;
     for (int line = 0; line < player_count; line++) {
-        max_player_length = max(max_player_length, int(players[line]->player_type().size()));
+        max_player_length = max(max_player_length, int(players[line]->analysed_player->player_type().size()));
     }
     printf("Games per group:  %d\n\n", count);
     // 1 - Player line
     printf("%*s ", max_player_length, "player");
     for (int p = 0; p < players.size(); p++) {
-        printf("| %*.*s ", 19 * prop_count, 19 * prop_count, players[p]->player_type().c_str());
+        printf("| %*.*s ", 19 * prop_count, 19 * prop_count, players[p]->analysed_player->player_type().c_str());
     }
     printf("\n");
     // 2 - VS line
