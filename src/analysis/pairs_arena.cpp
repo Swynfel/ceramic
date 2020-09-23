@@ -103,7 +103,7 @@ PairsArena::print_results(vector<vector<int>> results) {
         printf("%*.*s ",
             max_player_length,
             max_player_length,
-            players[line]->player_type().c_str());
+            players[line]->analysed_player->player_type().c_str());
         for (int opponent = 0; opponent < players.size(); opponent++) {
             if (line == opponent) {
                 for (int prop = 0; prop < prop_count; prop++) {
