@@ -12,6 +12,14 @@ Wall::Wall(const Wall& wall)
   : rules(wall.rules)
   , placed(wall.placed) {}
 
+Wall&
+Wall::operator=(const Wall& other) {
+    if (rules != other.rules) {
+        throw logic_error("Cannot assign wall with different rules");
+    }
+    placed = other.placed;
+    return *this;
+}
 
 // Private
 

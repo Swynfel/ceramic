@@ -37,6 +37,7 @@ public:
     Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> players);
 
     const State& get_state() const;
+    void override_state(const State& state);
 
     ushort players_missing() const;
     bool has_enough_players() const;

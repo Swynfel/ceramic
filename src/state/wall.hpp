@@ -20,6 +20,7 @@ private:
 public:
     Wall(const std::shared_ptr<const Rules>& rule);
     Wall(const Wall& wall);
+    Wall& operator=(const Wall& other);
 
     void clear();
 

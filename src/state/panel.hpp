@@ -20,6 +20,7 @@ private:
 public:
     Panel(const std::shared_ptr<const Rules>& rules);
     Panel(const Panel& panel);
+    Panel& operator=(const Panel& other);
 
     void clear();
 

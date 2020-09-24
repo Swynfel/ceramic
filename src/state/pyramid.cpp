@@ -17,6 +17,16 @@ Pyramid::Pyramid(const Pyramid& pyramid)
   , tile_types(pyramid.tile_types)
   , tile_filled(pyramid.tile_filled) {}
 
+Pyramid&
+Pyramid::operator=(const Pyramid& other) {
+    if (size != other.size) {
+        throw logic_error("Cannot assign pyramid with different size");
+    }
+    tile_types = other.tile_types;
+    tile_filled = tile_filled;
+    return *this;
+}
+
 // Place before every direct acces to arrays tile_types and tile_filled
 void
 Pyramid::assert_line(ushort line) const {

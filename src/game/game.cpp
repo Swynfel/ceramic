@@ -41,11 +41,6 @@ Game::Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> p
 
 // Private methods
 
-const State&
-Game::get_state() const {
-    return state;
-}
-
 // Should only be called if there is at least
 // one tile in bag
 Tile
@@ -133,6 +128,16 @@ Game::all_legal_between(const State& state, ushort begin_place, ushort end_place
 
 
 // Public methods
+
+const State&
+Game::get_state() const {
+    return state;
+}
+
+void
+Game::override_state(const State& _state) {
+    state = _state;
+}
 
 
 ushort

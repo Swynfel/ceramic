@@ -29,6 +29,7 @@ private:
 public:
     State(std::shared_ptr<const Rules> rules);
     State(const State& state);
+    State& operator=(const State& other);
 
     void reset();
 

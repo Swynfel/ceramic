@@ -32,6 +32,19 @@ State::State(const State& state)
     }
 }
 
+State&
+State::operator=(const State& other) {
+    if (rules != other.rules) {
+        throw logic_error("Cannot assign state with different rules");
+    }
+    for (int f = 0; f < rules->factory_count(); f++) {
+        factories[f] = other.factories[f];
+    }
+    for (int p = 0; p < rules->player_count; p++) {
+        panels[p] = other.panels[p];
+    }
+    return *this;
+}
 
 void
 State::assert_player_id(ushort id) const {
