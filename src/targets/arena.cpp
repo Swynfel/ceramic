@@ -10,13 +10,7 @@
 #include "players/monte_carlo_player.hpp"
 #include "players/random_player.hpp"
 
-void
-print_help_players() {
-    std::cout << "        fl : First Legal Player\n";
-    std::cout << "        rn : Naive Random Player (smart = false)\n";
-    std::cout << "        r : Random Player\n";
-    std::cout << "        mc / mc:<rollouts> : Monte-Carlo Player (rollouts default is 1000)\n";
-}
+#include "parsing.hpp"
 
 void
 print_help() {
@@ -24,8 +18,7 @@ print_help() {
     std::cout << '\n';
     std::cout << "    -h : Help, shows this]\n";
     std::cout << '\n';
-    std::cout << "    <players> : list for each player (default is 'fl rn r')\n";
-    print_help_players();
+    PlayerParameters::help();
     std::cout << '\n';
     std::cout << "    -a <arena_type>\n";
     std::cout << "        s : subsets\n";
@@ -108,18 +101,13 @@ options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::s
     }
     for (; optind < argc; optind++) {
         string arg = argv[optind];
-        if (arg == "fl" || arg == "first-legal") {
-            players.push_back(std::make_shared<FirstLegalPlayer>());
-        } else if (arg == "rn" || arg == "rand-naive" || arg == "random-naive") {
-            players.push_back(std::make_shared<RandomPlayer>(false));
-        } else if (arg == "r" || arg == "rand" || arg == "random") {
-            players.push_back(std::make_shared<RandomPlayer>());
-        } else if (arg == "mc" || arg == "monte-carlo") {
-            players.push_back(std::make_shared<MonteCarloPlayer>());
-        } else {
-            std::cout << "Unkown player type " << arg << '\n';
-            print_help();
-            return false;
+        try {
+            players.push_back(PlayerParameters::parse(arg).build());
+        } catch (const exception& e) {
+            std::cout << e.what() << '\n'
+                      << "Error parsing input, use '-h' for help\n"
+                      << std::endl;
+            throw e;
         }
     }
     if (players.size() == 0) {

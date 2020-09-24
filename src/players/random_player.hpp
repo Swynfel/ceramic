@@ -11,9 +11,10 @@ class RandomPlayer : public Player {
 private:
     rng randomness;
     ushort_range range;
-    const bool smart = true;
 
 public:
+    const bool smart = true;
+
     RandomPlayer(bool smart = true);
     RandomPlayer(int seed, bool smart = true);
 

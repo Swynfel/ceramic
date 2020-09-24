@@ -18,7 +18,7 @@ private:
     int select_ucb(int n, const vector<float>& score_sums, const vector<int>& count) const;
 
 public:
-    const static int DEFAULT_ROLLOUTS = 10;
+    const static int DEFAULT_ROLLOUTS = 1000;
     int rollouts;
     bool until_round;
     bool smart = true;
