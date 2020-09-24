@@ -13,7 +13,7 @@ Arena::add_results_container(
     const vector<int>& new_squared_scores) {
     const std::lock_guard<std::mutex> lock(results_mutex);
     add_results(ids, new_wins, new_scores, new_squared_scores);
-    processed_games++;
+    processed_groups++;
     print_current();
 }
 
@@ -28,7 +28,9 @@ Arena::run_single(vector<int> ids) {
     vector<int> score_sum(p, 0);
     vector<int> squared_score_sum(p, 0);
     for (int c = 0; c < count; c++) {
+        auto begin = std::chrono::high_resolution_clock::now();
         game.roll_game();
+        auto end = std::chrono::high_resolution_clock::now();
         int winner = game.order[game.state.winning_player()];
         win_count[winner] += 1;
         for (int position = 0; position < p; position++) {
@@ -37,7 +39,8 @@ Arena::run_single(vector<int> ids) {
             score_sum[id] += score;
             squared_score_sum[id] += score * score;
         }
-        processed_steps++;
+        processed_games++;
+        time.fetch_add(std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
         print_current();
     }
     add_results_container(ids, win_count, score_sum, squared_score_sum);
@@ -77,7 +80,7 @@ Arena::add_group(vector<int> group) {
 
 void
 Arena::print_current() {
-    std::cout << "Played " << processed_games << "/" << total_games << " (" << processed_steps << "/" << total_steps << ")    \r" << std::flush;
+    std::cout << "Played " << processed_groups << "/" << total_groups << " (" << processed_games << "/" << total_games << ")    \r" << std::flush;
 }
 
 
@@ -134,7 +137,23 @@ Arena::print_results(vector<vector<int>> results) {
         max_player_length = max(max_player_length, int(players[line]->analysed_player->player_type().size()));
     }
     int games_per_player = results[0][0] * count;
-    printf("Games per group:  %d\nGames per player: %d\n\n", count, games_per_player);
+
+    printf("Games per group:  %d\nGames per player: %d\n", count, games_per_player);
+
+    double game_time = time / total_games;
+    double move_time = time;
+    int total_moves = 0;
+    for (auto& player : players) {
+        move_time -= player->time;
+        total_moves += player->move_counter;
+    }
+    move_time /= total_moves;
+    printf("Time: %.3e µs (game), %.3e µs (single move state change)\nAverage moves per game: %i\n\n",
+        game_time,
+        move_time,
+        total_moves / total_games);
+
+    // Table
     printf("%*s | winrate |  avg  |  std  | move time \n", max_player_length, "player");
     for (int i = 0; i < max_player_length; i++) {
         printf("-");
@@ -220,9 +239,11 @@ Arena::run() {
     }
     generate_groups(players.size(), rules->player_count);
     // Clear results
-    processed_steps = 0;
-    total_games = groups.size();
-    total_steps = total_games * count;
+    time = 0;
+    processed_groups = 0;
+    processed_games = 0;
+    total_groups = groups.size();
+    total_games = total_groups * count;
     results = vector<vector<int>>(player_count, vector<int>(column_count(), 0));
     // Run games
     print_current();

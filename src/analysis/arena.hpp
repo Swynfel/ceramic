@@ -22,10 +22,10 @@ private:
     std::mutex results_mutex = {};
     std::mutex queue_mutex = {};
 
-    std::atomic<int> processed_steps{ 0 };
     std::atomic<int> processed_games{ 0 };
+    std::atomic<int> processed_groups{ 0 };
+    int total_groups;
     int total_games;
-    int total_steps;
 
     void add_results_container(
         const vector<int>& ids,
