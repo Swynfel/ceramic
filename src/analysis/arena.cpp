@@ -141,37 +141,39 @@ Arena::print_results(vector<vector<int>> results) {
     printf("Games per group:  %d\nGames per player: %d\n", count, games_per_player);
 
     double game_time = time / total_games;
-    double move_time = time;
+    double state_change_time = time;
     int total_moves = 0;
     for (auto& player : players) {
-        move_time -= player->time;
+        state_change_time -= player->time;
         total_moves += player->move_counter;
     }
-    move_time /= total_moves;
-    printf("Time: %.3e µs (game), %.3e µs (single move state change)\nAverage moves per game: %i\n\n",
-        game_time,
-        move_time,
-        total_moves / total_games);
+    printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
+        (double)time / total_games,
+        (double)time / total_moves,
+        state_change_time / total_moves,
+        (double)total_moves / total_games);
 
     // Table
-    printf("%*s | winrate |  avg  |  std  | move time \n", max_player_length, "player");
+    printf("%*s | winrate |  avg  |  std  | move time |moves\n", max_player_length, "player");
     for (int i = 0; i < max_player_length; i++) {
         printf("-");
     }
-    printf("-+---------+-------+-------+-----------\n");
+    printf("-+---------+-------+-------+-----------+-----\n");
     for (int line = 0; line < player_count; line++) {
         double winrate = 100. * results[line][1] / games_per_player;
         double avg_score = double(results[line][2]) / games_per_player;
         double score_var = std::sqrt(double(results[line][3]) / games_per_player - avg_score * avg_score);
         double time_per_move = players[line]->time * 1.0 / players[line]->move_counter;
-        printf("%*.*s | %5.2f %% | %5.1f | %5.1f | %.3e\n",
+        double moves = (double)players[line]->move_counter / games_per_player;
+        printf("%*.*s | %6.2f%% | %5.1f | %5.1f | %.3e |% 3.1f\n",
             max_player_length,
             max_player_length,
             players[line]->analysed_player->player_type().c_str(),
             winrate,
             avg_score,
             score_var,
-            time_per_move);
+            time_per_move,
+            moves);
     }
     std::cout << std::flush;
 }
