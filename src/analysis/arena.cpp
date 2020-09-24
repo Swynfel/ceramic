@@ -13,6 +13,7 @@ Arena::add_results_container(
     const vector<int>& new_squared_scores) {
     const std::lock_guard<std::mutex> lock(results_mutex);
     add_results(ids, new_wins, new_scores, new_squared_scores);
+    processed_games++;
     print_current();
 }
 
@@ -36,8 +37,10 @@ Arena::run_single(vector<int> ids) {
             score_sum[id] += score;
             squared_score_sum[id] += score * score;
         }
+        processed_steps++;
+        print_current();
     }
-    add_results(ids, win_count, score_sum, squared_score_sum);
+    add_results_container(ids, win_count, score_sum, squared_score_sum);
 }
 
 
@@ -74,7 +77,7 @@ Arena::add_group(vector<int> group) {
 
 void
 Arena::print_current() {
-    std::cout << "Played " << processed_steps << "/" << total_steps << '\r' << std::flush;
+    std::cout << "Played " << processed_games << "/" << total_games << " (" << processed_steps << "/" << total_steps << ")    \r" << std::flush;
 }
 
 
@@ -93,8 +96,6 @@ Arena::add_results(
         player_results[2] += new_scores[i];
         player_results[3] += new_squared_scores[i];
     }
-    processed_steps++;
-    print_current();
 }
 
 
@@ -220,7 +221,8 @@ Arena::run() {
     generate_groups(players.size(), rules->player_count);
     // Clear results
     processed_steps = 0;
-    total_steps = groups.size();
+    total_games = groups.size();
+    total_steps = total_games * count;
     results = vector<vector<int>>(player_count, vector<int>(column_count(), 0));
     // Run games
     print_current();

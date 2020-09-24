@@ -36,8 +36,6 @@ PairsArena::add_results(
         (*player_results)[3 * column + 2] += new_squared_scores[index];
         index++;
     }
-    processed_steps++;
-    print_current();
 }
 
 int

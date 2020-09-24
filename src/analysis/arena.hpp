@@ -22,6 +22,11 @@ private:
     std::mutex results_mutex = {};
     std::mutex queue_mutex = {};
 
+    std::atomic<int> processed_steps{ 0 };
+    std::atomic<int> processed_games{ 0 };
+    int total_games;
+    int total_steps;
+
     void add_results_container(
         const vector<int>& ids,
         const vector<int>& new_wins,
@@ -37,8 +42,7 @@ protected:
     vector<std::shared_ptr<AnalysisPlayer>> players;
     vector<vector<int>> results;
 
-    int total_steps;
-    int processed_steps;
+    std::atomic<long long> time{ 0 };
 
     void add_group(vector<int> group);
 
