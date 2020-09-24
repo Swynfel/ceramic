@@ -54,6 +54,7 @@ public:
 
     void next_player();
     void roll_round();
+    void roll_end_game();
     void roll_game();
 
     void setup_factories();

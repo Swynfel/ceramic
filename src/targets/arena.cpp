@@ -7,6 +7,7 @@
 #include "analysis/arena.hpp"
 #include "analysis/pairs_arena.hpp"
 #include "players/first_legal_player.hpp"
+#include "players/monte_carlo_player.hpp"
 #include "players/random_player.hpp"
 
 void
@@ -14,6 +15,7 @@ print_help_players() {
     std::cout << "        fl : First Legal Player\n";
     std::cout << "        rn : Naive Random Player (smart = false)\n";
     std::cout << "        r : Random Player\n";
+    std::cout << "        mc / mc:<rollouts> : Monte-Carlo Player (rollouts default is 1000)\n";
 }
 
 void
@@ -112,6 +114,8 @@ options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::s
             players.push_back(std::make_shared<RandomPlayer>(false));
         } else if (arg == "r" || arg == "rand" || arg == "random") {
             players.push_back(std::make_shared<RandomPlayer>());
+        } else if (arg == "mc" || arg == "monte-carlo") {
+            players.push_back(std::make_shared<MonteCarloPlayer>());
         } else {
             std::cout << "Unkown player type " << arg << '\n';
             print_help();

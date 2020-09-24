@@ -247,11 +247,27 @@ Game::roll_round() {
                 observer->action_played(action);
             }
             state.next_player();
-        } catch (exception e) {
-            player->error(e.what());
+        } catch (const exception& e) {
+            player->error("Action" + action.str() + " " + e.what());
             cout << e.what() << endl;
         }
     }
+}
+
+void
+Game::roll_end_game() {
+    if (!has_enough_players()) {
+        throw logic_error("Not enough players to start the game");
+    }
+    while (!state.is_game_finished()) {
+        start_round();
+        for (const std::shared_ptr<Observer>& observer : observers) {
+            observer->new_round(state);
+        }
+        roll_round();
+        end_round();
+    }
+    score_final();
 }
 
 void
@@ -263,15 +279,7 @@ Game::roll_game() {
     for (const std::shared_ptr<Observer>& observer : observers) {
         observer->start_game(order);
     }
-    while (!state.is_game_finished()) {
-        start_round();
-        for (const std::shared_ptr<Observer>& observer : observers) {
-            observer->new_round(state);
-        }
-        roll_round();
-        end_round();
-    }
-    score_final();
+    roll_end_game();
     ushort winner_position = state.winning_player();
     for (const std::shared_ptr<Observer>& observer : observers) {
         observer->end_game(state, winner_position);
