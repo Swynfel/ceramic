@@ -37,8 +37,11 @@ public:
     ushort line_color_x(ushort line, Tile color) const;
 
     ushort completed_column_count() const;
+    ushort column_tile_count(ushort column) const;
     ushort completed_line_count() const;
+    ushort line_tile_count(ushort line) const;
     ushort completed_type_count() const;
+    ushort type_tile_count(ushort type) const;
     ushort final_score_bonus() const;
 
     // Scoring

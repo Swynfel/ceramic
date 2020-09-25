@@ -156,6 +156,18 @@ Wall::completed_column_count() const {
 }
 
 ushort
+Wall::column_tile_count(ushort column) const {
+    assert_column(column);
+    int count = 0;
+    for (int y = 1; y <= rules->tile_types; y++) {
+        if (get_tile_at_unsafe(column, y)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+ushort
 Wall::completed_line_count() const {
     int count = 0;
     for (int line = 1; line <= rules->tile_types; line++) {
@@ -166,6 +178,18 @@ Wall::completed_line_count() const {
             }
         }
         if (x > rules->tile_types) {
+            count++;
+        }
+    }
+    return count;
+}
+
+ushort
+Wall::line_tile_count(ushort line) const {
+    assert_line(line);
+    int count = 0;
+    for (int x = 1; x <= rules->tile_types; x++) {
+        if (get_tile_at_unsafe(x, line)) {
             count++;
         }
     }
@@ -184,6 +208,18 @@ Wall::completed_type_count() const {
             }
         }
         if (line > rules->tile_types) {
+            count++;
+        }
+    }
+    return count;
+}
+
+ushort
+Wall::type_tile_count(ushort type) const {
+    int count = 0;
+    Tile tile = Tile(type);
+    for (int line = 1; line <= rules->tile_types; line++) {
+        if (line_has_color(line, tile)) {
             count++;
         }
     }

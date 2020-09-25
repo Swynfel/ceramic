@@ -31,6 +31,8 @@ Arena::run_single(vector<int> ids) {
         auto begin = std::chrono::high_resolution_clock::now();
         game.roll_game();
         auto end = std::chrono::high_resolution_clock::now();
+        // std::cout << "FINAL STATE\n"
+        //           << game.get_state() << '\n';
         int winner = game.order[game.state.winning_player()];
         win_count[winner] += 1;
         for (int position = 0; position < p; position++) {

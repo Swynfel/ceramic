@@ -5,6 +5,7 @@
 #include "game/player.hpp"
 #include "global.hpp"
 #include "random_player.hpp"
+#include "round_heuristic.hpp"
 #include "state/state.hpp"
 #include "utils/random.hpp"
 #include <cmath>
@@ -12,12 +13,13 @@
 class MonteCarloPlayer : public Player {
 private:
     std::shared_ptr<Player> sampling_player;
+    rng randomness = rng(random_seed());
 
-    float end_round_heuristic(int total_score, int player_score, int highest_score, int player_count);
     float state_score(Game& game, const State& state, int player);
     int select_ucb(int n, const vector<float>& score_sums, const vector<int>& count) const;
 
 public:
+    RoundHeuristic heuristic{};
     const static int DEFAULT_ROLLOUTS = 1000;
     int rollouts;
     bool until_round;

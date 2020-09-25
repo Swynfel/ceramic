@@ -13,41 +13,16 @@ MonteCarloPlayer::MonteCarloPlayer(std::shared_ptr<Player> player, bool until_ro
 // Private
 
 float
-MonteCarloPlayer::end_round_heuristic(int total_score, int player_score, int highest_score, int player_count) {
-    float first_factor = 0.2f;
-    float scale_factor = 0.6f;
-    float score_factor = 1.f - first_factor - scale_factor;
-    return total_score == 0 ? 1.f / player_count
-                            : ((player_score >= highest_score) ? first_factor : 0.f) +
-                                  scale_factor * float(player_score) / highest_score +
-                                  score_factor * float(player_score) / total_score;
-}
-
-float
 MonteCarloPlayer::state_score(Game& game, const State& state, int player) {
     game.override_state(state);
     if (until_round) {
         game.roll_round();
         game.end_round();
+        game.score_final();
         if (game.get_state().is_game_finished()) {
-            game.score_final();
-            return (game.get_state().winning_player() == player) ? 1 : 0;
+            return (game.get_state().winning_player() == player) ? 1.f : 0.f;
         }
-        int player_score = 0;
-        int total_score = 0;
-        int highest_score = 0;
-        int player_count = state.get_rules()->player_count;
-        for (int p = 0; p < player_count; p++) {
-            int score = game.get_state().get_panel(p).get_score();
-            total_score += score;
-            if (p == player) {
-                player_score = score;
-            }
-            if (score > highest_score) {
-                highest_score = score;
-            }
-        }
-        return end_round_heuristic(total_score, player_score, highest_score, player_count);
+        return heuristic.eval(state, player);
     } else {
         game.roll_game();
         return (game.get_state().winning_player() == player) ? 1 : 0;
@@ -92,6 +67,7 @@ MonteCarloPlayer::play(const State& state) {
     } else {
         legal_actions = Game::all_legal(state);
     }
+    std::shuffle(legal_actions.begin(), legal_actions.end(), randomness);
     vector<float> score_sums(legal_actions.size(), 0);
     vector<int> count(legal_actions.size(), 0);
 
@@ -121,7 +97,8 @@ MonteCarloPlayer::play(const State& state) {
         index++;
     }
     // index = 0;
-    // std::cout << ":: ";
+    // std::cout << ":: " << best_action << " ~ " << best_score << '\n';
+    // std::cout << state << std::endl;
     // for (Action action : legal_actions) {
     //     float score = count[index] > 0 ? score_sums[index] / count[index] : 0.f;
     //     std::cout << action;
@@ -135,5 +112,5 @@ MonteCarloPlayer::play(const State& state) {
 
 string
 MonteCarloPlayer::player_type() const {
-    return "monte-carlo";
+    return "mc-" + to_string(rollouts);
 }
