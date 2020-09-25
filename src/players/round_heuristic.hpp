@@ -29,7 +29,8 @@ struct RoundHeuristic {
         int n = rules.tile_types;
         float result = score;
         result -= penalty_factor * incomplete_pyramid_lines;
-        result += bonus_factor * (rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns) / (n * n * n);
+        result += bonus_factor * (rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns) / (n * n);
+        result = max(result, 0.f);
         return result;
     }
 
