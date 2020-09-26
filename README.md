@@ -1,14 +1,17 @@
 # Ceramic
 A python module for playing variations of the board game Azul, implemented in C++.
 
-
-## Build for Python
+## Build using python's setuptools
 
 ### Dependencies
 
-Before building this repository make sure to install the following dependencies:
+The simplest method for building the python module is using python's `setuptools`.
+Make sure to install the following dependencies:
 - C++14 compiler
 - [Pybind11](https://github.com/pybind/pybind11)
+
+It is also possible to build the python module using CMake.
+You need to run `export PYBIND=1` (or `SET PYBIND=1` on windows), and follow the **Build for C++ only** section.
 
 #### Pybind11
 
@@ -30,9 +33,27 @@ For example, on linux, and using python3.7, it will be called `ceramic.cpython-3
 It can safely be renamed `ceramic.so`.
 
 
-## Build for C++ only
+### Test
 
-This part is to build c++ only (no python) libraries and executables.
+To test the project works as intended, you can run the list of tests in the `test/` directory.
+
+The recommended method is to install [tox](https://) with `pip install tox`, and execute in the root of the repository
+```
+tox
+```
+
+If everything works as expected, you should see an output similar to
+```
+============================ 127 passed in 0.17s =============================
+__________________________________ summary ___________________________________
+  py37: commands succeeded
+  congratulations :)
+```
+
+## Build using CMake
+
+Although using CMake is slightly less straight forward, it allows more fine-tuning.
+For example, you can build c++ only libraries and executables, without the python module.
 
 ### Dependencies
 
@@ -40,6 +61,7 @@ Make sure you have the following tools:
 - CMake
 - Make
 - C++14 compiler
+- [Pybind11](https://github.com/pybind/pybind11) (optional, only required for python module)
 
 ### Build
 
@@ -57,6 +79,24 @@ cmake .. -DCMAKE_BUILD_TYPE=Debug
 ```
 
 Executable and libraries will be placed in the `build` directory.
+
+#### Build python module
+
+If you want to build the python module for python version 3.x, start by installing the corresponding pybind headers.
+Then export `PYTHON=3.x` before calling the `cmake` command
+```
+export PYTHON=3.x #Unix
+SET PYTHON=3.x #Windows
+```
+
+or pass it as a define option with
+```
+cmake .. -DPYTHON=3.x
+```
+
+The library will also be placed in the `build` directory.
+
+### Run
 
 #### ceramic-test
 Runs a test game with 4 random players.

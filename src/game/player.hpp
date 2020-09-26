@@ -12,6 +12,8 @@ private:
     friend class Game;
 
 public:
+    virtual ~Player() = default;
+
     virtual bool check_rules(const Rules& rules) const;
 
     virtual std::shared_ptr<Observer> observer();
