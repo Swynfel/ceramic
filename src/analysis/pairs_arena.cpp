@@ -7,10 +7,10 @@ PairsArena::get_column(int opponent, int prop) const {
 
 void
 PairsArena::add_results(
-    const vector<int>& ids,
-    const vector<int>& new_wins,
-    const vector<int>& new_scores,
-    const vector<int>& new_squared_scores) {
+    const std::vector<int>& ids,
+    const std::vector<int>& new_wins,
+    const std::vector<int>& new_scores,
+    const std::vector<int>& new_squared_scores) {
     int first = ids.front();
     int second = ids.back();
     int prop = 1;
@@ -18,12 +18,12 @@ PairsArena::add_results(
         prop++;
     }
     int index = 0;
-    vector<int>* first_player_results = &results[first];
+    std::vector<int>* first_player_results = &results[first];
     int first_player_colum = get_column(second, prop);
-    vector<int>* second_player_results = &results[second];
+    std::vector<int>* second_player_results = &results[second];
     int second_player_colum = get_column(first, rules->player_count - prop);
     for (int id : ids) {
-        vector<int>* player_results =
+        std::vector<int>* player_results =
             (id == first)
                 ? first_player_results
                 : second_player_results;
@@ -48,7 +48,7 @@ PairsArena::generate_groups(int available_players, int game_players) {
     for (int i = 0; i < available_players; i++) {
         for (int j = i + 1; j < available_players; j++) {
             for (int proportions = 1; proportions < game_players; proportions++) {
-                vector<int> ids;
+                std::vector<int> ids;
                 for (int x = 0; x < game_players; x++) {
                     ids.push_back(x < proportions ? i : j);
                 }
@@ -60,12 +60,12 @@ PairsArena::generate_groups(int available_players, int game_players) {
 
 
 void
-PairsArena::print_results(vector<vector<int>> results) {
+PairsArena::print_results(std::vector<std::vector<int>> results) {
     int player_count = results.size();
     int max_player_length = 6;
     int prop_count = rules->player_count - 1;
     for (int line = 0; line < player_count; line++) {
-        max_player_length = max(max_player_length, int(players[line]->analysed_player->player_type().size()));
+        max_player_length = std::max(max_player_length, int(players[line]->analysed_player->player_type().size()));
     }
     printf("Games per group:  %d\n\n", count);
     // 1 - Player line
@@ -127,7 +127,7 @@ PairsArena::print_results(vector<vector<int>> results) {
     std::cout << std::flush;
 }
 
-string
+std::string
 PairsArena::mode_name() const {
     return "Pairs";
 }

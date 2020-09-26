@@ -19,12 +19,12 @@ AnalysisPlayer::play(const State& state) {
 }
 
 void
-AnalysisPlayer::error(string error) {
+AnalysisPlayer::error(std::string error) {
     analysed_player->error(error);
 }
 
 
-string
+std::string
 AnalysisPlayer::player_type() const {
     return "analysis-" + analysed_player->player_type();
 }

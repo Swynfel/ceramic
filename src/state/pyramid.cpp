@@ -20,7 +20,7 @@ Pyramid::Pyramid(const Pyramid& pyramid)
 Pyramid&
 Pyramid::operator=(const Pyramid& other) {
     if (size != other.size) {
-        throw logic_error("Cannot assign pyramid with different size");
+        throw std::logic_error("Cannot assign pyramid with different size");
     }
     tile_types = other.tile_types;
     tile_filled = tile_filled;
@@ -34,7 +34,7 @@ Pyramid::assert_line(ushort line) const {
         throw std::range_error("No line '0', as it designates the floor.");
     }
     if (line > size) {
-        throw std::range_error("No line '" + to_string(line) + "', as there is only '" + to_string(size) + "' lines.");
+        throw std::range_error("No line '" + std::to_string(line) + "', as there is only '" + std::to_string(size) + "' lines.");
     }
 }
 
@@ -67,7 +67,7 @@ void
 Pyramid::set_line(ushort line, ushort amount, Tile color) {
     assert_line(line);
     if (amount > line) {
-        throw std::invalid_argument("Can't set amount over " + to_string(line) + " for line with the same id.");
+        throw std::invalid_argument("Can't set amount over " + std::to_string(line) + " for line with the same id.");
     }
     tile_types[line - 1] = color;
     tile_filled[line - 1] = amount;
@@ -107,9 +107,9 @@ Pyramid::accept_color(ushort line, Tile tile) const {
 }
 
 
-vector<bool>
+std::vector<bool>
 Pyramid::filled() const {
-    vector<bool> result;
+    std::vector<bool> result;
     for (ushort i = 1; i <= size; i++) {
         result.push_back(is_filled(i));
     }
@@ -119,7 +119,7 @@ Pyramid::filled() const {
 // Reading
 
 void
-Pyramid::stream_line(ostream& os, ushort line, bool brackets) const {
+Pyramid::stream_line(std::ostream& os, ushort line, bool brackets) const {
     int a = amount(line);
     char c = color(line).letter();
     if (brackets) {
@@ -133,8 +133,8 @@ Pyramid::stream_line(ostream& os, ushort line, bool brackets) const {
     }
 }
 
-ostream&
-operator<<(ostream& os, const Pyramid& pyramid) {
+std::ostream&
+operator<<(std::ostream& os, const Pyramid& pyramid) {
     for (int line = 1; line <= pyramid.size; line++) {
         os << (line == 1 ? '[' : ' ');
         pyramid.stream_line(os, line, true);
@@ -143,16 +143,16 @@ operator<<(ostream& os, const Pyramid& pyramid) {
     return os;
 }
 
-string
+std::string
 Pyramid::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Pyramid::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "[Pyramid:";
     for (int line = 1; line <= size; line++) {
         stream_line(os, line, false);

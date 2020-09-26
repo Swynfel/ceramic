@@ -10,8 +10,8 @@
 class Pyramid {
 private:
     const ushort size;
-    vector<Tile> tile_types;
-    vector<ushort> tile_filled;
+    std::vector<Tile> tile_types;
+    std::vector<ushort> tile_filled;
 
     void assert_line(ushort line) const;
 
@@ -32,13 +32,13 @@ public:
     ushort amount_remaining(ushort line) const;
     Tile color(ushort line) const;
     bool accept_color(ushort line, Tile color) const;
-    vector<bool> filled() const;
+    std::vector<bool> filled() const;
 
     // Reading
-    void stream_line(ostream& os, ushort line, bool brackets) const;
-    friend ostream& operator<<(ostream& os, const Pyramid& pyramid);
-    string str() const;
-    string repr() const;
+    void stream_line(std::ostream& os, ushort line, bool brackets) const;
+    friend std::ostream& operator<<(std::ostream& os, const Pyramid& pyramid);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //PYRAMID_HPP

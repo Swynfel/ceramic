@@ -10,7 +10,7 @@ class FirstLegalPlayer : public Player {
 public:
     Action play(const State& state) override;
 
-    virtual string player_type() const override;
+    virtual std::string player_type() const override;
 };
 
 #endif //FIRST_LEGAL_PLAYER_HPP

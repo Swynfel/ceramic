@@ -2,7 +2,7 @@
 
 void
 AllArena::generate_groups(int available_players, int game_players) {
-    vector<int> ids;
+    std::vector<int> ids;
     ids.push_back(0);
     while (true) {
         if (ids.back() >= available_players) {
@@ -25,7 +25,7 @@ AllArena::generate_groups(int available_players, int game_players) {
 }
 
 
-string
+std::string
 AllArena::mode_name() const {
     return "All";
 }

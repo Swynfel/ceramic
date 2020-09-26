@@ -51,14 +51,14 @@ private:
     }
 
     static bool _bool(std::string s) {
-        return s != "" && s != "false" && s != "0";
+        return s != "" && s != "false" && s != "0" && s != "f";
     }
 
     static int _int(std::string s) {
         std::string::size_type size;
         int value = std::stoi(s, &size);
         if (size != s.size()) {
-            throw invalid_argument("'" + s + "' is not an int");
+            throw std::invalid_argument("'" + s + "' is not an int");
         }
         return value;
     }
@@ -67,7 +67,7 @@ private:
         std::string::size_type size;
         float value = std::stof(s, &size);
         if (size != s.size()) {
-            throw invalid_argument("'" + s + "' is not an float");
+            throw std::invalid_argument("'" + s + "' is not an float");
         }
         return value;
     }
@@ -100,12 +100,12 @@ public:
         int i = raw_params.find('{');
         int j = raw_params.find('}');
         if (i == std::string::npos && j == std::string::npos) {
-            return PlayerParameters{ key : raw_params };
+            return PlayerParameters{ .key = raw_params };
         }
         if (i == std::string::npos || j == std::string::npos) {
             throw std::invalid_argument("Option format is 'key' or 'key[options]'");
         }
-        PlayerParameters result{ key : raw_params.substr(0UL, i) };
+        PlayerParameters result{ .key = raw_params.substr(0UL, i) };
         int last = i + 1;
         while (true) {
             int next = raw_params.find(',', last);
@@ -114,7 +114,7 @@ public:
             int split = argument.find(':');
             if (split != std::string::npos) {
                 key = argument.substr(0, split);
-                argument = argument.substr(split);
+                argument = argument.substr(split + 1);
             }
             result.parameters[key] = argument;
             if (next == std::string::npos) {
@@ -141,7 +141,7 @@ public:
             set(player->c, "c", "C");
             return player;
         } else {
-            throw invalid_argument("Unkown player type " + key);
+            throw std::invalid_argument("Unkown player type " + key);
         }
     }
 

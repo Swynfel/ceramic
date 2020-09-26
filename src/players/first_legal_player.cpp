@@ -6,7 +6,7 @@
 Action
 FirstLegalPlayer::play(const State& state) {
     auto rules = state.get_rules();
-    for (ushort place = rules->tile_types; place != numeric_limits<ushort>::max(); place--) {
+    for (ushort place = rules->tile_types; place != std::numeric_limits<ushort>::max(); place--) {
         for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
             for (ushort color = 0; color < rules->tile_types; color++) {
                 Action action = Action{ .pick = pick, .color = color, .place = place };
@@ -16,11 +16,11 @@ FirstLegalPlayer::play(const State& state) {
             }
         }
     }
-    throw runtime_error("No action was legal");
+    throw std::runtime_error("No action was legal");
 }
 
 
-string
+std::string
 FirstLegalPlayer::player_type() const {
     return "first-legal";
 }

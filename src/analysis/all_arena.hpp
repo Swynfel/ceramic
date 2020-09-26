@@ -10,7 +10,7 @@ protected:
 public:
     using Arena::Arena;
 
-    virtual string mode_name() const;
+    virtual std::string mode_name() const;
 
     bool virtual ready() const;
 };

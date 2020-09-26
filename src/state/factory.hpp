@@ -15,9 +15,9 @@ public:
     void set_tiles(const Tiles tiles);
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Factory& factory);
-    string str() const;
-    string repr() const;
+    friend std::ostream& operator<<(std::ostream& os, const Factory& factory);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //FACTORY_HPP

@@ -13,7 +13,7 @@ RandomPlayer::RandomPlayer(int seed, bool smart)
 
 Action
 RandomPlayer::play(const State& state) {
-    vector<Action> legal_actions;
+    std::vector<Action> legal_actions;
     if (smart) {
         legal_actions = Game::all_smart_legal(state);
         if (legal_actions.size() == 0) {
@@ -23,14 +23,14 @@ RandomPlayer::play(const State& state) {
         legal_actions = Game::all_legal(state);
     }
     if (legal_actions.size() == 0) {
-        throw runtime_error("No action was legal");
+        throw std::runtime_error("No action was legal");
     }
     ushort index = random_range(randomness, range, 0, legal_actions.size());
     return legal_actions[index];
 }
 
 
-string
+std::string
 RandomPlayer::player_type() const {
-    return string("random") + (smart ? "" : "-naive");
+    return std::string("random") + (smart ? "" : "-naive");
 }

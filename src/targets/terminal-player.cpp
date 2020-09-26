@@ -60,10 +60,10 @@ options(int argc, char* argv[], std::shared_ptr<TerminalPlayer>& terminal_player
                 try {
                     int value = std::stoi(optarg);
                     if (value < 2 || value > TILE_TYPES) {
-                        throw out_of_range("");
+                        throw std::out_of_range("");
                     }
                     rules->tile_types = value;
-                } catch (const exception& e) {
+                } catch (const std::exception& e) {
                     std::cout << "Unrecognised tile types cout: " << optarg << '\n';
                     std::cout << "Use an int between 2 and " << TILE_TYPES << " (included)" << std::endl;
                     return false;
@@ -91,9 +91,9 @@ main(int argc, char* argv[]) {
         return 1;
     }
     // Game
-    string player_chars = "rrr";
+    std::string player_chars = "rrr";
     if (optind < argc) {
-        player_chars = string(argv[optind]);
+        player_chars = std::string(argv[optind]);
     }
     rules->player_count = 1 + player_chars.size();
     Game game = Game(rules);

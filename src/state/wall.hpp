@@ -10,7 +10,7 @@
 class Wall {
 private:
     const std::shared_ptr<const Rules> rules;
-    vector<Tile> placed;
+    std::vector<Tile> placed;
 
     void assert_line(ushort line) const;
     void assert_column(ushort column) const;
@@ -28,10 +28,10 @@ public:
     Tile get_tile_at(ushort x, ushort y) const;
     Tile color_at(ushort x, ushort y) const;
 
-    vector<bool> get_placed() const;
-    const vector<Tile>& get_tiles() const;
-    vector<vector<bool>> get_placed_array() const;
-    vector<vector<Tile>> get_tiles_array() const;
+    std::vector<bool> get_placed() const;
+    const std::vector<Tile>& get_tiles() const;
+    std::vector<std::vector<bool>> get_placed_array() const;
+    std::vector<std::vector<Tile>> get_tiles_array() const;
 
     bool line_has_color(ushort line, Tile color) const;
     ushort line_color_x(ushort line, Tile color) const;
@@ -51,10 +51,10 @@ public:
     ushort place_line_color(ushort line, Tile color);
 
     // Reading
-    void stream_line(ostream& os, ushort line, bool brackets) const;
-    friend ostream& operator<<(ostream& os, const Wall& wall);
-    string str() const;
-    string repr() const;
+    void stream_line(std::ostream& os, ushort line, bool brackets) const;
+    friend std::ostream& operator<<(std::ostream& os, const Wall& wall);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //WALL_HPP

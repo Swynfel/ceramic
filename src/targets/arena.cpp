@@ -42,7 +42,7 @@ enum ArenaMode {
 };
 
 bool
-options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::shared_ptr<Rules>& rules, ArenaMode& arena_mode, ArenaOptions& arena_options) {
+options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, std::shared_ptr<Rules>& rules, ArenaMode& arena_mode, ArenaOptions& arena_options) {
     int option;
     while ((option = getopt(argc, argv, ":hc:n:a:g:t:")) != -1) { //get option from the getopt() method
         switch (option) {
@@ -79,10 +79,10 @@ options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::s
                 try {
                     int value = std::stoi(optarg);
                     if (value < 2 || value > TILE_TYPES) {
-                        throw out_of_range("");
+                        throw std::out_of_range("");
                     }
                     rules->tile_types = value;
-                } catch (const exception& e) {
+                } catch (const std::exception& e) {
                     std::cout << "Unrecognised tile types cout: " << optarg << '\n';
                     std::cout << "Use an int between 2 and " << TILE_TYPES << " (included)" << std::endl;
                     return false;
@@ -100,10 +100,10 @@ options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::s
         }
     }
     for (; optind < argc; optind++) {
-        string arg = argv[optind];
+        std::string arg = argv[optind];
         try {
             players.push_back(PlayerParameters::parse(arg).build());
-        } catch (const exception& e) {
+        } catch (const std::exception& e) {
             std::cout << e.what() << '\n'
                       << "Error parsing input, use '-h' for help\n"
                       << std::endl;
@@ -122,10 +122,10 @@ options(int argc, char* argv[], vector<std::shared_ptr<Player>>& players, std::s
 
 int
 main(int argc, char* argv[]) {
-    vector<std::shared_ptr<Player>> players;
+    std::vector<std::shared_ptr<Player>> players;
     std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::DEFAULT);
     ArenaMode arena_mode = ArenaMode::PAIRS;
-    ArenaOptions arena_options{ count : 1000, thread_limit : 8 };
+    ArenaOptions arena_options{ .count = 1000, .thread_limit = 8 };
     if (!options(argc, argv, players, rules, arena_mode, arena_options)) {
         return 1;
     }
@@ -141,7 +141,7 @@ main(int argc, char* argv[]) {
             arena = std::make_unique<AllArena>(rules, players);
             break;
         default:
-            throw runtime_error("Unkown Arena Mode");
+            throw std::runtime_error("Unkown Arena Mode");
     }
     arena->count = arena_options.count;
     arena->thread_limit = arena_options.thread_limit;

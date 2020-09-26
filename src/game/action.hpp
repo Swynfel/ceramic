@@ -13,10 +13,10 @@ struct Action {
     friend bool operator!=(Action left, Action right);
 
     // Reading
-    friend ostream& operator<<(ostream& os, Action tile);
-    friend istream& operator>>(istream& is, Action& tile);
-    string str() const;
-    string repr() const;
+    friend std::ostream& operator<<(std::ostream& os, Action tile);
+    friend std::istream& operator>>(std::istream& is, Action& tile);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //ACTION_HPP

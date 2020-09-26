@@ -15,7 +15,7 @@ Wall::Wall(const Wall& wall)
 Wall&
 Wall::operator=(const Wall& other) {
     if (rules != other.rules) {
-        throw logic_error("Cannot assign wall with different rules");
+        throw std::logic_error("Cannot assign wall with different rules");
     }
     placed = other.placed;
     return *this;
@@ -29,14 +29,14 @@ Wall::assert_line(ushort line) const {
         throw std::range_error("No line '0', as it designates the floor.");
     }
     if (line > rules->tile_types) {
-        throw std::range_error("No line '" + to_string(line) + "', as there is only '" + to_string(rules->tile_types) + "' lines.");
+        throw std::range_error("No line '" + std::to_string(line) + "', as there is only '" + std::to_string(rules->tile_types) + "' lines.");
     }
 }
 
 void
 Wall::assert_column(ushort column) const {
     if (column == 0 || column > rules->tile_types) {
-        throw std::range_error("No column '" + to_string(column) + "', choose 'column' such as 0 < 'column' <= " + to_string(rules->tile_types) + ".");
+        throw std::range_error("No column '" + std::to_string(column) + "', choose 'column' such as 0 < 'column' <= " + std::to_string(rules->tile_types) + ".");
     }
 }
 
@@ -77,30 +77,30 @@ Wall::color_at(ushort x, ushort y) const {
 }
 
 
-vector<bool>
-vec_tile_to_bool(vector<Tile>::const_iterator begin, vector<Tile>::const_iterator end) {
-    vector<bool> result;
+std::vector<bool>
+vec_tile_to_bool(std::vector<Tile>::const_iterator begin, std::vector<Tile>::const_iterator end) {
+    std::vector<bool> result;
     while (begin != end) {
         result.push_back(bool(*begin++));
     }
     return result;
 }
 
-vector<bool>
+std::vector<bool>
 Wall::get_placed() const {
     return vec_tile_to_bool(placed.begin(), placed.end());
 }
 
-const vector<Tile>&
+const std::vector<Tile>&
 Wall::get_tiles() const {
     return placed;
 }
 
-vector<vector<bool>>
+std::vector<std::vector<bool>>
 Wall::get_placed_array() const {
-    vector<vector<bool>> result;
-    vector<Tile>::const_iterator slice_start = placed.begin();
-    vector<Tile>::const_iterator slice_end;
+    std::vector<std::vector<bool>> result;
+    std::vector<Tile>::const_iterator slice_start = placed.begin();
+    std::vector<Tile>::const_iterator slice_end;
     for (int i = 1; i <= rules->tile_types; i++) {
         slice_end = slice_start + rules->tile_types;
         result.push_back(vec_tile_to_bool(slice_start, slice_end));
@@ -109,14 +109,14 @@ Wall::get_placed_array() const {
     return result;
 }
 
-vector<vector<Tile>>
+std::vector<std::vector<Tile>>
 Wall::get_tiles_array() const {
-    vector<vector<Tile>> result;
-    vector<Tile>::const_iterator slice_start = placed.begin();
-    vector<Tile>::const_iterator slice_end;
+    std::vector<std::vector<Tile>> result;
+    std::vector<Tile>::const_iterator slice_start = placed.begin();
+    std::vector<Tile>::const_iterator slice_end;
     for (int i = 1; i <= rules->tile_types; i++) {
         slice_end = slice_start + rules->tile_types;
-        result.push_back(vector<Tile>(slice_start, slice_end));
+        result.push_back(std::vector<Tile>(slice_start, slice_end));
         slice_start = slice_end;
     }
     return result;
@@ -126,8 +126,8 @@ Wall::get_tiles_array() const {
 bool
 Wall::line_has_color(ushort line, Tile color) const {
     // assert_line(line);
-    // vector<Tile>::const_iterator slice_start = placed.begin() + (line - 1) * rules->tile_types;
-    // vector<Tile>::const_iterator slice_end = slice_start + rules->tile_types;
+    // std::vector<Tile>::const_iterator slice_start = placed.begin() + (line - 1) * rules->tile_types;
+    // std::vector<Tile>::const_iterator slice_end = slice_start + rules->tile_types;
     // return std::find(slice_start, slice_end, color) != slice_end;
     return get_tile_at(line_color_x(line, color), line) != Tile::NONE;
 }
@@ -295,7 +295,7 @@ Wall::place_line_color(ushort line, Tile color) {
 // Reading
 
 void
-Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
+Wall::stream_line(std::ostream& os, const ushort line, bool brackets) const {
     if (brackets) {
         os << "[";
     }
@@ -312,8 +312,8 @@ Wall::stream_line(ostream& os, const ushort line, bool brackets) const {
     }
 }
 
-ostream&
-operator<<(ostream& os, const Wall& wall) {
+std::ostream&
+operator<<(std::ostream& os, const Wall& wall) {
     for (int line = 1; line <= wall.rules->tile_types; line++) {
         os << (line == 1 ? '[' : ' ');
         wall.stream_line(os, line, true);
@@ -322,16 +322,16 @@ operator<<(ostream& os, const Wall& wall) {
     return os;
 }
 
-string
+std::string
 Wall::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Wall::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "[Wall:";
     for (int line = 1; line <= rules->tile_types; line++) {
         stream_line(os, line, false);

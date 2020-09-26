@@ -8,18 +8,16 @@
 #include "global.hpp"
 #include "tile.hpp"
 
-using namespace std;
-
 class Tiles {
 protected:
-    array<ushort, TILE_TYPES> quantities;
+    std::array<ushort, TILE_TYPES> quantities;
 
 public:
     // Constructors
     Tiles();
     Tiles(Tile tile);
     Tiles(Tile tile, int count);
-    Tiles(const vector<ushort>& tiles);
+    Tiles(const std::vector<ushort>& tiles);
     Tiles(const Tiles& tiles);
 
     // Utils
@@ -48,13 +46,13 @@ public:
     friend bool operator>=(Tiles left, ushort right);
 
     // Reading
-    friend ostream& operator<<(ostream& os, Tiles tiles);
-    string virtual str() const;
-    string virtual letter_str() const;
-    string virtual repr() const;
+    friend std::ostream& operator<<(std::ostream& os, Tiles tiles);
+    std::string virtual str() const;
+    std::string virtual letter_str() const;
+    std::string virtual repr() const;
 
-    array<ushort, TILE_TYPES> get_quantities() const;
-    void set_quantities(array<ushort, TILE_TYPES> quantities);
+    std::array<ushort, TILE_TYPES> get_quantities() const;
+    void set_quantities(std::array<ushort, TILE_TYPES> quantities);
 
     static const Tiles ZERO;
 };

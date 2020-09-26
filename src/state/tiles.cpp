@@ -20,7 +20,7 @@ Tiles::Tiles(Tile tile, int count)
     }
 }
 
-Tiles::Tiles(const vector<ushort>& tiles)
+Tiles::Tiles(const std::vector<ushort>& tiles)
   : quantities() {
     uint index = 0;
     for (ushort q : tiles) {
@@ -40,14 +40,14 @@ Tiles::Tiles(const Tiles& tiles)
 ushort&
 Tiles::operator[](Tile tile) {
     if (!tile) {
-        throw range_error("Can't get amount of null tiles");
+        throw std::range_error("Can't get amount of null tiles");
     }
     return quantities[int(tile)];
 }
 
 ushort
 Tiles::total() const {
-    return accumulate(
+    return std::accumulate(
         quantities.begin(),
         quantities.end(),
         0);
@@ -61,7 +61,7 @@ Tiles::is_empty() const {
 bool
 Tiles::has_color(Tile color) const {
     if (!color) {
-        throw range_error("Can't call with null tile color");
+        throw std::range_error("Can't call with null tile color");
     }
     return quantities[int(color)] > 0;
 }
@@ -164,8 +164,8 @@ Tiles::operator-(Tile tile) const {
 
 // Reading
 
-ostream&
-operator<<(ostream& os, Tiles tiles) {
+std::ostream&
+operator<<(std::ostream& os, Tiles tiles) {
     bool first = true;
     for (uint v : tiles.quantities) {
         if (first) {
@@ -183,16 +183,16 @@ operator<<(ostream& os, Tiles tiles) {
     return os;
 }
 
-string
+std::string
 Tiles::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Tiles::letter_str() const {
-    ostringstream os;
+    std::ostringstream os;
     for (ushort tile_value = 0; tile_value < TILE_TYPES; tile_value++) {
         Tile tile = Tile(tile_value);
         for (int i = 0; i < quantities[int(tile)]; i++) {
@@ -202,20 +202,20 @@ Tiles::letter_str() const {
     return os.str();
 }
 
-string
+std::string
 Tiles::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "Tiles:" << *this;
     return os.str();
 }
 
-array<ushort, TILE_TYPES>
+std::array<ushort, TILE_TYPES>
 Tiles::get_quantities() const {
     return quantities;
 }
 
 void
-Tiles::set_quantities(array<ushort, TILE_TYPES> _quantities) {
+Tiles::set_quantities(std::array<ushort, TILE_TYPES> _quantities) {
     quantities = _quantities;
 }
 

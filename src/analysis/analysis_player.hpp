@@ -17,9 +17,9 @@ public:
 
     Action play(const State& state) override;
 
-    void error(string error) override;
+    void error(std::string error) override;
 
-    string player_type() const override;
+    std::string player_type() const override;
 
     std::shared_ptr<Observer> observer() override;
 };

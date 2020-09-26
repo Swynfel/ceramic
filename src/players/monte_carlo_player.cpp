@@ -38,7 +38,7 @@ MonteCarloPlayer::state_score(Game& game, const State& state, int player) {
 //    n total number of samples (n = sum_i(n_i))
 //    n_i number of times action "a" was sampled
 int
-MonteCarloPlayer::select_ucb(int n, const vector<float>& score_sums, const vector<int>& count) const {
+MonteCarloPlayer::select_ucb(int n, const std::vector<float>& score_sums, const std::vector<int>& count) const {
     float ln_n = log(n);
     float highest_uct = -std::numeric_limits<float>::infinity();
     int highest_index = 0;
@@ -58,7 +58,7 @@ MonteCarloPlayer::select_ucb(int n, const vector<float>& score_sums, const vecto
 Action
 MonteCarloPlayer::play(const State& state) {
     int position = state.get_current_player();
-    vector<Action> legal_actions;
+    std::vector<Action> legal_actions;
     if (smart) {
         legal_actions = Game::all_smart_legal(state);
         if (legal_actions.size() == 0) {
@@ -68,8 +68,8 @@ MonteCarloPlayer::play(const State& state) {
         legal_actions = Game::all_legal(state);
     }
     std::shuffle(legal_actions.begin(), legal_actions.end(), randomness);
-    vector<float> score_sums(legal_actions.size(), 0);
-    vector<int> count(legal_actions.size(), 0);
+    std::vector<float> score_sums(legal_actions.size(), 0);
+    std::vector<int> count(legal_actions.size(), 0);
 
     Game game = Game(state.get_rules());
     for (int p = 0; p < state.get_rules()->player_count; p++) {
@@ -110,7 +110,7 @@ MonteCarloPlayer::play(const State& state) {
 }
 
 
-string
+std::string
 MonteCarloPlayer::player_type() const {
-    return "mc-" + to_string(rollouts);
+    return "mc-" + std::to_string(rollouts);
 }

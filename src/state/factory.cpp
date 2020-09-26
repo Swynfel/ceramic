@@ -15,22 +15,22 @@ Factory::set_tiles(const Tiles tiles) {
 
 // Reading
 
-ostream&
-operator<<(ostream& os, const Factory& factory) {
+std::ostream&
+operator<<(std::ostream& os, const Factory& factory) {
     os << "<#" << factory.id << ":" << factory.letter_str() << ">";
     return os;
 }
 
-string
+std::string
 Factory::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Factory::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "<Factory#" << id << ":" << (Tiles)(*this) << ">";
     return os.str();
 }

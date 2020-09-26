@@ -5,8 +5,6 @@
 #include <memory>
 #include <string>
 
-using namespace std;
-
 struct Tile {
 private:
     ushort value;
@@ -33,9 +31,9 @@ public:
     char lc_letter() const;
 
     // Reading
-    friend ostream& operator<<(ostream& os, Tile tile);
-    string str() const;
-    string repr() const;
+    friend std::ostream& operator<<(std::ostream& os, Tile tile);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //TILE_HPP

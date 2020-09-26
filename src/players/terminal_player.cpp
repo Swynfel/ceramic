@@ -25,8 +25,8 @@ TerminalPlayer::help() const {
     std::cout << "    1c0 will take color 'c' from Factory#1 and throw it in floor" << std::endl;
 }
 
-string
-TerminalPlayer::colored_token(string token) const {
+std::string
+TerminalPlayer::colored_token(std::string token) const {
     if (color_type == TerminalPlayer::COLORED_TYPE::FULL) {
         return "<\x1b[30;47m" + token + "\x1b[0m>";
     } else {
@@ -34,18 +34,18 @@ TerminalPlayer::colored_token(string token) const {
     }
 }
 
-string
+std::string
 TerminalPlayer::colored_tile(Tile tile, bool colored) const {
     if (color_type == TerminalPlayer::COLORED_TYPE::NONE) {
-        return string(1, colored ? tile.letter() : tile.lc_letter());
+        return std::string(1, colored ? tile.letter() : tile.lc_letter());
     }
     if (color_type == TerminalPlayer::COLORED_TYPE::GREY) {
         if (colored) {
-            return string(1, tile.letter());
+            return std::string(1, tile.letter());
         }
-        return "\x1b[30m" + string(1, tile.lc_letter()) + "\x1b[0m";
+        return "\x1b[30m" + std::string(1, tile.lc_letter()) + "\x1b[0m";
     }
-    ostringstream os;
+    std::ostringstream os;
     os << "\x1b[";
     if (colored && tile != Tile::NONE) {
         os << "7;";
@@ -65,9 +65,9 @@ TerminalPlayer::colored_tile(Tile tile, bool colored) const {
     return os.str();
 }
 
-string
+std::string
 TerminalPlayer::colored_tiles(Tiles tiles) const {
-    ostringstream os;
+    std::ostringstream os;
     for (ushort tile_value = 0; tile_value < TILE_TYPES; tile_value++) {
         Tile tile = Tile(tile_value);
         for (int i = 0; i < tiles[tile]; i++) {
@@ -145,7 +145,7 @@ TerminalPlayer::print_state(const State& state) const {
 
 void
 TerminalPlayer::options(const State& state) {
-    string opt;
+    std::string opt;
     std::getline(std::cin, opt);
     if (opt == "-full") {
         color_type = TerminalPlayer::COLORED_TYPE::FULL;
@@ -164,7 +164,7 @@ TerminalPlayer::options(const State& state) {
         return;
     }
     if (opt == "-actions") {
-        vector<Action> legal = Game::all_legal(state);
+        std::vector<Action> legal = Game::all_legal(state);
         for (Action a : legal) {
             std::cout << a << " ";
         }
@@ -175,7 +175,7 @@ TerminalPlayer::options(const State& state) {
         help();
         return;
     }
-    throw invalid_argument("Invalid command");
+    throw std::invalid_argument("Invalid command");
 }
 
 // Public
@@ -211,16 +211,16 @@ TerminalPlayer::play(const State& state) {
                       << std::endl;
         }
     }
-    throw runtime_error("Exit program");
+    throw std::runtime_error("Exit program");
 }
 
 void
-TerminalPlayer::error(string message) {
+TerminalPlayer::error(std::string message) {
     Player::error(message);
     help();
 }
 
-string
+std::string
 TerminalPlayer::player_type() const {
     return "terminal-player";
 }

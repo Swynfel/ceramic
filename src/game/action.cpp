@@ -15,17 +15,17 @@ operator!=(Action left, Action right) {
 }
 
 
-ostream&
-operator<<(ostream& os, Action action) {
+std::ostream&
+operator<<(std::ostream& os, Action action) {
     return os << '<' << action.pick << action.color.letter() << action.place << '>';
 }
 
-istream&
-operator>>(istream& is, Action& action) {
-    string opt;
+std::istream&
+operator>>(std::istream& is, Action& action) {
+    std::string opt;
     std::getline(std::cin, opt);
     if (opt.size() != 3) {
-        throw invalid_argument("Wrong number of characters for Action");
+        throw std::invalid_argument("Wrong number of characters for Action");
     }
     char pick_char = opt[0];
     char color_char = opt[1];
@@ -33,12 +33,12 @@ operator>>(istream& is, Action& action) {
     // Convert characters
     int pick = opt[0] - '0';
     if (pick < 0 || pick >= 10) {
-        throw invalid_argument(string("Wrong character for pick: ") + pick_char);
+        throw std::invalid_argument(std::string("Wrong character for pick: ") + pick_char);
     }
     Tile color = Tile::from_letter(color_char);
     int place = place_char - '0';
     if (place < 0 || place >= 10) {
-        throw invalid_argument(string("Wrong character for place: ") + place_char);
+        throw std::invalid_argument(std::string("Wrong character for place: ") + place_char);
     }
     // Set
     action.pick = pick;
@@ -47,14 +47,14 @@ operator>>(istream& is, Action& action) {
     return is;
 }
 
-string
+std::string
 Action::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Action::repr() const {
     return str();
 }

@@ -21,7 +21,7 @@ Panel::Panel(const Panel& panel)
 Panel&
 Panel::operator=(const Panel& other) {
     if (rules != other.rules) {
-        throw logic_error("Cannot assign panel with different rules");
+        throw std::logic_error("Cannot assign panel with different rules");
     }
     score = other.score;
     pyramid = other.pyramid;
@@ -92,7 +92,7 @@ Panel::get_floor() const {
 void
 Panel::add_floor(ushort value) {
     floor += value;
-    floor = min(floor, rules->overflow_count);
+    floor = std::min(floor, rules->overflow_count);
 }
 
 void
@@ -117,8 +117,8 @@ Panel::legal_line(ushort line, Tile tile) const {
 
 // Reading
 
-ostream&
-operator<<(ostream& os, const Panel& panel) {
+std::ostream&
+operator<<(std::ostream& os, const Panel& panel) {
     os << "Score: " << panel.score << (panel.first_token ? " (+token)" : "") << '\n';
     for (int line = 1; line <= panel.rules->tile_types; line++) {
         panel.wall.stream_line(os, line, true);
@@ -130,16 +130,16 @@ operator<<(ostream& os, const Panel& panel) {
     return os;
 }
 
-string
+std::string
 Panel::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Panel::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "<Panel:" << score << (first_token ? "+" : "")
        << wall.repr() << pyramid.repr()
        << "[f:" << floor << "(-" << get_penalty() << ")]"

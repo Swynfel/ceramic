@@ -45,16 +45,16 @@ public:
             play,
             state);
     }
-    void error(string message) override {
+    void error(std::string message) override {
         PYBIND11_OVERLOAD(
             void,
             Player,
             error,
             message);
     }
-    string player_type() const override {
+    std::string player_type() const override {
         PYBIND11_OVERLOAD(
-            string,
+            std::string,
             Player,
             player_type);
     }
@@ -64,7 +64,7 @@ class PyObserver : public Observer {
 public:
     using Observer::Observer;
 
-    void start_game(vector<ushort> order) override {
+    void start_game(std::vector<ushort> order) override {
         PYBIND11_OVERLOAD(
             void,
             Observer,
@@ -122,7 +122,7 @@ py_bind_game(py::module& root) {
         .def(py::init<std::shared_ptr<const Rules>, int>(),
             "rules"_a,
             "seed"_a)
-        .def(py::init<std::shared_ptr<const Rules>, vector<std::shared_ptr<Player>>>(),
+        .def(py::init<std::shared_ptr<const Rules>, std::vector<std::shared_ptr<Player>>>(),
             "rules"_a,
             "players"_a)
 

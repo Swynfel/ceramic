@@ -15,31 +15,31 @@ Player::observer() {
 }
 
 void
-Player::error(string message) {
-    std::cout << "[PLAYER:" << player_type() << ":ERROR]" << message << endl;
+Player::error(std::string message) {
+    std::cout << "[PLAYER:" << player_type() << ":ERROR]" << message << std::endl;
 }
 
 
 // Reading
 
-string
+std::string
 Player::player_type() const {
     return "";
 }
 
-ostream&
-operator<<(ostream& os, const Player& player) {
+std::ostream&
+operator<<(std::ostream& os, const Player& player) {
     return os << "<Player:" << player.player_type() << ">";
 }
 
-string
+std::string
 Player::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Player::repr() const {
     return str();
 }

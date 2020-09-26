@@ -62,29 +62,29 @@ operator!=(const Rules left, const Rules right) {
 }
 
 
-ostream&
-operator<<(ostream& os, const Rules& rules) {
-    os << "player_count:     " << rules.player_count << endl;
-    os << "tile_count:       " << rules.tile_count << endl;
-    os << "tile_types:       " << rules.tile_types << endl;
-    os << "line_bonus:       " << rules.line_bonus << endl;
-    os << "column_bonus:     " << rules.column_bonus << endl;
-    os << "type_bonus:       " << rules.type_bonus << endl;
-    os << "overflow_count:   " << rules.overflow_count << endl;
-    os << "overflow_penalty: " << rules.overflow_penalty << endl;
+std::ostream&
+operator<<(std::ostream& os, const Rules& rules) {
+    os << "player_count:     " << rules.player_count << std::endl;
+    os << "tile_count:       " << rules.tile_count << std::endl;
+    os << "tile_types:       " << rules.tile_types << std::endl;
+    os << "line_bonus:       " << rules.line_bonus << std::endl;
+    os << "column_bonus:     " << rules.column_bonus << std::endl;
+    os << "type_bonus:       " << rules.type_bonus << std::endl;
+    os << "overflow_count:   " << rules.overflow_count << std::endl;
+    os << "overflow_penalty: " << rules.overflow_penalty << std::endl;
     return os;
 }
 
-string
+std::string
 Rules::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Rules::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "<Ceramic Rules (" << player_count << "p)" << this << ">";
     return os.str();
 }

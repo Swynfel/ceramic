@@ -7,10 +7,10 @@
 
 void
 Arena::add_results_container(
-    const vector<int>& ids,
-    const vector<int>& new_wins,
-    const vector<int>& new_scores,
-    const vector<int>& new_squared_scores) {
+    const std::vector<int>& ids,
+    const std::vector<int>& new_wins,
+    const std::vector<int>& new_scores,
+    const std::vector<int>& new_squared_scores) {
     const std::lock_guard<std::mutex> lock(results_mutex);
     add_results(ids, new_wins, new_scores, new_squared_scores);
     processed_groups++;
@@ -18,15 +18,15 @@ Arena::add_results_container(
 }
 
 void
-Arena::run_single(vector<int> ids) {
+Arena::run_single(std::vector<int> ids) {
     int p = ids.size();
     Game game = Game(rules);
     for (int id : ids) {
         game.add_player(players[id]);
     }
-    vector<int> win_count(p, 0);
-    vector<int> score_sum(p, 0);
-    vector<int> squared_score_sum(p, 0);
+    std::vector<int> win_count(p, 0);
+    std::vector<int> score_sum(p, 0);
+    std::vector<int> squared_score_sum(p, 0);
     for (int c = 0; c < count; c++) {
         auto begin = std::chrono::high_resolution_clock::now();
         game.roll_game();
@@ -60,7 +60,7 @@ Arena::run_from_queue() {
 void
 Arena::run_from_queue_async() {
     while (!groups.empty()) {
-        vector<int> ids;
+        std::vector<int> ids;
         {
             const std::lock_guard<std::mutex> lock(queue_mutex);
             if (groups.empty()) {
@@ -76,7 +76,7 @@ Arena::run_from_queue_async() {
 /*** Protected ***/
 
 void
-Arena::add_group(vector<int> group) {
+Arena::add_group(std::vector<int> group) {
     groups.push(std::move(group));
 }
 
@@ -90,12 +90,12 @@ Arena::print_current() {
 
 void
 Arena::add_results(
-    const vector<int>& ids,
-    const vector<int>& new_wins,
-    const vector<int>& new_scores,
-    const vector<int>& new_squared_scores) {
+    const std::vector<int>& ids,
+    const std::vector<int>& new_wins,
+    const std::vector<int>& new_scores,
+    const std::vector<int>& new_squared_scores) {
     for (int i = 0; i < ids.size(); i++) {
-        vector<int>& player_results = results[ids[i]];
+        std::vector<int>& player_results = results[ids[i]];
         player_results[0]++;
         player_results[1] += new_wins[i];
         player_results[2] += new_scores[i];
@@ -111,7 +111,7 @@ Arena::column_count() const {
 
 void
 Arena::generate_groups(int available_players, int game_players) {
-    vector<int> ids;
+    std::vector<int> ids;
     ids.push_back(0);
     while (true) {
         if (ids.back() >= available_players) {
@@ -132,11 +132,11 @@ Arena::generate_groups(int available_players, int game_players) {
 }
 
 void
-Arena::print_results(vector<vector<int>> results) {
+Arena::print_results(std::vector<std::vector<int>> results) {
     int player_count = results.size();
     int max_player_length = 6;
     for (int line = 0; line < player_count; line++) {
-        max_player_length = max(max_player_length, int(players[line]->analysed_player->player_type().size()));
+        max_player_length = std::max(max_player_length, int(players[line]->analysed_player->player_type().size()));
     }
     int games_per_player = results[0][0] * count;
 
@@ -186,7 +186,7 @@ Arena::print_results(vector<vector<int>> results) {
 Arena::Arena()
   : Arena(std::make_shared<Rules>(*Rules::DEFAULT)) {}
 
-Arena::Arena(std::shared_ptr<Rules> rules, vector<std::shared_ptr<Player>> players)
+Arena::Arena(std::shared_ptr<Rules> rules, std::vector<std::shared_ptr<Player>> players)
   : players()
   , rules(rules) {
     for (std::shared_ptr<Player> player : players) {
@@ -201,7 +201,7 @@ Arena::add_player(std::shared_ptr<Player> player) {
 }
 
 void
-Arena::add_players(vector<std::shared_ptr<Player>> players) {
+Arena::add_players(std::vector<std::shared_ptr<Player>> players) {
     for (auto player : players) {
         add_player(std::move(player));
     }
@@ -219,7 +219,7 @@ Arena::remove_player(std::shared_ptr<Player> player) {
 }
 
 
-string
+std::string
 Arena::mode_name() const {
     return "Subsets";
 }
@@ -234,7 +234,7 @@ Arena::run() {
     int player_count = players.size();
     // Check
     if (!ready()) {
-        throw runtime_error("Arena not ready");
+        throw std::runtime_error("Arena not ready");
     }
     std::cout << "Mode: " << mode_name() << "\n";
     // Setup all game groups
@@ -248,14 +248,14 @@ Arena::run() {
     processed_games = 0;
     total_groups = groups.size();
     total_games = total_groups * count;
-    results = vector<vector<int>>(player_count, vector<int>(column_count(), 0));
+    results = std::vector<std::vector<int>>(player_count, std::vector<int>(column_count(), 0));
     // Run games
     print_current();
     if (thread_limit > 1) {
         // Asynchronously
         threads.clear();
         for (int i = 0; i < thread_limit; i++) {
-            threads.push_back(thread(&Arena::run_from_queue_async, this));
+            threads.push_back(std::thread(&Arena::run_from_queue_async, this));
         }
         for (auto& t : threads) {
             t.join();

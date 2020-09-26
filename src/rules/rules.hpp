@@ -6,8 +6,6 @@
 
 #include "global.hpp"
 
-using namespace std;
-
 struct Rules {
     ushort player_count = 4;
     ushort tile_count = 20; //tile count of each tile type
@@ -31,9 +29,9 @@ struct Rules {
     static const std::shared_ptr<const Rules> MINI;
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Rules& rules);
-    string str() const;
-    string repr() const;
+    friend std::ostream& operator<<(std::ostream& os, const Rules& rules);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //RULE_HPP

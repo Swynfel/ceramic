@@ -16,7 +16,7 @@ private:
     rng randomness = rng(random_seed());
 
     float state_score(Game& game, const State& state, int player);
-    int select_ucb(int n, const vector<float>& score_sums, const vector<int>& count) const;
+    int select_ucb(int n, const std::vector<float>& score_sums, const std::vector<int>& count) const;
 
 public:
     RoundHeuristic heuristic{};
@@ -31,7 +31,7 @@ public:
 
     Action play(const State& state) override;
 
-    virtual string player_type() const override;
+    virtual std::string player_type() const override;
 };
 
 #endif //MONTE_CARLO_PLAYER

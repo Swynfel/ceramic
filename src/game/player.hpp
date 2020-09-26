@@ -17,13 +17,13 @@ public:
     virtual std::shared_ptr<Observer> observer();
 
     virtual Action play(const State& state) = 0;
-    virtual void error(string message);
+    virtual void error(std::string message);
 
     // Reading
-    virtual string player_type() const;
-    friend ostream& operator<<(ostream& os, const Player& player);
-    string str() const;
-    string repr() const;
+    virtual std::string player_type() const;
+    friend std::ostream& operator<<(std::ostream& os, const Player& player);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //PLAYER_HPP

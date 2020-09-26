@@ -66,7 +66,7 @@ Tile::letter_to_value(char l) {
     if (l >= INT_OF_CHAR_a && l < INT_OF_CHAR_a + TILE_TYPES) {
         return l - INT_OF_CHAR_a;
     }
-    throw std::invalid_argument(string("Invalid character to convert into Tile value: ") + l);
+    throw std::invalid_argument(std::string("Invalid character to convert into Tile value: ") + l);
 }
 
 Tile
@@ -86,19 +86,19 @@ Tile::lc_letter() const {
 
 // Reading
 
-ostream&
-operator<<(ostream& os, Tile tile) {
+std::ostream&
+operator<<(std::ostream& os, Tile tile) {
     return os << '<' << tile.letter() << '>';
 }
 
-string
+std::string
 Tile::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 Tile::repr() const {
     return str();
 }

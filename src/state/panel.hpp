@@ -40,9 +40,9 @@ public:
     bool legal_line(ushort line, Tile tile) const;
 
     // Reading
-    friend ostream& operator<<(ostream& os, const Panel& panel);
-    string str() const;
-    string repr() const;
+    friend std::ostream& operator<<(std::ostream& os, const Panel& panel);
+    std::string str() const;
+    std::string repr() const;
 };
 
 #endif //PANEL_HPP

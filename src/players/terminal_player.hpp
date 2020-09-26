@@ -7,7 +7,7 @@
 #include "state/state.hpp"
 
 class TerminalPlayer
-  : public enable_shared_from_this<TerminalPlayer>
+  : public std::enable_shared_from_this<TerminalPlayer>
   , public Player
   , public Observer {
 public:
@@ -23,9 +23,9 @@ private:
 
     void help() const;
 
-    string colored_token(string token) const;
-    string colored_tile(Tile tile, bool colored = true) const;
-    string colored_tiles(Tiles tiles) const;
+    std::string colored_token(std::string token) const;
+    std::string colored_tile(Tile tile, bool colored = true) const;
+    std::string colored_tiles(Tiles tiles) const;
     void print_state(const State& state) const;
 
     void options(const State& state);
@@ -35,9 +35,9 @@ public:
 
     Action play(const State& state) override;
 
-    void error(string error) override;
+    void error(std::string error) override;
 
-    string player_type() const override;
+    std::string player_type() const override;
 
     std::shared_ptr<Observer> observer() override;
     void end_game(const State& state, ushort winner_position) override;

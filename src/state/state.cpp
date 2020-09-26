@@ -35,7 +35,7 @@ State::State(const State& state)
 State&
 State::operator=(const State& other) {
     if (rules != other.rules) {
-        throw logic_error("Cannot assign state with different rules");
+        throw std::logic_error("Cannot assign state with different rules");
     }
     for (int f = 0; f < rules->factory_count(); f++) {
         factories[f] = other.factories[f];
@@ -49,7 +49,7 @@ State::operator=(const State& other) {
 void
 State::assert_player_id(ushort id) const {
     if (id >= rules->player_count) {
-        throw std::invalid_argument("No player with id '" + to_string(id) + "', as there is only '" + to_string(rules->player_count) + "' players.");
+        throw std::invalid_argument("No player with id '" + std::to_string(id) + "', as there is only '" + std::to_string(rules->player_count) + "' players.");
     }
 }
 
@@ -59,13 +59,13 @@ State::assert_factory_id(ushort id) const {
         throw std::invalid_argument("No factory with id '0', as it designates the Center.");
     }
     if (id > factories.size()) {
-        throw std::invalid_argument("No factory with id '" + to_string(id) + "', as there is only '" + to_string(factories.size()) + "' factories.");
+        throw std::invalid_argument("No factory with id '" + std::to_string(id) + "', as there is only '" + std::to_string(factories.size()) + "' factories.");
     }
 }
 
 void
 State::reset() {
-    bag = Tiles(vector<ushort>(rules->tile_types, rules->tile_count));
+    bag = Tiles(std::vector<ushort>(rules->tile_types, rules->tile_count));
     for (Factory& factory : factories) {
         factory.set_tiles(Tiles::ZERO);
     }
@@ -204,10 +204,10 @@ State::is_game_finished() const {
     return false;
 }
 
-vector<ushort>
+std::vector<ushort>
 State::highest_score_players() const {
     ushort highest_score = 0;
-    vector<ushort> highest_players;
+    std::vector<ushort> highest_players;
     ushort seat = 0;
     for (const Panel& panel : panels) {
         ushort score = panel.get_score();
@@ -226,7 +226,7 @@ State::highest_score_players() const {
 ushort
 State::winning_player() const {
     // The winner is the player with the highest score
-    vector<ushort> highest_players = highest_score_players();
+    std::vector<ushort> highest_players = highest_score_players();
     if (highest_players.size() == 1) {
         return highest_players.front();
     }
@@ -247,8 +247,8 @@ State::winning_player() const {
 
 // Reading
 
-ostream&
-operator<<(ostream& os, const State& state) {
+std::ostream&
+operator<<(std::ostream& os, const State& state) {
     os << state.center << '\n';
     for (const Factory& factory : state.factories) {
         os << factory << '\n';
@@ -267,16 +267,16 @@ operator<<(ostream& os, const State& state) {
     return os;
 }
 
-string
+std::string
 State::str() const {
-    ostringstream os;
+    std::ostringstream os;
     os << *this;
     return os.str();
 }
 
-string
+std::string
 State::repr() const {
-    ostringstream os;
+    std::ostringstream os;
     os << "<Ceramic State " << this << ">";
     return os.str();
 }

@@ -20,7 +20,7 @@ public:
 
     Action play(const State& state) override;
 
-    virtual string player_type() const override;
+    virtual std::string player_type() const override;
 };
 
 #endif //RANDOM_PLAYER

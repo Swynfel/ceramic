@@ -56,7 +56,7 @@ py_bind_state(py::module& root) {
         .def(py::init<Tile, int>(),
             "tile"_a,
             "count"_a)
-        .def(py::init<const vector<ushort>&>(),
+        .def(py::init<const std::vector<ushort>&>(),
             "list"_a)
         .def(py::init<const Tiles&>())
 

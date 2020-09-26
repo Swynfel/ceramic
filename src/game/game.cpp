@@ -18,7 +18,7 @@ Game::Game(std::shared_ptr<const Rules> rules, int seed)
     reset();
 }
 
-Game::Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> players)
+Game::Game(std::shared_ptr<const Rules> rules, std::vector<std::shared_ptr<Player>> players)
   : state(rules)
   , players()
   , observers()
@@ -26,7 +26,7 @@ Game::Game(std::shared_ptr<const Rules> rules, vector<std::shared_ptr<Player>> p
   , randomness(random_seed())
   , range() {
     if (players.size() > rules->player_count) {
-        throw invalid_argument("Too many players for rules");
+        throw std::invalid_argument("Too many players for rules");
     }
     for (std::shared_ptr<Player> player : players) {
         players.push_back(std::move(player));
@@ -100,9 +100,9 @@ Game::pull_random_tiles(int count) {
     return result;
 }
 
-vector<Action>
+std::vector<Action>
 Game::all_legal_between(const State& state, ushort begin_place, ushort end_place) {
-    vector<Action> legal_actions{};
+    std::vector<Action> legal_actions{};
     std::shared_ptr<const Rules> rules = state.get_rules();
     const Panel& panel = state.get_panel(state.player);
     for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
@@ -152,7 +152,7 @@ Game::has_enough_players() const {
 void
 Game::add_player(std::shared_ptr<Player> player) {
     if (has_enough_players()) {
-        throw logic_error("Already enough players");
+        throw std::logic_error("Already enough players");
     }
     if (player->check_rules(*state.rules)) {
         players.push_back(player);
@@ -161,14 +161,14 @@ Game::add_player(std::shared_ptr<Player> player) {
             observers.push_back(std::move(observer));
         }
     } else {
-        throw runtime_error("Failed adding player");
+        throw std::runtime_error("Failed adding player");
     }
 }
 
 void
-Game::add_players(vector<std::shared_ptr<Player>> _players) {
+Game::add_players(std::vector<std::shared_ptr<Player>> _players) {
     if (players_missing() < _players.size()) {
-        throw out_of_range("Not enough seats for this many players");
+        throw std::out_of_range("Not enough seats for this many players");
     }
     for (const std::shared_ptr<Player>& player : _players) {
         add_player(player);
@@ -177,7 +177,7 @@ Game::add_players(vector<std::shared_ptr<Player>> _players) {
 
 void
 Game::remove_player(std::shared_ptr<Player> player) {
-    vector<std::shared_ptr<Player>>::iterator p = std::find(players.begin(), players.end(), player);
+    std::vector<std::shared_ptr<Player>>::iterator p = std::find(players.begin(), players.end(), player);
     if (p != players.end()) {
         players.erase(p);
     }
@@ -190,7 +190,7 @@ Game::add_observer(std::shared_ptr<Observer> observer) {
 
 void
 Game::remove_observer(std::shared_ptr<Observer> observer) {
-    vector<std::shared_ptr<Observer>>::iterator obs = std::find(observers.begin(), observers.end(), observer);
+    std::vector<std::shared_ptr<Observer>>::iterator obs = std::find(observers.begin(), observers.end(), observer);
     if (obs != observers.end()) {
         observers.erase(obs);
     }
@@ -236,7 +236,7 @@ Game::next_player() {
 void
 Game::roll_round() {
     if (!has_enough_players()) {
-        throw logic_error("Not enough players to play a round");
+        throw std::logic_error("Not enough players to play a round");
     }
     while (!state.is_round_finished()) {
         const std::shared_ptr<Player>& player = players[order[state.player]];
@@ -247,9 +247,9 @@ Game::roll_round() {
                 observer->action_played(action);
             }
             state.next_player();
-        } catch (const exception& e) {
+        } catch (const std::exception& e) {
             player->error("Action" + action.str() + " " + e.what());
-            cout << e.what() << endl;
+            std::cout << e.what() << std::endl;
         }
     }
 }
@@ -257,7 +257,7 @@ Game::roll_round() {
 void
 Game::roll_end_game() {
     if (!has_enough_players()) {
-        throw logic_error("Not enough players to start the game");
+        throw std::logic_error("Not enough players to start the game");
     }
     while (!state.is_game_finished()) {
         start_round();
@@ -273,7 +273,7 @@ Game::roll_end_game() {
 void
 Game::roll_game() {
     if (!has_enough_players()) {
-        throw logic_error("Not enough players to start the game");
+        throw std::logic_error("Not enough players to start the game");
     }
     reset();
     for (const std::shared_ptr<Observer>& observer : observers) {
@@ -403,11 +403,11 @@ Game::apply(Action action, State& state) {
         throw std::invalid_argument(picked.repr() + " is empty");
     }
     if (!picked.has_color(action.color)) {
-        throw std::invalid_argument(picked.repr() + " has no tiles of color " + to_string(action.pick));
+        throw std::invalid_argument(picked.repr() + " has no tiles of color " + std::to_string(action.pick));
     }
     // If action is not "throwing away", check color can be placed on line
     if (action.place > 0 && !panel.legal_line(action.place, action.color)) {
-        throw std::invalid_argument("Cannot place tile " + action.color.str() + " on line " + to_string(action.place));
+        throw std::invalid_argument("Cannot place tile " + action.color.str() + " on line " + std::to_string(action.place));
     }
 
     // Action is confirmed to be legal
@@ -426,7 +426,7 @@ Game::apply(Action action, State& state) {
     } else {
         // Else pyramid, some will be placed in a line
         Pyramid& pyramid = panel.get_pyramid_mut();
-        overflow_count = max(0, count - pyramid.amount_remaining(action.place));
+        overflow_count = std::max(0, count - pyramid.amount_remaining(action.place));
         // Determine new amount of tiles on pyramid line
         count -= overflow_count;
         count += pyramid.amount(action.place);
@@ -455,17 +455,17 @@ Game::apply(Action action, State& state) {
     panel.add_floor(overflow_count);
 }
 
-vector<Action>
+std::vector<Action>
 Game::all_legal(const State& state) {
     return all_legal_between(state, 0, state.rules->tile_types);
 }
 
-vector<Action>
+std::vector<Action>
 Game::all_smart_legal(const State& state) {
     return all_legal_between(state, 1, state.rules->tile_types);
 }
 
-vector<Action>
+std::vector<Action>
 Game::all_penalty_legal(const State& state) {
     return all_legal_between(state, 0, 0);
 }
