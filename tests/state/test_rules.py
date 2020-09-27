@@ -25,7 +25,7 @@ def test_rules_init(
         type_bonus,
         overflow_count,
         overflow_penalty):
-    #pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments
     rules = Rules()
     rules.player_count = player_count
     rules.tile_count = tile_count
