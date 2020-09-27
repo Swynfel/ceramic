@@ -1,4 +1,10 @@
 # Ceramic
+
+[![Version](https://img.shields.io/badge/dynamic/yaml?color=informational&label=version&query=%24&url=https%3A%2F%2Fgithub.com%2Fswynfel%2Fceramic%2Fblob%2Fmaster%2FVERSION)](https://github.com/Swynfel/ceramic)
+![Tests](https://github.com/swynfel/ceramic/workflows/Tests/badge.svg)
+[![License](https://img.shields.io/badge/license-GPL--3.0-orange)](https://github.com/swynfel/ceramic/blob/master/LICENSE)
+<!---[![License](https://img.shields.io/github/license/swynfel/ceramic)](https://github.com/swynfel/ceramic/blob/master/LICENSE)--->
+
 A python module for playing variations of the board game Azul, implemented in C++.
 
 ## Build using python's setuptools
