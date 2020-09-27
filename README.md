@@ -10,9 +10,6 @@ Make sure to install the following dependencies:
 - C++14 compiler
 - [Pybind11](https://github.com/pybind/pybind11)
 
-It is also possible to build the python module using CMake.
-You need to run `export PYBIND=1` (or `SET PYBIND=1` on windows), and follow the **Build for C++ only** section.
-
 #### Pybind11
 
 [Pybind11](https://github.com/pybind/pybind11) is a library to binds the C++ code to python.
@@ -124,19 +121,37 @@ You can type `-help` during the game to see action format.
 #### ceramic-arena
 Compare the performance of different agents.
 
-Currently, no arguments can be passed.
-The default will run a 1000 games with the default rules, for each possible games configuration (except for only the same player), out of the three players "first-legal", "random" with `smart=false`, and "random" with `smart=true`.
+The default will run a 1000 games with the default rules, for each possible games group with at least 2 different players (*ALL* mode). The three default players types are "first-legal", "random-naive", and "random".
 ```
 ./ceramic-arena
 ```
 
 It will output a recap table.
 ```
-      player | winrate |  avg  |  std  
--------------+---------+-------+-------
- first-legal | 28.02 % |  20.0 |  11.1
-random-naive |  2.26 % |   3.6 |   5.7
-      random | 44.71 % |  25.0 |  13.7
+Mode: All
+Played 12/12 (12000/12000)   
+Games per group:  1000
+Games per player: 16000
+Time: 1.276e+03 µs (game), 1.315e+01 µs (step), 2.087e+00 µs (state change)
+Average moves per game: 97.0
+
+      player | winrate |  avg  |  std  | move time |moves
+-------------+---------+-------+-------+-----------+-----
+ first-legal |  28.32% |  20.0 |  11.0 | 8.089e+00 | 25.7
+random-naive |   2.36% |   3.6 |   5.7 | 1.328e+01 | 24.2
+      random |  44.31% |  24.8 |  13.7 | 1.204e+01 | 22.9
 ```
-- *avg* designates average score
-- *std* designates the standard deviation of the score
+- *Time (game)*: average time to process a whole game
+- *Time (step)*: average time to process an action (player decision + state change)
+- *Time (state change)*: average time to process a state change (time taken by player to make a decision not included)
+
+- *winrate*: average winrate, which should be around 25% since there are 4 players
+- *avg*: average score
+- *std*: standard deviation of the score
+- *move time*: average time (in µs) to make a decision
+- *moves*: average move count per game
+
+To see the arguments that can be passed, execute with the `-h` flag
+```
+./ceramic-arena -h
+```
