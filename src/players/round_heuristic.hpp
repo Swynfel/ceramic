@@ -7,7 +7,7 @@
 #include "state/wall.hpp"
 
 struct RoundHeuristic {
-    float penalty_factor = 0.1f;
+    float penalty_factor = 0.f;
     float bonus_factor = 1.f;
 
     float leading_factor = 0.6f;

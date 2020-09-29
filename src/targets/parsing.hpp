@@ -134,11 +134,14 @@ public:
         } else if (key == "r" || key == "rand" || key == "random") {
             return std::make_shared<RandomPlayer>(get(true, "", "s", "smart"));
         } else if (key == "mc" || key == "monte-carlo") {
-            std::shared_ptr<MonteCarloPlayer> player = std::make_shared<MonteCarloPlayer>();
+            std::shared_ptr<MonteCarloPlayer> player = std::make_shared<MonteCarloPlayer>(std::make_unique<RandomPlayer>(get(true, "s", "smart")));
             set(player->rollouts, "", "r", "rollouts");
             set(player->smart, "s", "smart");
-            set(player->until_round, "u", "round", "until_round");
             set(player->c, "c", "C");
+            set(player->until_round, "u", "round", "until_round");
+            set(player->heuristic.bonus_factor, "hb", "h-bonus");
+            set(player->heuristic.leading_factor, "hl", "h-leading");
+            set(player->heuristic.penalty_factor, "hp", "h-penalty");
             return player;
         } else {
             throw std::invalid_argument("Unkown player type " + key);
@@ -151,15 +154,18 @@ public:
         std::cout << padding << "<players> : list of 'key' or 'key{options}' for each player, default is 'fl rn r'\n"
                   << padding << "    fl : First Legal Player\n"
                   << padding << "    r : Random Player\n"
-                  << padding << "      {options} (default is r = r{true})\n"
+                  << padding << "      {options} (default is r = 'r{true}')\n"
                   << padding << "        <s>, s:<s>, smart:<s> : should the random ai used for generating rollouts be smart\n"
                   << padding << "    rn : Naive Random Player (equivalent to 'r{false}')\n"
                   << padding << "    mc : Monte-Carlo Player\n"
-                  << padding << "      {options} (default is mc = mc{1000,s:true,u:true,c:1.41})\n"
+                  << padding << "      {options} (default is mc = 'mc{1000,s:true,c:1.41,u:true,hb:1,hl:0.6,hp:0}')\n"
                   << padding << "        <r>, r:<r>, rollouts:<r> : number of rollouts\n"
                   << padding << "        s:<s>, smart:<s> : should the random ai used for generating rollouts be smart\n"
+                  << padding << "        c:<c>, C:<c> : constant 'c' in UBT formula\n"
                   << padding << "        u:<u>, round:<u>, until_round:<u> : should rollouts be stopped at the end of rounds\n"
-                  << padding << "        c:<c>, C:<c> : constant 'c' in UBT formula\n";
+                  << padding << "        hb:<hb>, h-bonus:<hb> : if <u>, 0 <= <hb> <= 1 is bonus factor of round heuristic\n"
+                  << padding << "        hl:<hl>, h-leading:<hl> : if <u>, 0 <= <hl> <= 1 is leading factor of round heuristic\n"
+                  << padding << "        hp:<hp>, h-penalty:<hp> : if <u>, 0 <= <hp> <= 1 is penalty factor of round heuristic\n";
         std::cout << std::flush;
     }
 };
