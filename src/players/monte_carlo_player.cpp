@@ -42,7 +42,7 @@ MonteCarloPlayer::select_ucb(int n, const std::vector<float>& score_sums, const 
     float ln_n = log(n);
     float highest_uct = -std::numeric_limits<float>::infinity();
     int highest_index = 0;
-    for (int i = 0; i < score_sums.size(); i++) {
+    for (std::size_t i = 0; i < score_sums.size(); i++) {
         if (count[i] == 0) {
             return i;
         }

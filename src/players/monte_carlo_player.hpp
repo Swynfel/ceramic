@@ -19,12 +19,13 @@ private:
     int select_ucb(int n, const std::vector<float>& score_sums, const std::vector<int>& count) const;
 
 public:
+    constexpr static int DEFAULT_ROLLOUTS = 1000;
+    constexpr static float DEFAULT_C = M_SQRT2;
     RoundHeuristic heuristic{};
-    const static int DEFAULT_ROLLOUTS = 1000;
     int rollouts;
     bool until_round;
     bool smart = true;
-    float c = M_SQRT2;
+    float c = DEFAULT_C;
 
     MonteCarloPlayer(bool until_round = true, int rollouts = DEFAULT_ROLLOUTS);
     MonteCarloPlayer(std::shared_ptr<Player> player, bool until_round = true, int rollouts = DEFAULT_ROLLOUTS);

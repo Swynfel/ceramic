@@ -20,7 +20,8 @@ struct RoundHeuristic {
         return (highest_score == 0) ? 1.f / player_count : leading_factor * (player_score / highest_score) + (1.f - leading_factor) * (player_score / total_score);
     }
 
-    float eval_score(int score,
+    float eval_score(
+        int score,
         int incomplete_pyramid_lines,
         int squared_wall_columns,
         int squared_wall_lines,

@@ -11,14 +11,14 @@ class TerminalPlayer
   , public Player
   , public Observer {
 public:
-    enum COLORED_TYPE {
+    enum ColoredType {
         NONE,
         GREY,
         FULL
     };
 
 private:
-    TerminalPlayer::COLORED_TYPE color_type = TerminalPlayer::COLORED_TYPE::GREY;
+    TerminalPlayer::ColoredType color_type = TerminalPlayer::ColoredType::GREY;
     bool successful = true;
 
     void help() const;
@@ -31,7 +31,7 @@ private:
     void options(const State& state);
 
 public:
-    void set_color_type(TerminalPlayer::COLORED_TYPE color_type);
+    void set_color_type(TerminalPlayer::ColoredType color_type);
 
     Action play(const State& state) override;
 

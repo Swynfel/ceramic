@@ -27,7 +27,7 @@ TerminalPlayer::help() const {
 
 std::string
 TerminalPlayer::colored_token(std::string token) const {
-    if (color_type == TerminalPlayer::COLORED_TYPE::FULL) {
+    if (color_type == TerminalPlayer::ColoredType::FULL) {
         return "<\x1b[30;47m" + token + "\x1b[0m>";
     } else {
         return "<" + token + ">";
@@ -36,10 +36,10 @@ TerminalPlayer::colored_token(std::string token) const {
 
 std::string
 TerminalPlayer::colored_tile(Tile tile, bool colored) const {
-    if (color_type == TerminalPlayer::COLORED_TYPE::NONE) {
+    if (color_type == TerminalPlayer::ColoredType::NONE) {
         return std::string(1, colored ? tile.letter() : tile.lc_letter());
     }
-    if (color_type == TerminalPlayer::COLORED_TYPE::GREY) {
+    if (color_type == TerminalPlayer::ColoredType::GREY) {
         if (colored) {
             return std::string(1, tile.letter());
         }
@@ -80,7 +80,7 @@ TerminalPlayer::colored_tiles(Tiles tiles) const {
 void
 TerminalPlayer::print_state(const State& state) const {
     const std::shared_ptr<const Rules>& rules = state.get_rules();
-    bool brackets = color_type != TerminalPlayer::COLORED_TYPE::FULL;
+    bool brackets = color_type != TerminalPlayer::ColoredType::FULL;
     // Center
     std::cout << "Center#0:" << colored_tiles(state.get_center());
     if (state.get_center().first_token) {
@@ -148,15 +148,15 @@ TerminalPlayer::options(const State& state) {
     std::string opt;
     std::getline(std::cin, opt);
     if (opt == "-full") {
-        color_type = TerminalPlayer::COLORED_TYPE::FULL;
+        color_type = TerminalPlayer::ColoredType::FULL;
         return;
     }
     if (opt == "-grey") {
-        color_type = TerminalPlayer::COLORED_TYPE::GREY;
+        color_type = TerminalPlayer::ColoredType::GREY;
         return;
     }
     if (opt == "-none") {
-        color_type = TerminalPlayer::COLORED_TYPE::NONE;
+        color_type = TerminalPlayer::ColoredType::NONE;
         return;
     }
     if (opt == "-state") {
@@ -180,7 +180,7 @@ TerminalPlayer::options(const State& state) {
 
 // Public
 void
-TerminalPlayer::set_color_type(TerminalPlayer::COLORED_TYPE _color_type) {
+TerminalPlayer::set_color_type(TerminalPlayer::ColoredType _color_type) {
     color_type = _color_type;
 }
 

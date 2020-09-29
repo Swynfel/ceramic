@@ -41,13 +41,13 @@ options(int argc, char* argv[], std::shared_ptr<TerminalPlayer>& terminal_player
             case 'c':
                 switch (optarg[0]) {
                     case 'f':
-                        terminal_player->set_color_type(TerminalPlayer::COLORED_TYPE::FULL);
+                        terminal_player->set_color_type(TerminalPlayer::ColoredType::FULL);
                         break;
                     case 'g':
-                        terminal_player->set_color_type(TerminalPlayer::COLORED_TYPE::GREY);
+                        terminal_player->set_color_type(TerminalPlayer::ColoredType::GREY);
                         break;
                     case 'n':
-                        terminal_player->set_color_type(TerminalPlayer::COLORED_TYPE::NONE);
+                        terminal_player->set_color_type(TerminalPlayer::ColoredType::NONE);
                         break;
                     default:
                         std::cout << "Unrecognised color argument: " << argv[1] << '\n';

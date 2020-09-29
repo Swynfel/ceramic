@@ -134,7 +134,7 @@ public:
         } else if (key == "r" || key == "rand" || key == "random") {
             return std::make_shared<RandomPlayer>(get(true, "", "s", "smart"));
         } else if (key == "mc" || key == "monte-carlo") {
-            std::shared_ptr<MonteCarloPlayer> player = std::make_shared<MonteCarloPlayer>(std::make_unique<RandomPlayer>(get(true, "s", "smart")));
+            std::shared_ptr<MonteCarloPlayer> player = std::make_shared<MonteCarloPlayer>(std::make_shared<RandomPlayer>(get(true, "s", "smart")));
             set(player->rollouts, "", "r", "rollouts");
             set(player->smart, "s", "smart");
             set(player->c, "c", "C");

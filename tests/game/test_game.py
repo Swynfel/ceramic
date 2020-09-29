@@ -1,7 +1,7 @@
-import pytest
 import random
+import pytest
 from ceramic.game import Game, Action, Player, GameHelper
-from ceramic.players import FirstLegalPlayer, RandomPlayer
+from ceramic.players import FirstLegalPlayer, RandomPlayer, MonteCarloPlayer
 from ceramic.state import Tile, Tiles
 from ceramic.rules import Rules
 
@@ -22,7 +22,12 @@ def test_game_methods(rules):
 
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
-@pytest.mark.parametrize("player", [FirstLegalPlayer(), RandomPlayer()])
+@pytest.mark.parametrize("player", [
+    FirstLegalPlayer(),
+    RandomPlayer(smart=False),
+    RandomPlayer(),
+    MonteCarloPlayer(rollouts=30)
+])
 def test_game_manual_roll(rules, player):
     game = Game(rules, 0)
     expected_total_tiles = Tiles([rules.tile_count] * rules.tile_types)
