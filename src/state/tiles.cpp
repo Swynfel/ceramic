@@ -209,7 +209,7 @@ Tiles::repr() const {
     return os.str();
 }
 
-std::array<ushort, TILE_TYPES>
+const std::array<ushort, TILE_TYPES>&
 Tiles::get_quantities() const {
     return quantities;
 }

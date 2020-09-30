@@ -53,6 +53,7 @@ public:
     void set_current_player(ushort id);
     void next_player();
 
+    bool is_running_out_of_tiles() const;
     bool is_round_finished() const;
     bool is_game_finished() const;
     std::vector<ushort> highest_score_players() const;

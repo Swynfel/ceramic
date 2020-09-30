@@ -221,6 +221,7 @@ py_bind_state(py::module& root) {
         .def_property("current_player", &State::get_current_player, &State::set_current_player)
         .def("next_player", &State::next_player)
 
+        .def("is_running_out_of_tiles", &State::is_running_out_of_tiles)
         .def("is_round_finished", &State::is_round_finished)
         .def("is_game_finished", &State::is_game_finished)
         .def("highest_score_players", &State::highest_score_players)

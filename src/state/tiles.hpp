@@ -51,7 +51,7 @@ public:
     std::string virtual letter_str() const;
     std::string virtual repr() const;
 
-    std::array<ushort, TILE_TYPES> get_quantities() const;
+    const std::array<ushort, TILE_TYPES>& get_quantities() const;
     void set_quantities(std::array<ushort, TILE_TYPES> quantities);
 
     static const Tiles ZERO;

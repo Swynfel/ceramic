@@ -6,6 +6,12 @@ from ceramic.state import Tile, Tiles
 from ceramic.rules import Rules
 
 
+def is_state_finished(state):
+    return max([state.panel(p).wall.completed_line_count()
+                for p in range(0, state.rules.player_count)]) > 0 \
+        or 0 in (state.bin + state.bag).quantities
+
+
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
 def test_game_methods(rules):
     game = Game(rules, 0)
@@ -39,8 +45,7 @@ def test_game_manual_roll(rules, player):
             game.apply(action)
             game.next_player()
         game.end_round()
-    assert max([game.state.panel(p).wall.completed_line_count()
-                for p in range(0, rules.player_count)]) > 0
+    assert is_state_finished(game.state)
 
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
@@ -60,5 +65,4 @@ def test_game_roll_with_python_player(rules):
     game.add_players(
         [python_random_player for _ in range(0, rules.player_count)])
     game.roll_game()
-    assert max([game.state.panel(p).wall.completed_line_count()
-                for p in range(0, rules.player_count)]) > 0
+    assert is_state_finished(game.state)

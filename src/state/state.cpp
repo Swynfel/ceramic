@@ -181,6 +181,17 @@ State::next_player() {
 
 
 bool
+State::is_running_out_of_tiles() const {
+    Tiles tiles = bag + bin;
+    for (ushort color = 0; color < rules->tile_types; color++) {
+        if (tiles[color] == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
 State::is_round_finished() const {
     if (!center.is_empty()) {
         return false;
@@ -193,7 +204,6 @@ State::is_round_finished() const {
     return true;
 }
 
-
 bool
 State::is_game_finished() const {
     for (const Panel& panel : panels) {
@@ -201,7 +211,7 @@ State::is_game_finished() const {
             return true;
         }
     }
-    return false;
+    return is_running_out_of_tiles();
 }
 
 std::vector<ushort>
@@ -249,6 +259,8 @@ State::winning_player() const {
 
 std::ostream&
 operator<<(std::ostream& os, const State& state) {
+    os << "bag:" << state.bag << "\nbin:" << state.bin << "\n";
+    os << "--------------------\n";
     os << state.center << '\n';
     for (const Factory& factory : state.factories) {
         os << factory << '\n';
