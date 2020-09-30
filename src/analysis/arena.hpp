@@ -61,6 +61,7 @@ protected:
 public:
     int count = 1000;
     int thread_limit = 8;
+    bool detailed_player_analysis = true;
     std::shared_ptr<Rules> rules;
 
     Arena();

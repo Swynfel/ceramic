@@ -3,18 +3,24 @@
 #include <chrono>
 #include <iostream>
 
-AnalysisPlayer::AnalysisPlayer(std::shared_ptr<Player> player)
+AnalysisPlayer::AnalysisPlayer(std::shared_ptr<Player> player, bool analysis)
   : Player()
-  , analysed_player(player) {}
+  , analysed_player(player)
+  , analysis(analysis) {}
 
 
 Action
 AnalysisPlayer::play(const State& state) {
-    auto begin = std::chrono::high_resolution_clock::now();
-    Action choice = analysed_player->play(state);
-    auto end = std::chrono::high_resolution_clock::now();
-    move_counter.fetch_add(1);
-    time.fetch_add(std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
+    Action choice;
+    if (analysis) {
+        auto begin = std::chrono::high_resolution_clock::now();
+        choice = analysed_player->play(state);
+        auto end = std::chrono::high_resolution_clock::now();
+        move_counter.fetch_add(1);
+        time.fetch_add(std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
+    } else {
+        choice = analysed_player->play(state);
+    }
     return choice;
 }
 

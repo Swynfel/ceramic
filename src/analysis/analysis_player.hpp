@@ -9,7 +9,9 @@
 
 class AnalysisPlayer : public Player {
 public:
-    AnalysisPlayer(std::shared_ptr<Player> player);
+    AnalysisPlayer(std::shared_ptr<Player> player, bool analysis = true);
+
+    bool analysis = true;
 
     const std::shared_ptr<Player> analysed_player;
     std::atomic<int> move_counter{ 0 };
