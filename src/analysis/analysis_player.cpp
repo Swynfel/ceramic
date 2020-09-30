@@ -9,6 +9,11 @@ AnalysisPlayer::AnalysisPlayer(std::shared_ptr<Player> player, bool analysis)
   , analysis(analysis) {}
 
 
+std::shared_ptr<Player>
+AnalysisPlayer::copy() {
+    return std::make_shared<AnalysisPlayer>(analysed_player->copy(), analysis);
+}
+
 Action
 AnalysisPlayer::play(const State& state) {
     Action choice;

@@ -3,6 +3,11 @@
 #include "game/game.hpp"
 #include <limits>
 
+std::shared_ptr<Player>
+FirstLegalPlayer::copy() {
+    return std::make_shared<FirstLegalPlayer>();
+}
+
 Action
 FirstLegalPlayer::play(const State& state) {
     auto rules = state.get_rules();

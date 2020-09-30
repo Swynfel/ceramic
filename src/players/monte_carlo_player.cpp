@@ -10,6 +10,14 @@ MonteCarloPlayer::MonteCarloPlayer(std::shared_ptr<Player> player, bool until_ro
   , rollouts(rollouts)
   , until_round(until_round) {}
 
+MonteCarloPlayer::MonteCarloPlayer(const MonteCarloPlayer& other)
+  : sampling_player(other.sampling_player->copy())
+  , heuristic(other.heuristic)
+  , rollouts(other.rollouts)
+  , until_round(other.until_round)
+  , smart(other.smart)
+  , c(other.c) {}
+
 // Private
 
 float
@@ -53,6 +61,11 @@ MonteCarloPlayer::select_ucb(int n, const std::vector<float>& score_sums, const 
         }
     }
     return highest_index;
+}
+
+std::shared_ptr<Player>
+MonteCarloPlayer::copy() {
+    return std::make_shared<MonteCarloPlayer>(*this);
 }
 
 Action

@@ -32,6 +32,7 @@ private:
 
 public:
     void set_color_type(TerminalPlayer::ColoredType color_type);
+    virtual std::shared_ptr<Player> copy() override;
 
     Action play(const State& state) override;
 

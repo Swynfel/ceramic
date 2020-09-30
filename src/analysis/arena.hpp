@@ -38,6 +38,8 @@ private:
     void run_from_queue();
     void run_from_queue_async();
 
+    bool is_sequential() const;
+
 protected:
     std::vector<std::shared_ptr<AnalysisPlayer>> players;
     std::vector<std::vector<int>> results;

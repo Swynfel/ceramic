@@ -184,6 +184,11 @@ TerminalPlayer::set_color_type(TerminalPlayer::ColoredType _color_type) {
     color_type = _color_type;
 }
 
+std::shared_ptr<Player>
+TerminalPlayer::copy() {
+    return std::make_shared<TerminalPlayer>(*this);
+}
+
 Action
 TerminalPlayer::play(const State& state) {
     std::cout << '\n';

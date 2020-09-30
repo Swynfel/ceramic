@@ -29,8 +29,11 @@ public:
 
     MonteCarloPlayer(bool until_round = true, int rollouts = DEFAULT_ROLLOUTS);
     MonteCarloPlayer(std::shared_ptr<Player> player, bool until_round = true, int rollouts = DEFAULT_ROLLOUTS);
+    MonteCarloPlayer(const MonteCarloPlayer& other);
 
-    Action play(const State& state) override;
+    virtual std::shared_ptr<Player> copy() override;
+
+    virtual Action play(const State& state) override;
 
     virtual std::string player_type() const override;
 };

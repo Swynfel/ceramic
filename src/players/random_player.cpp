@@ -11,6 +11,11 @@ RandomPlayer::RandomPlayer(int seed, bool smart)
   , smart(smart) {}
 
 
+std::shared_ptr<Player>
+RandomPlayer::copy() {
+    return std::make_shared<RandomPlayer>(*this);
+}
+
 Action
 RandomPlayer::play(const State& state) {
     std::vector<Action> legal_actions;

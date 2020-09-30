@@ -17,6 +17,8 @@ public:
     std::atomic<int> move_counter{ 0 };
     std::atomic<long long> time{ 0 };
 
+    virtual std::shared_ptr<Player> copy() override;
+
     Action play(const State& state) override;
 
     void error(std::string error) override;

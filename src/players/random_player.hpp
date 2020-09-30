@@ -18,7 +18,9 @@ public:
     RandomPlayer(bool smart = true);
     RandomPlayer(int seed, bool smart = true);
 
-    Action play(const State& state) override;
+    virtual std::shared_ptr<Player> copy() override;
+
+    virtual Action play(const State& state) override;
 
     virtual std::string player_type() const override;
 };

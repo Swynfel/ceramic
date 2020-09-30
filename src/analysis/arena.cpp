@@ -21,8 +21,14 @@ void
 Arena::run_single(std::vector<int> ids) {
     int p = ids.size();
     Game game = Game(rules);
-    for (int id : ids) {
-        game.add_player(players[id]);
+    if (is_sequential() || detailed_player_analysis) {
+        for (int id : ids) {
+            game.add_player(players[id]);
+        }
+    } else {
+        for (int id : ids) {
+            game.add_player(players[id]->analysed_player->copy());
+        }
     }
     std::vector<int> win_count(p, 0);
     std::vector<int> score_sum(p, 0);
@@ -71,6 +77,11 @@ Arena::run_from_queue_async() {
         }
         run_single(ids);
     }
+}
+
+bool
+Arena::is_sequential() const {
+    return thread_limit <= 1;
 }
 
 /*** Protected ***/
@@ -271,7 +282,10 @@ Arena::run() {
     }
     // Run games
     print_current();
-    if (thread_limit > 1) {
+    if (is_sequential()) {
+        // Sequentially
+        run_from_queue();
+    } else {
         // Asynchronously
         threads.clear();
         for (int i = 0; i < thread_limit; i++) {
@@ -280,9 +294,6 @@ Arena::run() {
         for (auto& t : threads) {
             t.join();
         }
-    } else {
-        // Sequentially
-        run_from_queue();
     }
     std::cout << std::endl;
     // Print results

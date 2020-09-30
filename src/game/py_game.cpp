@@ -38,6 +38,12 @@ public:
             Player,
             observer);
     }
+    std::shared_ptr<Player> copy() override {
+        PYBIND11_OVERLOAD_PURE(
+            std::shared_ptr<Player>,
+            Player,
+            copy);
+    }
     Action play(const State& state) override {
         PYBIND11_OVERLOAD_PURE(
             Action,
@@ -175,6 +181,7 @@ py_bind_game(py::module& root) {
             &Player::check_rules,
             "rules"_a)
 
+        .def("copy", &Player::copy)
         .def("observer", &Player::observer)
 
         .def("play",

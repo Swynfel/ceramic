@@ -8,7 +8,9 @@
 
 class FirstLegalPlayer : public Player {
 public:
-    Action play(const State& state) override;
+    virtual std::shared_ptr<Player> copy() override;
+
+    virtual Action play(const State& state) override;
 
     virtual std::string player_type() const override;
 };
