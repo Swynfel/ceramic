@@ -30,7 +30,7 @@ struct RoundHeuristic {
         int n = rules.tile_types;
         float result = score;
         result -= penalty_factor * incomplete_pyramid_lines;
-        result += bonus_factor * (rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns + rules.column_bonus * squared_wall_columns) / (n * n);
+        result += bonus_factor * (rules.column_bonus * squared_wall_columns + rules.line_bonus * squared_wall_lines + rules.type_bonus * squared_wall_colors) / (n * n);
         result = std::max(result, 0.f);
         return result;
     }

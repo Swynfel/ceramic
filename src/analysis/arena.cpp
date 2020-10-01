@@ -105,7 +105,7 @@ Arena::add_results(
     const std::vector<int>& new_wins,
     const std::vector<int>& new_scores,
     const std::vector<int>& new_squared_scores) {
-    for (int i = 0; i < ids.size(); i++) {
+    for (size_t i = 0; i < ids.size(); i++) {
         std::vector<int>& player_results = results[ids[i]];
         player_results[0]++;
         player_results[1] += new_wins[i];
@@ -133,7 +133,7 @@ Arena::generate_groups(int available_players, int game_players) {
             ids.back()++;
             continue;
         }
-        if (ids.size() < game_players) {
+        if (ids.size() < (size_t)game_players) {
             ids.push_back(ids.back() + 1);
             continue;
         }
@@ -162,13 +162,12 @@ Arena::print_results(std::vector<std::vector<int>> results) {
             total_moves += player->move_counter;
         }
         printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
-            (double)time / total_games,
+            game_time,
             (double)time / total_moves,
             state_change_time / total_moves,
             (double)total_moves / total_games);
     } else {
-        printf("Average time per game: %.4e µs\n\n",
-            (double)time / total_games);
+        printf("Average time per game: %.4e µs\n\n", game_time);
     }
 
     // Table

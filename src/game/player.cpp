@@ -5,7 +5,7 @@
 #include <sstream>
 
 bool
-Player::check_rules(const Rules& rules) const {
+Player::check_rules(const Rules& /*rules*/) const {
     return true;
 }
 

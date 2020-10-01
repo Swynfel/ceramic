@@ -68,6 +68,7 @@ public:
 
     Arena();
     Arena(std::shared_ptr<Rules> rules, std::vector<std::shared_ptr<Player>> players = {});
+    virtual ~Arena() = default;
 
     void add_player(std::shared_ptr<Player> player);
     void add_players(std::vector<std::shared_ptr<Player>> players);

@@ -19,6 +19,7 @@ public:
     Tiles(Tile tile, int count);
     Tiles(const std::vector<ushort>& tiles);
     Tiles(const Tiles& tiles);
+    virtual ~Tiles() = default;
 
     // Utils
     ushort& operator[](Tile tile);

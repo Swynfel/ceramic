@@ -13,7 +13,7 @@ AllArena::generate_groups(int available_players, int game_players) {
             ids.back()++;
             continue;
         }
-        if (ids.size() < game_players) {
+        if (ids.size() < (size_t)game_players) {
             ids.push_back(ids.back());
             continue;
         }

@@ -70,13 +70,13 @@ PairsArena::print_results(std::vector<std::vector<int>> results) {
     printf("Games per group:  %d\n\n", count);
     // 1 - Player line
     printf("%*s ", max_player_length, "player");
-    for (int p = 0; p < players.size(); p++) {
+    for (size_t p = 0; p < players.size(); p++) {
         printf("| %*.*s ", 19 * prop_count, 19 * prop_count, players[p]->analysed_player->player_type().c_str());
     }
     printf("\n");
     // 2 - VS line
     printf("%*s ", max_player_length, "");
-    for (int p = 0; p < players.size(); p++) {
+    for (size_t p = 0; p < players.size(); p++) {
         for (int c = 0; c < prop_count; c++) {
             printf("|       %dvs%d        ", c + 1, prop_count - c);
         }
@@ -84,7 +84,7 @@ PairsArena::print_results(std::vector<std::vector<int>> results) {
     printf("\n");
     // 3 - details line
     printf("%*s ", max_player_length, "");
-    for (int l = 0; l < prop_count * players.size(); l++) {
+    for (size_t l = 0; l < prop_count * players.size(); l++) {
         printf("|  win   avg   std  ");
     }
     printf("\n");
@@ -92,7 +92,7 @@ PairsArena::print_results(std::vector<std::vector<int>> results) {
     for (int i = 0; i <= max_player_length; i++) {
         printf("-");
     }
-    for (int l = 0; l < prop_count * players.size(); l++) {
+    for (size_t l = 0; l < prop_count * players.size(); l++) {
         printf("+------+-----+------");
     }
     printf("\n");
@@ -102,7 +102,7 @@ PairsArena::print_results(std::vector<std::vector<int>> results) {
             max_player_length,
             max_player_length,
             players[line]->analysed_player->player_type().c_str());
-        for (int opponent = 0; opponent < players.size(); opponent++) {
+        for (int opponent = 0; opponent < (int)players.size(); opponent++) {
             if (line == opponent) {
                 for (int prop = 0; prop < prop_count; prop++) {
                     printf("|   ·     ·     ·   ");

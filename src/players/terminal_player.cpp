@@ -245,7 +245,7 @@ TerminalPlayer::end_game(const State& state, ushort winner_position) {
     std::cout << '\n';
     print_state(state);
     std::cout << '\n';
-    std::cout << "Winner: " << state.winning_player() << '\n';
+    std::cout << "Winner: " << winner_position << '\n';
     std::cout << "Scores:";
     for (ushort p = 0U; p < state.get_rules()->player_count; p++) {
         std::cout << " " << state.get_panel(p).get_score();

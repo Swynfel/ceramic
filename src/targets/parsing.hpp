@@ -97,8 +97,8 @@ private:
 public:
     static PlayerParameters
     parse(std::string raw_params) {
-        int i = raw_params.find('{');
-        int j = raw_params.find('}');
+        size_t i = raw_params.find('{');
+        size_t j = raw_params.find('}');
         if (i == std::string::npos && j == std::string::npos) {
             return PlayerParameters{ .key = raw_params };
         }
@@ -106,12 +106,12 @@ public:
             throw std::invalid_argument("Option format is 'key' or 'key[options]'");
         }
         PlayerParameters result{ .key = raw_params.substr(0UL, i) };
-        int last = i + 1;
+        size_t last = i + 1;
         while (true) {
-            int next = raw_params.find(',', last);
+            size_t next = raw_params.find(',', last);
             std::string argument = raw_params.substr(last, (next == std::string::npos ? raw_params.length() - 1 : next) - last);
             std::string key = "";
-            int split = argument.find(':');
+            size_t split = argument.find(':');
             if (split != std::string::npos) {
                 key = argument.substr(0, split);
                 argument = argument.substr(split + 1);
