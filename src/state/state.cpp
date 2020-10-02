@@ -252,7 +252,7 @@ State::winning_player() const {
             winner = player;
         }
     }
-    return player;
+    return winner;
 }
 
 // Reading

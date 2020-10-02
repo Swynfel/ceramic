@@ -20,7 +20,7 @@ Arena::add_results_container(
 void
 Arena::run_single(std::vector<int> ids) {
     int p = ids.size();
-    Game game = Game(rules);
+    Game game = Game(std::make_shared<Rules>(*rules));
     if (is_sequential() || detailed_player_analysis) {
         for (int id : ids) {
             game.add_player(players[id]);

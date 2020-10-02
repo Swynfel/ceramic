@@ -32,7 +32,7 @@ MonteCarloPlayer::state_score(Game& game, const State& state, int player) {
         }
         return heuristic.eval(state, player);
     } else {
-        game.roll_game();
+        game.roll_end_game();
         return (game.get_state().winning_player() == player) ? 1 : 0;
     }
 }
