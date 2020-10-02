@@ -221,10 +221,7 @@ Game::end_round() {
 
 void
 Game::score_final() {
-    for (Panel& panel : state.panels) {
-        const Wall& wall = panel.get_wall();
-        panel.add_score(wall.final_score_bonus());
-    }
+    Game::score_final(state);
 }
 
 
@@ -453,6 +450,14 @@ Game::apply(Action action, State& state) {
     }
     // Add thrown tiles as floor penalty
     panel.add_floor(overflow_count);
+}
+
+void
+Game::score_final(State& state) {
+    for (Panel& panel : state.panels) {
+        const Wall& wall = panel.get_wall();
+        panel.add_score(wall.final_score_bonus());
+    }
 }
 
 std::vector<Action>

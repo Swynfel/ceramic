@@ -155,7 +155,7 @@ py_bind_game(py::module& root) {
         .def("reset", &Game::reset)
         .def("start_round", &Game::start_round)
         .def("end_round", &Game::end_round)
-        .def("score_final", &Game::score_final)
+        .def("score_final", [](Game& game) { game.score_final(); })
 
         .def("roll_round", &Game::roll_round)
         .def("roll_game", &Game::roll_game)
@@ -217,6 +217,7 @@ py_bind_game(py::module& root) {
     m.def_submodule("GameHelper")
         .def("score_panels", [](State& state) { Game::score_panels(state); })
         .def("apply_first_token", [](State& state) { Game::apply_first_token(state); })
+        .def("score_final", [](State& state) { Game::score_final(state); })
         .def("legal", [](Action action, const State& state) { return Game::legal(action, state); })
         .def("apply", [](Action action, State& state) { Game::apply(action, state); })
         .def("all_legal", &Game::all_legal)
