@@ -133,6 +133,7 @@ py_bind_game(py::module& root) {
             "players"_a)
 
         .def_property_readonly("state", &Game::get_state)
+        .def("override_state", &Game::override_state)
 
         .def("players_missing", &Game::players_missing)
         .def("has_enough_players", &Game::has_enough_players)

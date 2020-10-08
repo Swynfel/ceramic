@@ -38,12 +38,16 @@ State::operator=(const State& other) {
     if (rules != other.rules) {
         throw std::logic_error("Cannot assign state with different rules");
     }
+    center = other.center;
     for (int f = 0; f < rules->factory_count(); f++) {
         factories[f] = other.factories[f];
     }
     for (int p = 0; p < rules->player_count; p++) {
         panels[p] = other.panels[p];
     }
+    bag = other.bag;
+    bin = other.bin;
+    player = other.player;
     return *this;
 }
 

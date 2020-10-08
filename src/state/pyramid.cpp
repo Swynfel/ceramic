@@ -24,7 +24,7 @@ Pyramid::operator=(const Pyramid& other) {
         throw std::logic_error("Cannot assign pyramid with different size");
     }
     tile_types = other.tile_types;
-    tile_filled = tile_filled;
+    tile_filled = other.tile_filled;
     return *this;
 }
 

@@ -2,7 +2,7 @@ import random
 import pytest
 from ceramic.game import Game, Action, Player, GameHelper
 from ceramic.players import FirstLegalPlayer, RandomPlayer, MonteCarloPlayer
-from ceramic.state import Tile, Tiles
+from ceramic.state import State, Tile, Tiles
 from ceramic.rules import Rules
 
 
@@ -25,6 +25,12 @@ def test_game_methods(rules):
     assert not game.legal(Action(0, Tile(0), 0))
     with pytest.raises(ValueError):
         game.apply(Action(0, Tile(0), 0))
+    game.add_players([RandomPlayer() for _ in range(0, rules.player_count)])
+    game.roll_game()
+    empty_state = State(rules)
+    assert game.state != empty_state
+    game.override_state(empty_state)
+    assert game.state == empty_state
 
 
 @pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])

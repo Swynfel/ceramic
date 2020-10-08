@@ -8,8 +8,8 @@
 
 class Center {
 public:
-    bool first_token;
     Tiles tiles;
+    bool first_token;
 
     friend bool operator==(const Center& left, const Center& right);
     friend bool operator!=(const Center& left, const Center& right);
