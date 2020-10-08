@@ -1,5 +1,6 @@
 #include "arena.hpp"
 
+#include "arena_room.hpp"
 #include <cmath>
 #include <stdio.h>
 
@@ -7,76 +8,15 @@
 
 void
 Arena::add_results_container(
+    std::vector<std::vector<int>>& _results,
     const std::vector<int>& ids,
     const std::vector<int>& new_wins,
     const std::vector<int>& new_scores,
     const std::vector<int>& new_squared_scores) {
     const std::lock_guard<std::mutex> lock(results_mutex);
-    add_results(ids, new_wins, new_scores, new_squared_scores);
+    add_results(_results, ids, new_wins, new_scores, new_squared_scores);
     processed_groups++;
     print_current();
-}
-
-void
-Arena::run_single(std::vector<int> ids) {
-    int p = ids.size();
-    Game game = Game(std::make_shared<Rules>(*rules));
-    if (is_sequential() || detailed_player_analysis) {
-        for (int id : ids) {
-            game.add_player(players[id]);
-        }
-    } else {
-        for (int id : ids) {
-            game.add_player(players[id]->analysed_player->copy());
-        }
-    }
-    std::vector<int> win_count(p, 0);
-    std::vector<int> score_sum(p, 0);
-    std::vector<int> squared_score_sum(p, 0);
-    for (int c = 0; c < count; c++) {
-        auto begin = std::chrono::high_resolution_clock::now();
-        game.roll_game();
-        auto end = std::chrono::high_resolution_clock::now();
-        // std::cout << "FINAL STATE\n"
-        //           << game.get_state() << '\n';
-        int winner = game.order[game.state.winning_player()];
-        win_count[winner] += 1;
-        for (int position = 0; position < p; position++) {
-            int id = game.order[position];
-            int score = game.state.get_panel(position).get_score();
-            score_sum[id] += score;
-            squared_score_sum[id] += score * score;
-        }
-        processed_games++;
-        time.fetch_add(std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
-        print_current();
-    }
-    add_results_container(ids, win_count, score_sum, squared_score_sum);
-}
-
-
-void
-Arena::run_from_queue() {
-    while (!groups.empty()) {
-        run_single(groups.front());
-        groups.pop();
-    }
-}
-
-void
-Arena::run_from_queue_async() {
-    while (!groups.empty()) {
-        std::vector<int> ids;
-        {
-            const std::lock_guard<std::mutex> lock(queue_mutex);
-            if (groups.empty()) {
-                break;
-            }
-            ids = groups.front();
-            groups.pop();
-        }
-        run_single(ids);
-    }
 }
 
 bool
@@ -101,12 +41,13 @@ Arena::print_current() {
 
 void
 Arena::add_results(
+    std::vector<std::vector<int>>& _results,
     const std::vector<int>& ids,
     const std::vector<int>& new_wins,
     const std::vector<int>& new_scores,
     const std::vector<int>& new_squared_scores) {
     for (size_t i = 0; i < ids.size(); i++) {
-        std::vector<int>& player_results = results[ids[i]];
+        std::vector<int>& player_results = _results[ids[i]];
         player_results[0]++;
         player_results[1] += new_wins[i];
         player_results[2] += new_scores[i];
@@ -280,19 +221,13 @@ Arena::run() {
         player->analysis = detailed_player_analysis;
     }
     // Run games
+    std::vector<std::thread> rooms = std::vector<std::thread>();
     print_current();
-    if (is_sequential()) {
-        // Sequentially
-        run_from_queue();
-    } else {
-        // Asynchronously
-        threads.clear();
-        for (int i = 0; i < thread_limit; i++) {
-            threads.push_back(std::thread(&Arena::run_from_queue_async, this));
-        }
-        for (auto& t : threads) {
-            t.join();
-        }
+    for (int i = 0; i < thread_limit; i++) {
+        rooms.push_back(std::thread(&ArenaRoom::run, ArenaRoom(this)));
+    }
+    for (auto& room : rooms) {
+        room.join();
     }
     std::cout << std::endl;
     // Print results

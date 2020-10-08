@@ -1,5 +1,5 @@
-#ifndef ANALYSIS_PLAYER
-#define ANALYSIS_PLAYER
+#ifndef ANALYSIS_PLAYER_HPP
+#define ANALYSIS_PLAYER_HPP
 
 #include "game/action.hpp"
 #include "game/player.hpp"
@@ -28,4 +28,4 @@ public:
     std::shared_ptr<Observer> observer() override;
 };
 
-#endif //ANALYSIS_PLAYER
+#endif //ANALYSIS_PLAYER_HPP

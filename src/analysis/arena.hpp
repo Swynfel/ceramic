@@ -14,9 +14,9 @@
 #include "rules/rules.hpp"
 
 class Arena {
-private:
-    std::vector<std::thread> threads = {};
+    friend class ArenaRoom;
 
+private:
     std::queue<std::vector<int>> groups = {};
 
     std::mutex results_mutex = {};
@@ -28,15 +28,11 @@ private:
     int total_games;
 
     void add_results_container(
+        std::vector<std::vector<int>>& results,
         const std::vector<int>& ids,
         const std::vector<int>& new_wins,
         const std::vector<int>& new_scores,
         const std::vector<int>& new_squared_scores);
-
-    void run_single(std::vector<int> ids);
-
-    void run_from_queue();
-    void run_from_queue_async();
 
     bool is_sequential() const;
 
@@ -44,13 +40,14 @@ protected:
     std::vector<std::shared_ptr<AnalysisPlayer>> players;
     std::vector<std::vector<int>> results;
 
-    std::atomic<long long> time{ 0 };
+    long long time = 0LL;
 
     void add_group(std::vector<int> group);
 
     void print_current();
 
     void virtual add_results(
+        std::vector<std::vector<int>>& results,
         const std::vector<int>& ids,
         const std::vector<int>& new_wins,
         const std::vector<int>& new_scores,

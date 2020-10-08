@@ -17,6 +17,7 @@ class Arena;
 class Game {
 private:
     friend class Arena;
+    friend class ArenaRoom;
 
     State state;
     std::vector<std::shared_ptr<Player>> players;
