@@ -5,19 +5,18 @@
 // Constructor
 
 Center::Center()
-  : Tiles()
+  : tiles()
   , first_token(false) {}
 
-void
-Center::set_tiles(const Tiles tiles) {
-    quantities = tiles.get_quantities();
-}
+Center::Center(Tiles tiles, bool first_token)
+  : tiles(tiles)
+  , first_token(first_token) {}
 
 // Reading
 
 std::ostream&
 operator<<(std::ostream& os, const Center& center) {
-    os << "<" << center.letter_str() << (center.first_token ? "<+>" : "") << ">";
+    os << "<" << center.tiles.letter_str() << (center.first_token ? "<+>" : "") << ">";
     return os;
 }
 
@@ -31,6 +30,6 @@ Center::str() const {
 std::string
 Center::repr() const {
     std::ostringstream os;
-    os << "<Center:" << (Tiles)(*this) << (first_token ? "<+>" : "") << ">";
+    os << "<Center:" << tiles << (first_token ? "<+>" : "") << ">";
     return os.str();
 }

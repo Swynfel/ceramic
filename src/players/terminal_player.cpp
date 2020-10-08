@@ -82,7 +82,7 @@ TerminalPlayer::print_state(const State& state) const {
     const std::shared_ptr<const Rules>& rules = state.get_rules();
     bool brackets = color_type != TerminalPlayer::ColoredType::FULL;
     // Center
-    std::cout << "Center#0:" << colored_tiles(state.get_center());
+    std::cout << "Center#0:" << colored_tiles(state.get_center().tiles);
     if (state.get_center().first_token) {
         std::cout << colored_token("+");
     }
@@ -90,7 +90,7 @@ TerminalPlayer::print_state(const State& state) const {
     // Factories
     for (int i = 1; i <= rules->factory_count(); i++) {
         const Factory& factory = state.get_factory(i);
-        std::cout << "Factory#" << i << ":" << colored_tiles(factory) << '\n';
+        std::cout << "Factory#" << i << ":" << colored_tiles(factory.tiles) << '\n';
     }
     // Players
     for (int player = 0; player < rules->player_count; player++) {

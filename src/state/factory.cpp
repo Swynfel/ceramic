@@ -4,20 +4,20 @@
 
 // Constructor
 
-Factory::Factory(ushort _id)
-  : Tiles()
-  , id(_id) {}
+Factory::Factory(ushort id)
+  : id(id)
+  , tiles() {}
 
-void
-Factory::set_tiles(const Tiles tiles) {
-    quantities = tiles.get_quantities();
-}
+Factory::Factory(ushort id, Tiles tiles)
+  : id(id)
+  , tiles(tiles) {}
+
 
 // Reading
 
 std::ostream&
 operator<<(std::ostream& os, const Factory& factory) {
-    os << "<#" << factory.id << ":" << factory.letter_str() << ">";
+    os << "<#" << factory.id << ":" << factory.tiles.letter_str() << ">";
     return os;
 }
 
@@ -31,6 +31,6 @@ Factory::str() const {
 std::string
 Factory::repr() const {
     std::ostringstream os;
-    os << "<Factory#" << id << ":" << (Tiles)(*this) << ">";
+    os << "<Factory#" << id << ":" << tiles << ">";
     return os.str();
 }

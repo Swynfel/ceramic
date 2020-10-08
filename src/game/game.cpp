@@ -106,7 +106,7 @@ Game::all_legal_between(const State& state, ushort begin_place, ushort end_place
     std::shared_ptr<const Rules> rules = state.get_rules();
     const Panel& panel = state.get_panel(state.player);
     for (ushort pick = 0; pick <= rules->factory_count(); pick++) {
-        Tiles tiles = (pick == 0) ? (Tiles)state.center : (Tiles)state.get_factory(pick);
+        Tiles tiles = (pick == 0) ? state.center.tiles : state.get_factory(pick).tiles;
         if (tiles.is_empty()) {
             continue;
         }
@@ -288,12 +288,12 @@ void
 Game::setup_factories() {
     // Fill factories
     for (auto& factory : state.factories) {
-        factory.set_tiles(pull_random_tiles(state.rules->factory_tiles));
+        factory.tiles = pull_random_tiles(state.rules->factory_tiles);
         if (state.bag.is_empty() && state.bin.is_empty()) {
             break;
         }
     }
-    state.center.set_tiles(Tiles::ZERO);
+    state.center.tiles = Tiles::ZERO;
     state.center.first_token = true;
 }
 
@@ -373,9 +373,9 @@ Game::legal(Action action, const State& state) {
     }
     Tiles picked;
     if (action.pick == 0) {
-        picked = state.get_center();
+        picked = state.get_center().tiles;
     } else {
-        picked = state.get_factory(action.pick);
+        picked = state.get_factory(action.pick).tiles;
     }
     // Check action color is present in picked Center / Factory
     if (!picked.has_color(action.color)) {
@@ -393,7 +393,7 @@ Game::apply(Action action, State& state) {
     }
 
     Panel& panel = state.get_panel_mut(state.get_current_player());
-    Tiles& picked = (action.pick == 0) ? (Tiles&)state.get_center_mut() : (Tiles&)state.get_factory_mut(action.pick);
+    Tiles& picked = (action.pick == 0) ? state.get_center_mut().tiles : state.get_factory_mut(action.pick).tiles;
 
     // Check action color is present in picked Center / Factory
     if (picked.is_empty()) {
@@ -445,8 +445,8 @@ Game::apply(Action action, State& state) {
     } else {
         // If factory, move all tiles to center
         Factory& factory = state.get_factory_mut(action.pick);
-        center += factory;
-        factory.set_tiles(Tiles::ZERO);
+        center.tiles += factory.tiles;
+        factory.tiles = Tiles::ZERO;
     }
     // Add thrown tiles as floor penalty
     panel.add_floor(overflow_count);

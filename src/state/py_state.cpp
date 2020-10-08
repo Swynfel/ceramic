@@ -100,26 +100,26 @@ py_bind_state(py::module& root) {
         .def("__repr__", &Tiles::repr);
 
 
-    py::class_<Center, Tiles>(m, "Center")
+    py::class_<Center>(m, "Center")
         .def(py::init<>())
-        .def_readonly("first_token", &Center::first_token)
-        .def_property(
-            "tiles",
-            [](const Center& center) { return (Tiles)center; },
-            [](Center& center, Tiles value) { center.set_tiles(value); })
+        .def(py::init<Tiles, bool>(),
+            "tiles"_a,
+            "first_token"_a)
+        .def_readwrite("first_token", &Center::first_token)
+        .def_readwrite("tiles", &Center::tiles)
 
         .def("__str__", &Center::str)
         .def("__repr__", &Center::repr);
 
 
-    py::class_<Factory, Tiles>(m, "Factory")
+    py::class_<Factory>(m, "Factory")
         .def(py::init<ushort>(),
             "id"_a)
+        .def(py::init<ushort, Tiles>(),
+            "id"_a,
+            "tiles"_a)
         .def_readonly("id", &Factory::id)
-        .def_property(
-            "tiles",
-            [](const Factory& factory) { return (Tiles)factory; },
-            [](Factory& factory, Tiles value) { factory.set_tiles(value); })
+        .def_readwrite("tiles", &Factory::tiles)
 
         .def("__str__", &Factory::str)
         .def("__repr__", &Factory::repr);

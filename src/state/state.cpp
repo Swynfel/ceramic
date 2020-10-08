@@ -67,7 +67,7 @@ void
 State::reset() {
     bag = Tiles(std::vector<ushort>(rules->tile_types, rules->tile_count));
     for (Factory& factory : factories) {
-        factory.set_tiles(Tiles::ZERO);
+        factory.tiles = Tiles::ZERO;
     }
     for (Panel& panel : panels) {
         panel.clear();
@@ -154,9 +154,9 @@ State::get_total_tiles() const {
             result += tile;
         }
     }
-    result += center;
+    result += center.tiles;
     for (const Factory& factory : factories) {
-        result += factory;
+        result += factory.tiles;
     }
 
     result += bag;
@@ -193,11 +193,11 @@ State::is_running_out_of_tiles() const {
 
 bool
 State::is_round_finished() const {
-    if (!center.is_empty()) {
+    if (!center.tiles.is_empty()) {
         return false;
     }
     for (const Factory& factory : factories) {
-        if (!factory.is_empty()) {
+        if (!factory.tiles.is_empty()) {
             return false;
         }
     }

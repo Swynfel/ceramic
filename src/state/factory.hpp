@@ -6,13 +6,14 @@
 #include "global.hpp"
 #include "tiles.hpp"
 
-class Factory : public Tiles {
+class Factory {
 public:
     ushort id;
+    Tiles tiles;
+
     // Constructor
     Factory(ushort id);
-
-    void set_tiles(const Tiles tiles);
+    Factory(ushort id, Tiles tiles);
 
     // Reading
     friend std::ostream& operator<<(std::ostream& os, const Factory& factory);

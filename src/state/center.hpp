@@ -6,13 +6,13 @@
 #include "global.hpp"
 #include "tiles.hpp"
 
-class Center : public Tiles {
+class Center {
 public:
     bool first_token;
+    Tiles tiles;
     // Constructor
     Center();
-
-    void set_tiles(const Tiles tiles);
+    Center(Tiles tiles, bool first_token);
 
     // Reading
     friend std::ostream& operator<<(std::ostream& os, const Center& center);
