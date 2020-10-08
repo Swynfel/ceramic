@@ -40,7 +40,8 @@ protected:
     std::vector<std::shared_ptr<AnalysisPlayer>> players;
     std::vector<std::vector<int>> results;
 
-    long long time = 0LL;
+    long long process_time = 0LL;
+    long long real_time = 0LL;
 
     void add_group(std::vector<int> group);
 

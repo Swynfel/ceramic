@@ -87,5 +87,5 @@ ArenaRoom::run() {
         }
         player++;
     }
-    arena->time += execution_time;
+    arena->process_time += execution_time;
 }

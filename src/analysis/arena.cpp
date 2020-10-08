@@ -94,17 +94,18 @@ Arena::print_results(std::vector<std::vector<int>> results) {
 
     printf("Games per group:  %d\nGames per player: %d\n", count, games_per_player);
 
-    double game_time = time / total_games;
+    double game_time = process_time / total_games;
     if (detailed_player_analysis) {
-        double state_change_time = time;
+        double state_change_time = process_time;
         int total_moves = 0;
         for (auto& player : players) {
             state_change_time -= player->time;
             total_moves += player->move_counter;
         }
+        printf("Total time: %.4e µs (real), %.4e (per thread)", real_time, real_time / (long long)thread_limit);
         printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
             game_time,
-            (double)time / total_moves,
+            (double)process_time / total_moves,
             state_change_time / total_moves,
             (double)total_moves / total_games);
     } else {
@@ -197,10 +198,14 @@ Arena::ready() const {
 
 void
 Arena::run() {
+    auto begin_instant = std::chrono::high_resolution_clock::now();
     int player_count = players.size();
     // Check
     if (!ready()) {
-        throw std::runtime_error("Arena not ready");
+        throw std::runtime_error("Arena not ready: missing player(s)");
+    }
+    if (thread_limit <= 0) {
+        throw std::runtime_error("Thread_limit should be strictly positive");
     }
     std::cout << "Mode: " << mode_name() << "\n";
     // Setup all game groups
@@ -209,7 +214,7 @@ Arena::run() {
     }
     generate_groups(players.size(), rules->player_count);
     // Clear results
-    time = 0;
+    process_time = 0;
     processed_groups = 0;
     processed_games = 0;
     total_groups = groups.size();
@@ -229,6 +234,8 @@ Arena::run() {
     for (auto& room : rooms) {
         room.join();
     }
+    auto end_instant = std::chrono::high_resolution_clock::now();
+    real_time = std::chrono::duration_cast<std::chrono::microseconds>(end_instant - begin_instant).count();
     std::cout << std::endl;
     // Print results
     print_results(std::move(results));
