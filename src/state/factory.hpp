@@ -11,6 +11,9 @@ public:
     ushort id;
     Tiles tiles;
 
+    friend bool operator==(const Factory& left, const Factory& right);
+    friend bool operator!=(const Factory& left, const Factory& right);
+
     // Constructor
     Factory(ushort id);
     Factory(ushort id, Tiles tiles);

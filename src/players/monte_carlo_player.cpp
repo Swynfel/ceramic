@@ -27,14 +27,13 @@ MonteCarloPlayer::state_score(Game& game, const State& state, int player) {
         game.roll_round();
         game.end_round();
         game.score_final();
-        if (game.get_state().is_game_finished()) {
-            return (game.get_state().winning_player() == player) ? 1.f : 0.f;
+        if (!game.get_state().is_game_finished()) {
+            return heuristic.eval(state, player);
         }
-        return heuristic.eval(state, player);
     } else {
         game.roll_end_game();
-        return (game.get_state().winning_player() == player) ? 1 : 0;
     }
+    return (game.get_state().winning_player() == player) ? 1.f : 0.f;
 }
 
 // Selects action "a" of index "i" with highest

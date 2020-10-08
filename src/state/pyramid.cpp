@@ -17,6 +17,7 @@ Pyramid::Pyramid(const Pyramid& pyramid)
   , tile_types(pyramid.tile_types)
   , tile_filled(pyramid.tile_filled) {}
 
+
 Pyramid&
 Pyramid::operator=(const Pyramid& other) {
     if (size != other.size) {
@@ -26,6 +27,19 @@ Pyramid::operator=(const Pyramid& other) {
     tile_filled = tile_filled;
     return *this;
 }
+
+bool
+operator==(const Pyramid& left, const Pyramid& right) {
+    return left.size == right.size &&
+           left.tile_types == right.tile_types &&
+           left.tile_filled == right.tile_filled;
+}
+
+bool
+operator!=(const Pyramid& left, const Pyramid& right) {
+    return !(left == right);
+}
+
 
 // Place before every direct acces to arrays tile_types and tile_filled
 void

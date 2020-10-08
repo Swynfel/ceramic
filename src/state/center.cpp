@@ -12,6 +12,18 @@ Center::Center(Tiles tiles, bool first_token)
   : tiles(tiles)
   , first_token(first_token) {}
 
+
+bool
+operator==(const Center& left, const Center& right) {
+    return left.tiles == right.tiles &&
+           left.first_token == right.first_token;
+}
+
+bool
+operator!=(const Center& left, const Center& right) {
+    return !(left == right);
+}
+
 // Reading
 
 std::ostream&

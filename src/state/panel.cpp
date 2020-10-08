@@ -18,6 +18,7 @@ Panel::Panel(const Panel& panel)
   , first_token(panel.first_token)
   , floor(panel.floor) {}
 
+
 Panel&
 Panel::operator=(const Panel& other) {
     if (rules != other.rules) {
@@ -29,6 +30,20 @@ Panel::operator=(const Panel& other) {
     first_token = other.first_token;
     floor = other.floor;
     return *this;
+}
+
+bool
+operator==(const Panel& left, const Panel& right) {
+    return left.score == right.score &&
+           left.pyramid == right.pyramid &&
+           left.wall == right.wall &&
+           left.first_token == right.first_token &&
+           left.floor == right.floor;
+}
+
+bool
+operator!=(const Panel& left, const Panel& right) {
+    return !(left == right);
 }
 
 void

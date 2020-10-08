@@ -108,6 +108,9 @@ py_bind_state(py::module& root) {
         .def_readwrite("first_token", &Center::first_token)
         .def_readwrite("tiles", &Center::tiles)
 
+        .def("__eq__", &py_eq<Center>)
+        .def("__ne__", &py_ne<Center>)
+
         .def("__str__", &Center::str)
         .def("__repr__", &Center::repr);
 
@@ -120,6 +123,9 @@ py_bind_state(py::module& root) {
             "tiles"_a)
         .def_readonly("id", &Factory::id)
         .def_readwrite("tiles", &Factory::tiles)
+
+        .def("__eq__", &py_eq<Factory>)
+        .def("__ne__", &py_ne<Factory>)
 
         .def("__str__", &Factory::str)
         .def("__repr__", &Factory::repr);
@@ -148,6 +154,9 @@ py_bind_state(py::module& root) {
             &Panel::legal_line,
             "line"_a,
             "tile"_a)
+
+        .def("__eq__", &py_eq<Panel>)
+        .def("__ne__", &py_ne<Panel>)
 
         .def("__str__", &Panel::str)
         .def("__repr__", &Panel::repr);
@@ -194,6 +203,9 @@ py_bind_state(py::module& root) {
             "color"_a)
         .def("filled", &Pyramid::filled)
 
+        .def("__eq__", &py_eq<Pyramid>)
+        .def("__ne__", &py_ne<Pyramid>)
+
         .def("__str__", &Pyramid::str)
         .def("__repr__", &Pyramid::repr);
 
@@ -226,6 +238,9 @@ py_bind_state(py::module& root) {
         .def("is_game_finished", &State::is_game_finished)
         .def("highest_score_players", &State::highest_score_players)
         .def("winning_player", &State::winning_player)
+
+        .def("__eq__", &py_eq<State>)
+        .def("__ne__", &py_ne<State>)
 
         .def("__str__", &State::str)
         .def("__repr__", &State::repr);
@@ -298,6 +313,9 @@ py_bind_state(py::module& root) {
             &Wall::place_line_color,
             "line"_a,
             "color"_a)
+
+        .def("__eq__", &py_eq<Wall>)
+        .def("__ne__", &py_ne<Wall>)
 
         .def("__str__", &Wall::str)
         .def("__repr__", &Wall::repr);

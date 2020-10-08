@@ -12,6 +12,7 @@ Wall::Wall(const Wall& wall)
   : rules(wall.rules)
   , placed(wall.placed) {}
 
+
 Wall&
 Wall::operator=(const Wall& other) {
     if (rules != other.rules) {
@@ -19,6 +20,16 @@ Wall::operator=(const Wall& other) {
     }
     placed = other.placed;
     return *this;
+}
+
+bool
+operator==(const Wall& left, const Wall& right) {
+    return left.placed == right.placed;
+}
+
+bool
+operator!=(const Wall& left, const Wall& right) {
+    return !(left == right);
 }
 
 // Private

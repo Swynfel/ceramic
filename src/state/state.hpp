@@ -29,7 +29,10 @@ private:
 public:
     State(std::shared_ptr<const Rules> rules);
     State(const State& state);
+
     State& operator=(const State& other);
+    friend bool operator==(const State& left, const State& right);
+    friend bool operator!=(const State& left, const State& right);
 
     void reset();
 

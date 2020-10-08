@@ -13,6 +13,16 @@ Factory::Factory(ushort id, Tiles tiles)
   , tiles(tiles) {}
 
 
+bool
+operator==(const Factory& left, const Factory& right) {
+    return left.tiles == right.tiles;
+}
+
+bool
+operator!=(const Factory& left, const Factory& right) {
+    return !(left == right);
+}
+
 // Reading
 
 std::ostream&

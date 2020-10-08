@@ -19,7 +19,10 @@ public:
     Pyramid(ushort size);
     Pyramid(const std::shared_ptr<const Rules>& rule);
     Pyramid(const Pyramid& pyramid);
+
     Pyramid& operator=(const Pyramid& other);
+    friend bool operator==(const Pyramid& left, const Pyramid& right);
+    friend bool operator!=(const Pyramid& left, const Pyramid& right);
 
     void clear();
     Tiles get_line(ushort line) const;

@@ -32,6 +32,7 @@ State::State(const State& state)
     }
 }
 
+
 State&
 State::operator=(const State& other) {
     if (rules != other.rules) {
@@ -45,6 +46,23 @@ State::operator=(const State& other) {
     }
     return *this;
 }
+
+bool
+operator==(const State& left, const State& right) {
+    return left.rules == right.rules &&
+           left.factories == right.factories &&
+           left.panels == right.panels &&
+           left.center == right.center &&
+           left.player == right.player &&
+           left.bag == right.bag &&
+           left.bin == right.bin;
+}
+
+bool
+operator!=(const State& left, const State& right) {
+    return !(left == right);
+}
+
 
 void
 State::assert_player_id(ushort id) const {

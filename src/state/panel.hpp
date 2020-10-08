@@ -20,7 +20,10 @@ private:
 public:
     Panel(const std::shared_ptr<const Rules>& rules);
     Panel(const Panel& panel);
+
     Panel& operator=(const Panel& other);
+    friend bool operator==(const Panel& left, const Panel& right);
+    friend bool operator!=(const Panel& left, const Panel& right);
 
     void clear();
 
