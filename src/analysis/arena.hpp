@@ -16,9 +16,10 @@
 class Arena {
     friend class ArenaRoom;
 
-private:
+protected:
     std::queue<std::vector<int>> groups = {};
 
+private:
     std::mutex results_mutex = {};
     std::mutex queue_mutex = {};
 

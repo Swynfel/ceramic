@@ -3,6 +3,7 @@
 #include "game/observer.hpp"
 #include "game/player.hpp"
 #include "players/first_legal_player.hpp"
+#include "players/monte_carlo_player.hpp"
 #include "players/random_player.hpp"
 #include "rules/rules.hpp"
 #include "state/center.hpp"

@@ -124,5 +124,8 @@ MonteCarloPlayer::play(const State& state) {
 
 std::string
 MonteCarloPlayer::player_type() const {
-    return "mc-" + std::to_string(rollouts);
+    return "mc-" +
+           std::to_string(rollouts) +
+           (smart ? "" : "-naive") +
+           "-" + (until_round ? heuristic.str() : "full");
 }

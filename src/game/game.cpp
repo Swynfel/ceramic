@@ -175,6 +175,12 @@ Game::add_players(std::vector<std::shared_ptr<Player>> _players) {
     }
 }
 
+
+const std::shared_ptr<Player>&
+Game::get_player_at(int i) const {
+    return players[order[i]];
+}
+
 void
 Game::remove_player(std::shared_ptr<Player> player) {
     std::vector<std::shared_ptr<Player>>::iterator p = std::find(players.begin(), players.end(), player);

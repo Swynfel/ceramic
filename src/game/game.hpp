@@ -44,6 +44,7 @@ public:
     bool has_enough_players() const;
     void add_player(std::shared_ptr<Player> player);
     void add_players(std::vector<std::shared_ptr<Player>> players);
+    const std::shared_ptr<Player>& get_player_at(int i) const;
     void remove_player(std::shared_ptr<Player> player);
     void add_observer(std::shared_ptr<Observer> observer);
     void remove_observer(std::shared_ptr<Observer> observer);

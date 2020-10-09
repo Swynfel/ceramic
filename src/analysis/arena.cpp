@@ -1,6 +1,7 @@
 #include "arena.hpp"
 
 #include "arena_room.hpp"
+#include "groups_utils.hpp"
 #include <cmath>
 #include <stdio.h>
 
@@ -63,24 +64,7 @@ Arena::column_count() const {
 
 void
 Arena::generate_groups(int available_players, int game_players) {
-    std::vector<int> ids;
-    ids.push_back(0);
-    while (true) {
-        if (ids.back() >= available_players) {
-            ids.pop_back();
-            if (ids.empty()) {
-                return;
-            }
-            ids.back()++;
-            continue;
-        }
-        if (ids.size() < (size_t)game_players) {
-            ids.push_back(ids.back() + 1);
-            continue;
-        }
-        groups.push(ids);
-        ids.back()++;
-    }
+    GroupUtils::subsets(groups, available_players, game_players);
 }
 
 void
@@ -102,7 +86,7 @@ Arena::print_results(std::vector<std::vector<int>> results) {
             state_change_time -= player->time;
             total_moves += player->move_counter;
         }
-        printf("Total time: %.4e µs (real), %.4e (per thread)", real_time, real_time / (long long)thread_limit);
+        printf("Total time: %.4e µs (real), %.4e (per thread)", (double)real_time, (double)real_time / (double)thread_limit);
         printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
             game_time,
             (double)process_time / total_moves,

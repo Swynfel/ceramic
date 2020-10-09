@@ -1,27 +1,10 @@
 #include "all_arena.hpp"
 
+#include "groups_utils.hpp"
+
 void
 AllArena::generate_groups(int available_players, int game_players) {
-    std::vector<int> ids;
-    ids.push_back(0);
-    while (true) {
-        if (ids.back() >= available_players) {
-            ids.pop_back();
-            if (ids.empty()) {
-                return;
-            }
-            ids.back()++;
-            continue;
-        }
-        if (ids.size() < (size_t)game_players) {
-            ids.push_back(ids.back());
-            continue;
-        }
-        if (ids[0] != ids[game_players - 1]) {
-            add_group(ids);
-        }
-        ids.back()++;
-    }
+    GroupUtils::all(groups, available_players, game_players, true);
 }
 
 
