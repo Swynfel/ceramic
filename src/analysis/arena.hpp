@@ -75,8 +75,10 @@ public:
 
     virtual std::string mode_name() const;
 
-    bool virtual ready() const;
+    virtual bool ready() const;
     void run();
+    void print();
+    void run_print();
 };
 
 #endif //ARENA_HPP

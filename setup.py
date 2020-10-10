@@ -5,7 +5,7 @@ with open('VERSION', 'r') as version:
     __version__ = version.readline()
 
 sources = ["src/py_main.cpp"] + \
-    sorted(p.as_posix() for dir in ["game", "players", "rules", "state"]
+    sorted(p.as_posix() for dir in ["analysis", "game", "players", "rules", "state"]
            for p in Path(f"src/{dir}/").rglob("*.cpp"))
 
 

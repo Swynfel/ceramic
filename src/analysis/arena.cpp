@@ -221,6 +221,15 @@ Arena::run() {
     auto end_instant = std::chrono::high_resolution_clock::now();
     real_time = std::chrono::duration_cast<std::chrono::microseconds>(end_instant - begin_instant).count();
     std::cout << std::endl;
-    // Print results
-    print_results(std::move(results));
+}
+
+void
+Arena::print() {
+    print_results(results);
+}
+
+void
+Arena::run_print() {
+    run();
+    print();
 }

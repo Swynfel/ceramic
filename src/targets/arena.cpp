@@ -151,5 +151,5 @@ main(int argc, char* argv[]) {
     arena->count = arena_options.count;
     arena->thread_limit = arena_options.thread_limit;
     arena->detailed_player_analysis = arena_options.detailed_player_analysis;
-    arena->run();
+    arena->run_print();
 }
