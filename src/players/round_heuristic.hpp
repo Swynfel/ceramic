@@ -1,5 +1,5 @@
-#ifndef ROUND_HEURISTIC
-#define ROUND_HEURISTIC
+#ifndef ROUND_HEURISTIC_HPP
+#define ROUND_HEURISTIC_HPP
 
 #include "global.hpp"
 #include "state/pyramid.hpp"
@@ -90,4 +90,4 @@ struct RoundHeuristic {
     }
 };
 
-#endif //ROUND_HEURISTIC
+#endif //ROUND_HEURISTIC_HPP

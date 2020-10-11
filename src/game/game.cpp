@@ -472,11 +472,20 @@ Game::all_legal(const State& state) {
 }
 
 std::vector<Action>
-Game::all_smart_legal(const State& state) {
+Game::all_non_penalty_legal(const State& state) {
     return all_legal_between(state, 1, state.rules->tile_types);
 }
 
 std::vector<Action>
 Game::all_penalty_legal(const State& state) {
     return all_legal_between(state, 0, 0);
+}
+
+std::vector<Action>
+Game::all_smart_legal(const State& state) {
+    std::vector<Action> actions = Game::all_non_penalty_legal(state);
+    if (actions.size() == 0) {
+        actions = Game::all_penalty_legal(state);
+    }
+    return actions;
 }

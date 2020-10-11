@@ -1,5 +1,5 @@
-#ifndef TERMINAL_PLAYER
-#define TERMINAL_PLAYER
+#ifndef TERMINAL_PLAYER_HPP
+#define TERMINAL_PLAYER_HPP
 
 #include "game/action.hpp"
 #include "game/player.hpp"
@@ -32,7 +32,7 @@ private:
 
 public:
     void set_color_type(TerminalPlayer::ColoredType color_type);
-    virtual std::shared_ptr<Player> copy() override;
+    virtual std::shared_ptr<Player> copy() const override;
 
     Action play(const State& state) override;
 
@@ -44,4 +44,4 @@ public:
     void end_game(const State& state, ushort winner_position) override;
 };
 
-#endif //TERMINAL_PLAYER
+#endif //TERMINAL_PLAYER_HPP

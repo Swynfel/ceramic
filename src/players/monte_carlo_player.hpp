@@ -1,5 +1,5 @@
-#ifndef MONTE_CARLO_PLAYER
-#define MONTE_CARLO_PLAYER
+#ifndef MONTE_CARLO_PLAYER_HPP
+#define MONTE_CARLO_PLAYER_HPP
 
 #include "game/action.hpp"
 #include "game/player.hpp"
@@ -18,6 +18,9 @@ private:
     float state_score(Game& game, const State& state, int player);
     int select_ucb(int n, const std::vector<float>& score_sums, const std::vector<int>& count) const;
 
+protected:
+    Action best_action(std::vector<Action> actions, std::vector<float> score_sums, std::vector<int> count) const;
+
 public:
     constexpr static int DEFAULT_ROLLOUTS = 1000;
     constexpr static float DEFAULT_C = M_SQRT2;
@@ -31,11 +34,11 @@ public:
     MonteCarloPlayer(std::shared_ptr<Player> player, bool until_round = true, int rollouts = DEFAULT_ROLLOUTS);
     MonteCarloPlayer(const MonteCarloPlayer& other);
 
-    virtual std::shared_ptr<Player> copy() override;
+    virtual std::shared_ptr<Player> copy() const override;
 
     virtual Action play(const State& state) override;
 
     virtual std::string player_type() const override;
 };
 
-#endif //MONTE_CARLO_PLAYER
+#endif //MONTE_CARLO_PLAYER_HPP

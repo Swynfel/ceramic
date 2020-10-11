@@ -10,7 +10,7 @@ AnalysisPlayer::AnalysisPlayer(std::shared_ptr<Player> player, bool analysis)
 
 
 std::shared_ptr<Player>
-AnalysisPlayer::copy() {
+AnalysisPlayer::copy() const {
     return std::make_shared<AnalysisPlayer>(analysed_player->copy(), analysis);
 }
 

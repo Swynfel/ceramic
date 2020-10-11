@@ -62,8 +62,25 @@ MonteCarloPlayer::select_ucb(int n, const std::vector<float>& score_sums, const 
     return highest_index;
 }
 
+Action
+MonteCarloPlayer::best_action(std::vector<Action> actions, std::vector<float> score_sums, std::vector<int> count) const {
+    float best_score = -std::numeric_limits<float>::infinity();
+    Action best_action;
+    int index = 0;
+    for (Action action : actions) {
+        float score = count[index] > 0 ? score_sums[index] / count[index] : 0.f;
+        if (score > best_score) {
+            best_score = score;
+            best_action = action;
+        }
+        index++;
+    }
+    return best_action;
+}
+
+
 std::shared_ptr<Player>
-MonteCarloPlayer::copy() {
+MonteCarloPlayer::copy() const {
     return std::make_shared<MonteCarloPlayer>(*this);
 }
 
@@ -73,9 +90,6 @@ MonteCarloPlayer::play(const State& state) {
     std::vector<Action> legal_actions;
     if (smart) {
         legal_actions = Game::all_smart_legal(state);
-        if (legal_actions.size() == 0) {
-            legal_actions = Game::all_penalty_legal(state);
-        }
     } else {
         legal_actions = Game::all_legal(state);
     }
@@ -97,28 +111,7 @@ MonteCarloPlayer::play(const State& state) {
         score_sums[index] += score;
     }
 
-    float best_score = -std::numeric_limits<float>::infinity();
-    Action best_action;
-    int index = 0;
-    for (Action action : legal_actions) {
-        float score = count[index] > 0 ? score_sums[index] / count[index] : 0.f;
-        if (score > best_score) {
-            best_score = score;
-            best_action = action;
-        }
-        index++;
-    }
-    // index = 0;
-    // std::cout << ":: " << best_action << " ~ " << best_score << '\n';
-    // std::cout << state << std::endl;
-    // for (Action action : legal_actions) {
-    //     float score = count[index] > 0 ? score_sums[index] / count[index] : 0.f;
-    //     std::cout << action;
-    //     printf("(%i|%.3f) ", count[index], score);
-    //     index++;
-    // }
-    // std::cout << std::endl;
-    return best_action;
+    return best_action(legal_actions, score_sums, count);
 }
 
 

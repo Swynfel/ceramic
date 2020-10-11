@@ -4,7 +4,7 @@
 #include <limits>
 
 std::shared_ptr<Player>
-FirstLegalPlayer::copy() {
+FirstLegalPlayer::copy() const {
     return std::make_shared<FirstLegalPlayer>();
 }
 

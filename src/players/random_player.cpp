@@ -12,7 +12,7 @@ RandomPlayer::RandomPlayer(int seed, bool smart)
 
 
 std::shared_ptr<Player>
-RandomPlayer::copy() {
+RandomPlayer::copy() const {
     return std::make_shared<RandomPlayer>(*this);
 }
 
@@ -21,9 +21,6 @@ RandomPlayer::play(const State& state) {
     std::vector<Action> legal_actions;
     if (smart) {
         legal_actions = Game::all_smart_legal(state);
-        if (legal_actions.size() == 0) {
-            legal_actions = Game::all_penalty_legal(state);
-        }
     } else {
         legal_actions = Game::all_legal(state);
     }

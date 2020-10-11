@@ -1,5 +1,5 @@
-#ifndef RANDOM_PLAYER
-#define RANDOM_PLAYER
+#ifndef RANDOM_PLAYER_HPP
+#define RANDOM_PLAYER_HPP
 
 #include "game/action.hpp"
 #include "game/player.hpp"
@@ -18,11 +18,11 @@ public:
     RandomPlayer(bool smart = true);
     RandomPlayer(int seed, bool smart = true);
 
-    virtual std::shared_ptr<Player> copy() override;
+    virtual std::shared_ptr<Player> copy() const override;
 
     virtual Action play(const State& state) override;
 
     virtual std::string player_type() const override;
 };
 
-#endif //RANDOM_PLAYER
+#endif //RANDOM_PLAYER_HPP

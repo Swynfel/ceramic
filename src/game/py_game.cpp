@@ -38,7 +38,7 @@ public:
             Player,
             observer);
     }
-    std::shared_ptr<Player> copy() override {
+    std::shared_ptr<Player> copy() const override {
         PYBIND11_OVERLOAD_PURE(
             std::shared_ptr<Player>,
             Player,
@@ -222,6 +222,7 @@ py_bind_game(py::module& root) {
         .def("legal", [](Action action, const State& state) { return Game::legal(action, state); })
         .def("apply", [](Action action, State& state) { Game::apply(action, state); })
         .def("all_legal", &Game::all_legal)
-        .def("all_smart_legal", &Game::all_smart_legal)
-        .def("all_penalty_legal", &Game::all_penalty_legal);
+        .def("all_non_penalty_legal", &Game::all_non_penalty_legal)
+        .def("all_penalty_legal", &Game::all_penalty_legal)
+        .def("all_smart_legal", &Game::all_smart_legal);
 }

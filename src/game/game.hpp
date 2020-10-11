@@ -72,8 +72,9 @@ public:
     void static apply(Action action, State& state);
     void static score_final(State& state);
     std::vector<Action> static all_legal(const State& state);
-    std::vector<Action> static all_smart_legal(const State& state);
+    std::vector<Action> static all_non_penalty_legal(const State& state);
     std::vector<Action> static all_penalty_legal(const State& state);
+    std::vector<Action> static all_smart_legal(const State& state);
 };
 
 #endif //GAME_HPP

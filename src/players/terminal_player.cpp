@@ -185,7 +185,7 @@ TerminalPlayer::set_color_type(TerminalPlayer::ColoredType _color_type) {
 }
 
 std::shared_ptr<Player>
-TerminalPlayer::copy() {
+TerminalPlayer::copy() const {
     return std::make_shared<TerminalPlayer>(*this);
 }
 

@@ -17,7 +17,7 @@ public:
     virtual bool check_rules(const Rules& rules) const;
 
     virtual std::shared_ptr<Observer> observer();
-    virtual std::shared_ptr<Player> copy() = 0;
+    virtual std::shared_ptr<Player> copy() const = 0;
 
     virtual Action play(const State& state) = 0;
     virtual void error(std::string message);
