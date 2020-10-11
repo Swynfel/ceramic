@@ -158,7 +158,7 @@ public:
                   << padding << "        <s>, s:<s>, smart:<s> : should the random ai used for generating rollouts be smart\n"
                   << padding << "    rn : Naive Random Player (equivalent to 'r{false}')\n"
                   << padding << "    mc : Monte-Carlo Player\n"
-                  << padding << "      {options} (default is mc = 'mc{1000,s:true,c:1.41,u:true,hb:1,hl:0.6,hp:0}')\n"
+                  << padding << "      {options} (default is mc = 'mc{1000,s:true,c:1.41,u:true,hb:0.2,hl:0.2,hp:0}')\n"
                   << padding << "        <r>, r:<r>, rollouts:<r> : number of rollouts\n"
                   << padding << "        s:<s>, smart:<s> : should the random ai used for generating rollouts be smart\n"
                   << padding << "        c:<c>, C:<c> : constant 'c' in UBT formula\n"

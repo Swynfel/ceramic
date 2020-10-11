@@ -6,15 +6,18 @@
 #include "state/state.hpp"
 #include "state/wall.hpp"
 
+#include <sstream>
 #include <string>
 
 struct RoundHeuristic {
-    float bonus_factor = 1.f;
-    float leading_factor = 0.6f;
+    float bonus_factor = 0.2f;
+    float leading_factor = 0.2f;
     float penalty_factor = 0.f;
 
     std::string str() const {
-        return "h(" + std::to_string(bonus_factor) + "," + std::to_string(leading_factor) + "," + std::to_string(penalty_factor) + ")";
+        std::stringstream ss;
+        ss << "h(" << bonus_factor << "," << leading_factor << "," << penalty_factor << ")";
+        return ss.str();
     }
 
     float eval_winrate(
