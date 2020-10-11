@@ -86,7 +86,7 @@ Arena::print_results(std::vector<std::vector<int>> results) {
             state_change_time -= player->time;
             total_moves += player->move_counter;
         }
-        printf("Total time: %.4e µs (real), %.4e (per thread)", (double)real_time, (double)real_time / (double)thread_limit);
+        printf("Total time: %.4e µs (real), %.4e (per thread)\n", (double)real_time, (double)real_time / (double)thread_limit);
         printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
             game_time,
             (double)process_time / total_moves,
@@ -182,7 +182,7 @@ Arena::ready() const {
 
 void
 Arena::run() {
-    auto begin_instant = std::chrono::high_resolution_clock::now();
+    auto begin_instant = std::chrono::system_clock::now();
     int player_count = players.size();
     // Check
     if (!ready()) {
@@ -218,7 +218,7 @@ Arena::run() {
     for (auto& room : rooms) {
         room.join();
     }
-    auto end_instant = std::chrono::high_resolution_clock::now();
+    auto end_instant = std::chrono::system_clock::now();
     real_time = std::chrono::duration_cast<std::chrono::microseconds>(end_instant - begin_instant).count();
     std::cout << std::endl;
 }
