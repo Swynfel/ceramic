@@ -24,8 +24,8 @@ RandomPlayer::play(const State& state) {
     } else {
         legal_actions = Game::all_legal(state);
     }
-    if (legal_actions.size() == 0) {
-        throw std::runtime_error("No action was legal");
+    if (legal_actions.size() == 1) {
+        return legal_actions[0];
     }
     ushort index = random_range(randomness, range, 0, legal_actions.size());
     return legal_actions[index];

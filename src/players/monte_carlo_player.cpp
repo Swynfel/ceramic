@@ -93,6 +93,9 @@ MonteCarloPlayer::play(const State& state) {
     } else {
         legal_actions = Game::all_legal(state);
     }
+    if (legal_actions.size() == 1) {
+        return legal_actions[0];
+    }
     std::shuffle(legal_actions.begin(), legal_actions.end(), randomness);
     std::vector<float> score_sums(legal_actions.size(), 0);
     std::vector<int> count(legal_actions.size(), 0);
