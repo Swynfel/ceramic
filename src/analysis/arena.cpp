@@ -86,7 +86,7 @@ Arena::print_results(std::vector<std::vector<int>> results) {
             state_change_time -= player->time;
             total_moves += player->move_counter;
         }
-        printf("Total time: %.4e µs (real), %.4e (per thread)\n", (double)real_time, (double)real_time / (double)thread_limit);
+        printf("Total time: %.4e µs (real), %.4e (times thread count)\n", (double)real_time, (double)real_time * (double)thread_limit);
         printf("Time: %.3e µs (game), %.3e µs (step), %.3e µs (state change)\nAverage moves per game: %.1f\n\n",
             game_time,
             (double)process_time / total_moves,
