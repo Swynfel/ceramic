@@ -112,6 +112,16 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
                         return false;
                 }
                 break;
+            // Games
+            case 'g':
+                try {
+                    int value = std::stoi(optarg);
+                    options.game_count = value;
+                } catch (const std::exception& e) {
+                    std::cout << "Unrecognised game count: " << optarg << '\n';
+                    return false;
+                }
+                break;
             // Errors
             case ':':
                 std::cout << "Missing argument for option " << optopt << '\n';
@@ -192,7 +202,7 @@ main(int argc, char* argv[]) {
         std::vector<std::pair<int, std::vector<int>>> possibleGames{};
         int total = groups.size() * gamesOptions.game_count;
         while (!groups.empty()) {
-            std::vector<int> group = groups.back();
+            std::vector<int> group = groups.front();
             possibleGames.push_back(std::pair<int, std::vector<int>>(gamesOptions.game_count, group));
             groups.pop();
         }
