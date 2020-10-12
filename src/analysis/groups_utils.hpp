@@ -48,4 +48,11 @@ public:
             ids.back()++;
         }
     }
+
+    static void
+    identical(std::queue<std::vector<int>>& groups, int available_players, int game_players) {
+        for (int player = 0; player < available_players; player++) {
+            groups.push(std::vector<int>(game_players, player));
+        }
+    }
 };

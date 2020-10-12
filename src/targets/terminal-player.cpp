@@ -14,31 +14,40 @@
 
 void
 print_help() {
-    std::cout << "./ceramic-terminal-player [-h] [-c] [players] [-n]\n";
+    std::cout << "./ceramic-terminal-player [-h] [-c] [players] [-n] [-p p -m s|i|a]\n";
     std::cout << '\n';
     std::cout << "    -h : Help, shows this]\n";
-    std::cout << "    -c {f,g,n} : Change color, use 'f' for full-color, 'g' for grey-scale, 'n' for none]\n";
+    std::cout << "    -c f|g|n : Change color, use 'f' for full-color, 'g' for grey-scale, 'n' for none]\n";
     std::cout << '\n';
     PlayerParameters::help();
     std::cout << '\n';
     std::cout << "    -n 2-" << TILE_TYPES << " : Change number of tile types\n";
     std::cout << "    -g g : Play g games instead of 1\n";
     std::cout << "    -p p : Play again subsets of players of size p\n";
-    std::cout << "    -a : All copies in generated subsets (when -p is used)\n";
+    std::cout << "    -m s|i|a : Mode to generate groups of size p (when -p is used)\n";
+    std::cout << "        s : Subsets, take subsets of players\n";
+    std::cout << "        i : Identical, take only groups with copies of the same player\n";
+    std::cout << "        a : All, take all combinations (allows copy)\n";
     std::cout << '\n';
     std::cout << "In-game, enter -help form help" << std::endl;
 }
 
+enum OpponentMode {
+    SUBSETS,
+    IDENTICAL,
+    ALL
+};
+
 struct GamesOptions {
     int player_limit;
-    bool is_all;
+    OpponentMode mode;
     int game_count;
 };
 
 bool
 options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, std::shared_ptr<TerminalPlayer>& terminal_player, std::shared_ptr<Rules>& rules, GamesOptions& options) {
     int option;
-    while ((option = getopt(argc, argv, ":hc:n:ap:g:")) != -1) { //get option from the getopt() method
+    while ((option = getopt(argc, argv, ":hc:n:p:m:g:")) != -1) { //get option from the getopt() method
         switch (option) {
             // Options
             case 'h':
@@ -75,10 +84,6 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
                     return false;
                 }
                 break;
-            // All subsets
-            case 'a':
-                options.is_all = true;
-                break;
             // Player count
             case 'p':
                 try {
@@ -87,6 +92,24 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
                 } catch (const std::exception& e) {
                     std::cout << "Unrecognised player limit: " << optarg << '\n';
                     return false;
+                }
+                break;
+            // Mode
+            case 'm':
+                switch (optarg[0]) {
+                    case 's':
+                        options.mode = OpponentMode::SUBSETS;
+                        break;
+                    case 'i':
+                        options.mode = OpponentMode::IDENTICAL;
+                        break;
+                    case 'a':
+                        options.mode = OpponentMode::ALL;
+                        break;
+                    default:
+                        std::cout << "Unrecognised mode argument: " << argv[1] << '\n';
+                        std::cout << "Use 's' for subsets, 'i' for identical, 'a' for all" << std::endl;
+                        return false;
                 }
                 break;
             // Errors
@@ -113,8 +136,8 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
     }
     if (players.size() == 0) {
         players = {
-            std::make_shared<RandomPlayer>(),
-            std::make_shared<RandomPlayer>(),
+            std::make_shared<FirstLegalPlayer>(),
+            std::make_shared<RandomPlayer>(false),
             std::make_shared<RandomPlayer>()
         };
     }
@@ -136,7 +159,7 @@ main(int argc, char* argv[]) {
     std::vector<std::shared_ptr<Player>> players;
     std::shared_ptr<TerminalPlayer> terminal_player = std::make_shared<TerminalPlayer>();
     std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::DEFAULT);
-    GamesOptions gamesOptions{ .player_limit = -1, .is_all = false, .game_count = 1 };
+    GamesOptions gamesOptions{ .player_limit = -1, .mode = SUBSETS, .game_count = 1 };
     if (!options(argc, argv, players, terminal_player, rules, gamesOptions)) {
         return 1;
     }
@@ -155,10 +178,16 @@ main(int argc, char* argv[]) {
     } else {
         rules->player_count = 1 + gamesOptions.player_limit;
         std::queue<std::vector<int>> groups{};
-        if (gamesOptions.is_all) {
-            GroupUtils::all(groups, players.size(), gamesOptions.player_limit, false);
-        } else {
-            GroupUtils::subsets(groups, players.size(), gamesOptions.player_limit);
+        switch (gamesOptions.mode) {
+            case SUBSETS:
+                GroupUtils::subsets(groups, players.size(), gamesOptions.player_limit);
+                break;
+            case IDENTICAL:
+                GroupUtils::identical(groups, players.size(), gamesOptions.player_limit);
+                break;
+            case ALL:
+                GroupUtils::all(groups, players.size(), gamesOptions.player_limit, false);
+                break;
         }
         std::vector<std::pair<int, std::vector<int>>> possibleGames{};
         int total = groups.size() * gamesOptions.game_count;
