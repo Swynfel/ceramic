@@ -1,8 +1,8 @@
 # Ceramic
 
-[![Version](https://img.shields.io/badge/dynamic/yaml?color=informational&label=version&query=%24&url=https%3A%2F%2Fgithub.com%2Fswynfel%2Fceramic%2Fblob%2Fmaster%2FVERSION)](https://github.com/Swynfel/ceramic)
-![Tests](https://github.com/swynfel/ceramic/workflows/Tests/badge.svg)
-[![License](https://img.shields.io/github/license/swynfel/ceramic)](https://github.com/swynfel/ceramic/blob/master/LICENSE)
+[![Version](https://img.shields.io/github/v/tag/Swynfel/ceramic?label=version)](https://github.com/Swynfel/ceramic)
+![Tests](https://github.com/Swynfel/ceramic/workflows/Tests/badge.svg)
+[![License](https://img.shields.io/github/license/Swynfel/ceramic)](https://github.com/Swynfel/ceramic/blob/master/LICENSE)
 
 A python module for playing variations of the board game Azul, implemented in C++.
 
@@ -10,13 +10,13 @@ A python module for playing variations of the board game Azul, implemented in C+
 
 The python module can be simply installed through pip using the following command.
 ```
-pip install git+https://github.com/swynfel/ceramic.git
+pip install git+https://github.com/Swynfel/ceramic.git
 ```
 
 You should now be able to use the module.
 For example, to create a player that always choose the Action "take from Factory **1** tiles of color **B** and place them on line **3**" if it is available, or a random action otherwise, you can write:
 
-```
+```python3
 from ceramic.game import Action, Player, GameHelper
 from ceramic.state import Tile
 import random
@@ -35,7 +35,7 @@ class TestPlayer(Player):
 
 To run a game with the base rules, with this newly created agent and three random agents, you can add:
 
-```
+```python3
 from ceramic.game import Game
 from ceramic.rules import Rules
 from ceramic.players import RandomPlayer
@@ -87,7 +87,7 @@ tox
 
 If everything works as expected, you should see an output similar to
 ```
-============================ 127 passed in 0.17s =============================
+============================ 137 passed in 0.23s =============================
 __________________________________ summary ___________________________________
   py37: commands succeeded
   congratulations :)
@@ -141,9 +141,6 @@ The library will also be placed in the `build` directory.
 
 ### Run
 
-#### ceramic-test
-Runs a test game with 4 random players.
-
 #### ceramic-terminal-player
 Play a game using the terminal.
 
@@ -154,7 +151,12 @@ To play a default game against 3 random players, call
 
 To play against one random player and one first-legal player, using colors in the terminal, call
 ```
-./ceramic-terminal-player rf -c f
+./ceramic-terminal-player r fl -c f
+```
+
+To play against 3 monte-carlo with 10000 complete roll-outs (the best AI available), call
+```
+./ceramic-terminal-player 'mc{10000,u:f}' -p 3 -c f
 ```
 
 For additional options, call with `-h` option.
@@ -175,18 +177,21 @@ The default will run a 1000 games with the default rules, for each possible game
 It will output a recap table.
 ```
 Mode: All
-Played 12/12 (12000/12000)   
+Played 12/12 (12000/12000) 
 Games per group:  1000
 Games per player: 16000
-Time: 1.276e+03 µs (game), 1.315e+01 µs (step), 2.087e+00 µs (state change)
+Total time: 9.0917e+05 µs (real), 7.2734e+06 (times thread count)
+Time: 5.240e+02 µs (game), 5.404e+00 µs (step), 1.032e+00 µs (state change)
 Average moves per game: 97.0
 
       player | winrate |  avg  |  std  | move time |moves
 -------------+---------+-------+-------+-----------+-----
- first-legal |  28.32% |  20.0 |  11.0 | 8.089e+00 | 25.7
-random-naive |   2.36% |   3.6 |   5.7 | 1.328e+01 | 24.2
-      random |  44.31% |  24.8 |  13.7 | 1.204e+01 | 22.9
+ first-legal |  27.06% |  19.8 |  11.0 | 3.787e+00 | 25.6
+random-naive |   2.42% |   3.6 |   5.7 | 4.969e+00 | 24.2
+      random |  45.52% |  25.2 |  13.8 | 4.396e+00 | 23.0
 ```
+- *Total time (real)*: the total time elapse
+- *Total time (times thread count)*: above duration multiplied by number of threads
 - *Time (game)*: average time to process a whole game
 - *Time (step)*: average time to process an action (player decision + state change)
 - *Time (state change)*: average time to process a state change (time taken by player to make a decision not included)

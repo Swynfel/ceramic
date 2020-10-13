@@ -181,8 +181,11 @@ main(int argc, char* argv[]) {
         game.add_player(terminal_player);
         game.add_players(players);
         try {
-            game.roll_game();
-            save(os, game);
+            for (int total = gamesOptions.game_count; total > 0; total--) {
+                std::cout << "Game left " << total << std::endl;
+                game.roll_game();
+                save(os, game);
+            }
         } catch (std::exception& e) {
         }
     } else {
