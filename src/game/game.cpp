@@ -3,7 +3,7 @@
 // Constuctors
 
 Game::Game()
-  : Game(Rules::DEFAULT) {}
+  : Game(Rules::BASE) {}
 
 Game::Game(std::shared_ptr<const Rules> rules)
   : Game(rules, random_seed()) {}

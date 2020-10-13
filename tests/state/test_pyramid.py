@@ -3,7 +3,7 @@ from ceramic.rules import Rules
 from ceramic.state import Pyramid, Tile
 from ceramic import TILE_TYPES
 
-RULES = [Rules.MINI, Rules.DEFAULT]
+RULES = [Rules.MINI, Rules.BASE]
 SIZES = [3, 5]
 
 

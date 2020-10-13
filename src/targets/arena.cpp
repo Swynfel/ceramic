@@ -128,7 +128,7 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
 int
 main(int argc, char* argv[]) {
     std::vector<std::shared_ptr<Player>> players;
-    std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::DEFAULT);
+    std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::BASE);
     ArenaMode arena_mode = ArenaMode::ALL;
     ArenaOptions arena_options{ .count = 1000, .thread_limit = 8, .detailed_player_analysis = true };
     if (!options(argc, argv, players, rules, arena_mode, arena_options)) {

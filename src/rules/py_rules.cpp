@@ -74,7 +74,7 @@ py_bind_rules(py::module& root) {
         .def_property_readonly("factory_count", &Rules::factory_count)
         .def_property_readonly("tile_types_2", &Rules::tile_types_2)
 
-        .def_property_readonly_static("DEFAULT", [](py::object) { return Rules::DEFAULT; })
+        .def_property_readonly_static("BASE", [](py::object) { return Rules::BASE; })
         .def_property_readonly_static("MINI", [](py::object) { return Rules::MINI; })
 
         .def("__str__", &Rules::str)

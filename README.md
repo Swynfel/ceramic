@@ -2,10 +2,50 @@
 
 [![Version](https://img.shields.io/badge/dynamic/yaml?color=informational&label=version&query=%24&url=https%3A%2F%2Fgithub.com%2Fswynfel%2Fceramic%2Fblob%2Fmaster%2FVERSION)](https://github.com/Swynfel/ceramic)
 ![Tests](https://github.com/swynfel/ceramic/workflows/Tests/badge.svg)
-[![License](https://img.shields.io/badge/license-GPL--3.0-orange)](https://github.com/swynfel/ceramic/blob/master/LICENSE)
-<!---[![License](https://img.shields.io/github/license/swynfel/ceramic)](https://github.com/swynfel/ceramic/blob/master/LICENSE)--->
+[![License](https://img.shields.io/github/license/swynfel/ceramic)](https://github.com/swynfel/ceramic/blob/master/LICENSE)
 
 A python module for playing variations of the board game Azul, implemented in C++.
+
+## Install through pip
+
+The python module can be simply installed through pip using the following command.
+```
+pip install git+https://github.com/swynfel/ceramic.git
+```
+
+You should now be able to use the module.
+For example, to create a player that always choose the Action "take from Factory **1** tiles of color **B** and place them on line **3**" if it is available, or a random action otherwise, you can write:
+
+```
+from ceramic.game import Action, Player, GameHelper
+from ceramic.state import Tile
+import random
+
+class TestPlayer(Player):
+    def __init__(self):
+        Player.__init__(self)
+
+    def play(self, state):
+        special_action = Action(1, Tile.from_letter('B'), 3)
+        if (GameHelper.legal(special_action, state)):
+            return special_action
+        legal_actions = GameHelper.all_legal(state)
+        return random.choice(legal_actions)
+```
+
+To run a game with the base rules, with this newly created agent and three random agents, you can add:
+
+```
+from ceramic.game import Game
+from ceramic.rules import Rules
+from ceramic.players import RandomPlayer
+
+game = Game(Rules.BASE)
+game.add_player(TestPlayer())
+game.add_players([RandomPlayer() for i in range(0,3)])
+game.roll_game() # Plays a random game until the end
+print("The winner is:", game.state.winning_player())
+```
 
 ## Build using python's setuptools
 
@@ -22,7 +62,7 @@ Make sure to install the following dependencies:
 
 It can be installed with `pip` by executing the following command
 ```
-python -m pip install pybind11
+pip install pybind11
 ```
 
 ### Build

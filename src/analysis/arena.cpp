@@ -135,7 +135,7 @@ Arena::print_results(std::vector<std::vector<int>> results) {
 /*** Public ***/
 
 Arena::Arena()
-  : Arena(std::make_shared<Rules>(*Rules::DEFAULT)) {}
+  : Arena(std::make_shared<Rules>(*Rules::BASE)) {}
 
 Arena::Arena(std::shared_ptr<Rules> rules, std::vector<std::shared_ptr<Player>> players)
   : players()

@@ -50,4 +50,4 @@ def test_rules_init(
 
 
 def test_rules_methods():
-    assert Rules.DEFAULT.tile_types == 5
+    assert Rules.BASE.tile_types == 5

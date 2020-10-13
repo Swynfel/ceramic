@@ -12,12 +12,12 @@ E = tuple()
     (Rules, E),
     (Center, E),
     (Factory, (0,)),
-    (Panel, (Rules.DEFAULT,)),
+    (Panel, (Rules.BASE,)),
     (Pyramid, (TILE_TYPES,)),
-    (State, (Rules.DEFAULT,)),
+    (State, (Rules.BASE,)),
     (Tile, (0,)),
     (Tiles, E),
-    (Wall, (Rules.DEFAULT,)),
+    (Wall, (Rules.BASE,)),
 ])
 def test_str_repr(cls, args):
     obj = cls(*args)

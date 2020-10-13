@@ -6,7 +6,7 @@
 
 int
 main() {
-    std::shared_ptr<const Rules> rules(Rules::DEFAULT);
+    std::shared_ptr<const Rules> rules(Rules::BASE);
     std::cout << "Rules: \n"
               << *rules << std::endl;
     Game game = Game(rules);

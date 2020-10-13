@@ -168,7 +168,7 @@ int
 main(int argc, char* argv[]) {
     std::vector<std::shared_ptr<Player>> players;
     std::shared_ptr<TerminalPlayer> terminal_player = std::make_shared<TerminalPlayer>();
-    std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::DEFAULT);
+    std::shared_ptr<Rules> rules = std::make_shared<Rules>(*Rules::BASE);
     GamesOptions gamesOptions{ .player_limit = -1, .mode = SUBSETS, .game_count = 1 };
     if (!options(argc, argv, players, terminal_player, rules, gamesOptions)) {
         return 1;

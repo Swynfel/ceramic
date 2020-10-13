@@ -29,7 +29,7 @@ Rules::tile_types_2() const {
     return tile_types * tile_types;
 }
 
-const std::shared_ptr<const Rules> Rules::DEFAULT = std::make_shared<Rules>();
+const std::shared_ptr<const Rules> Rules::BASE = std::make_shared<Rules>();
 const std::shared_ptr<const Rules> Rules::MINI = std::make_shared<Rules>(Rules{
     .player_count = 2,
     .tile_count = 15,

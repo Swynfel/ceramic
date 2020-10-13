@@ -3,9 +3,9 @@ from ceramic.state import Wall
 from ceramic.rules import Rules
 
 
-RULES = [Rules.MINI, Rules.DEFAULT]
+RULES = [Rules.MINI, Rules.BASE]
 
-N = Rules.DEFAULT.tile_types
+N = Rules.BASE.tile_types
 
 
 @pytest.mark.parametrize("rules", RULES)
@@ -22,7 +22,7 @@ def test_wall_init(rules):
 ])
 def test_wall_methods_exceptions(x, y):
     with pytest.raises(ValueError):
-        Wall(Rules.DEFAULT).get_placed_at(x, y)
+        Wall(Rules.BASE).get_placed_at(x, y)
 
 
 @pytest.mark.parametrize("x,y", [
@@ -31,17 +31,17 @@ def test_wall_methods_exceptions(x, y):
     (N, N),
 ])
 def test_wall_methods(x, y):
-    wall = Wall(Rules.DEFAULT)
+    wall = Wall(Rules.BASE)
     assert not wall.get_placed_at(x, y)
 
 
 def test_wall_others():
-    assert len(Wall(Rules.DEFAULT).get_placed()) == N * N
-    assert len(Wall(Rules.DEFAULT).get_tiles()) == N * N
-    array = Wall(Rules.DEFAULT).get_placed_array()
+    assert len(Wall(Rules.BASE).get_placed()) == N * N
+    assert len(Wall(Rules.BASE).get_tiles()) == N * N
+    array = Wall(Rules.BASE).get_placed_array()
     assert len(array) == N
     assert len(array[0]) == N
-    array = Wall(Rules.DEFAULT).get_tiles_array()
+    array = Wall(Rules.BASE).get_tiles_array()
     assert len(array) == N
     assert len(array[0]) == N
 
@@ -49,8 +49,8 @@ def test_wall_others():
 @pytest.mark.parametrize("x", [1, 2, 3, 4, 5])
 @pytest.mark.parametrize("y", [1, 2, 3, 4, 5])
 def test_wall_layout(x, y):
-    wall_manual = Wall(Rules.DEFAULT)
-    wall_color = Wall(Rules.DEFAULT)
+    wall_manual = Wall(Rules.BASE)
+    wall_color = Wall(Rules.BASE)
     walls = [wall_manual, wall_color]
     c = wall_manual.color_at(x, y)
     assert c == wall_color.color_at(x, y)

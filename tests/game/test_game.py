@@ -12,7 +12,7 @@ def is_state_finished(state):
         or 0 in (state.bin + state.bag).quantities
 
 
-@pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
+@pytest.mark.parametrize("rules", [Rules.MINI, Rules.BASE])
 def test_game_methods(rules):
     game = Game(rules, 0)
     game.reset()
@@ -33,7 +33,7 @@ def test_game_methods(rules):
     assert game.state == empty_state
 
 
-@pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
+@pytest.mark.parametrize("rules", [Rules.MINI, Rules.BASE])
 @pytest.mark.parametrize("player", [
     FirstLegalPlayer(),
     RandomPlayer(smart=False),
@@ -54,7 +54,7 @@ def test_game_manual_roll(rules, player):
     assert is_state_finished(game.state)
 
 
-@pytest.mark.parametrize("rules", [Rules.MINI, Rules.DEFAULT])
+@pytest.mark.parametrize("rules", [Rules.MINI, Rules.BASE])
 def test_game_roll_with_python_player(rules):
     class PythonRandomPlayer(Player):
         def __init__(self):
@@ -62,8 +62,6 @@ def test_game_roll_with_python_player(rules):
 
         def play(self, state):
             possible_actions = GameHelper.all_smart_legal(state)
-            if len(possible_actions) == 0:
-                possible_actions = GameHelper.all_penalty_legal(state)
             return random.choice(possible_actions)
 
     game = Game(rules)
