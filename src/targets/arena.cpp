@@ -14,7 +14,7 @@
 
 void
 print_help() {
-    std::cout << "./ceramic-arena [-h] <players> [-a <arena_type>] [-g <game_per_group>] [-t <thread_limit>] [-z]\n";
+    std::cout << "./ceramic-arena [-h] <players> [-a <arena_type>] [-n <tile_count>] [-p <player_count>] [-g <game_per_group>] [-t <thread_limit>] [-z]\n";
     std::cout << '\n';
     std::cout << "    -h : Help, shows this]\n";
     std::cout << '\n';
@@ -25,7 +25,9 @@ print_help() {
               << "        p : pairs (default)\n"
               << "        a : all\n"
               << '\n';
-    std::cout << "    -g <game_per_group> : int (default is 1000)\n"
+    std::cout << "    -n <tile_count> : int (default is 5)\n"
+              << "    -p <player_count> : int (default is 4)\n"
+              << "    -g <game_per_group> : int (default is 1000)\n"
               << "    -t <thread_limit> : int (default is 8)\n"
               << "    -z : deactivate detailed player analysis\n";
     std::cout << std::endl;
@@ -46,7 +48,7 @@ enum ArenaMode {
 bool
 options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, std::shared_ptr<Rules>& rules, ArenaMode& arena_mode, ArenaOptions& arena_options) {
     int option;
-    while ((option = getopt(argc, argv, ":hc:n:a:g:t:z")) != -1) { //get option from the getopt() method
+    while ((option = getopt(argc, argv, ":hc:n:p:a:g:t:z")) != -1) { // get option from the getopt() method
         switch (option) {
             // Help
             case 'h':
@@ -88,8 +90,21 @@ options(int argc, char* argv[], std::vector<std::shared_ptr<Player>>& players, s
                     }
                     rules->tile_types = value;
                 } catch (const std::exception& e) {
-                    std::cout << "Unrecognised tile types cout: " << optarg << '\n';
-                    std::cout << "Use an int between 2 and " << TILE_TYPES << " (included)" << std::endl;
+                    std::cout << "Unrecognised tile types count: " << optarg << '\n';
+                    std::cout << "Use an integer between 2 and " << TILE_TYPES << " (included)" << std::endl;
+                    return false;
+                }
+                break;
+            case 'p':
+                try {
+                    int value = std::stoi(optarg);
+                    if (value < 2) {
+                        throw std::out_of_range("");
+                    }
+                    rules->player_count = value;
+                } catch (const std::exception& e) {
+                    std::cout << "Unrecognised player count: " << optarg << '\n';
+                    std::cout << "Use an integer greater or equals to 2" << std::endl;
                     return false;
                 }
                 break;
